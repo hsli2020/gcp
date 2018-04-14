@@ -8,7 +8,7 @@
 
   <title>{% block title %}{% if pageTitle is defined %}{{ pageTitle }} - {% endif %}Great Circle Solar{% endblock %}</title>
 
-  {{ stylesheet_link("/css/w3.css") }}
+  {{ stylesheet_link("/assets/lib/w3.css") }}
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
   <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 
@@ -39,7 +39,7 @@
     {% block csscode %}{% endblock %}
   </style>
 
-  {{ stylesheet_link("/css/style.css") }}
+  {{ stylesheet_link("/assets/app/css/style.css") }}
 </head>
 <body class="w3-light-grey">
 
@@ -55,7 +55,7 @@
     <div id="toast" class="success" style="display:none;">{{ flashSession.output() }}</div>
   {% endif %}
 
-  <script type='text/javascript' src='/js/jquery-2.1.0.min.js'></script>
+  <script type='text/javascript' src='/assets/lib/jquery/jquery-2.1.0.min.js'></script>
   {% block jsfile %}{% endblock %}
   {% block jscode %}{% endblock %}
 

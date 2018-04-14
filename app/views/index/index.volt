@@ -4,7 +4,7 @@
   <title>Great Circle Solar</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/css/w3.css">
+  <link rel="stylesheet" href="/assets/lib/w3.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
@@ -17,7 +17,7 @@
   .bkimg {
     background-position: center;
     background-size: cover;
-    background-image: url("/img/solar-panel-1.jpg");
+    background-image: url("/assets/app/img/solar-panel-1.jpg");
     min-height: 50%;
   }
   </style>
@@ -27,7 +27,7 @@
 <!-- Navigation Bar -->
 <div class="w3-cell-row w3-padding">
   <span class="w3-cell">
-    <img src="/img/gcs-logo-name-335x57.png">
+    <img src="/assets/app/img/gcs-logo-name-335x57.png">
   </span>
   <span class="w3-cell w3-right w3-large">
     <a href="/user/login" class="w3-btn w3-green">Login</a>
