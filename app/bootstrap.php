@@ -37,7 +37,7 @@ class Bootstrap
 
     public function __construct()
     {
-        $this->di = new Phalcon\Di\FactoryDefault;
+        $this->di = new Phalcon\Di\FactoryDefault();
 
         $em = new EventsManager;
         $em->enablePriorities(true);

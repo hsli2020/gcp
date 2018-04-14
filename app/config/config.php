@@ -15,10 +15,10 @@ $application = [
     'utilsDir'                 => BASE_DIR . '/app/utils/',
     'securityDir'              => BASE_DIR . '/app/cache/security/',
     'vendorDir'                => BASE_DIR . '/vendor',
-    'baseUri'                  => '',
+    'baseUri'                  => '/gcp',
+#   'baseUrl'                  => 'https://www.solar-ems.dev',
     'appTitle'                 => 'Solar EMS',
     'appName'                  => 'solar-ems',
-    'baseUrl'                  => 'https://www.solar-ems.dev',
     'debug'                    => '0',
     'securitySalt'             => 'b5hdr6f9t5a6tjhpei9m',
     'cryptSalt'                => 'eEAfR|_&G&f,+vUx:jFr!!A&+71w1Ms9~8_4L!<@xN@DyaIP_2My|:+.u>/6m,$D',
@@ -41,7 +41,7 @@ $database = [
     'host'        => '127.0.0.1',
     'username'    => 'root',
     'password'    => '',
-    'dbname'      => 'solar'
+    'dbname'      => 'gcp'
 ];
 
 $logger = [
