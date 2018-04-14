@@ -5,11 +5,11 @@
   <div class="w3-modal" style="display: block;">
     <div class="w3-modal-content w3-card-8 w3-padding" style="max-width:350px">
       <p style="text-align: center;">
-        <img src="/img/gcs-logo-name-223x38.png">
+        <img src="/gcp/assets/img/gcs-logo-name-223x38.png">
       </p>
 
       <div class="w3-center">
-        <img src="/img/avatar_2x.png" alt="Avatar" style="width:30%" class="w3-circle w3-margin-top">
+        <img src="/gcp/assets/img/avatar_2x.png" alt="Avatar" style="width:30%" class="w3-circle w3-margin-top">
       </div>
 
       <form class="w3-container" method="POST">
