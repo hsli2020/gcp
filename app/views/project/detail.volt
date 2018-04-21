@@ -4,9 +4,9 @@
 <div class="container">
   <div class="w3-modal" style="display: block;">
     <div class="w3-modal-content w3-card-8 w3-padding" style="max-width:900px">
-      <h2>Detailed Site Information</h2>
+      <h2>Project Details</h2>
 
-      <table class="w3-table compact">
+      <table class="w3-table padding0">
         <tr>
           <td width="20%">Project Name</td>
           <td width="80%">Whitby</td>
@@ -29,8 +29,8 @@
         </tr>
       </table>
 
-      <table class="w3-table w3-margin-top compact">
-        <tr class="w3-light-gray">
+      <table class="w3-table w3-bordered w3-border w3-margin-top compact">
+        <tr>
           <th width="33%">Description</th>
           <th width="33%">Utility Main</th>
           <th width="33%">Generator</th>
@@ -55,6 +55,7 @@
           <td>20684</td>
           <td>20684</td>
         </tr>
+        <tr><td colspan="3" class="w3-light-gray"></td></tr>
         <tr>
           <td>Last Run's Real Energy, kWh</td>
           <td></td>
@@ -75,6 +76,7 @@
           <td></td>
           <td></td>
         </tr>
+        <tr><td colspan="3" class="w3-light-gray"></td></tr>
         <tr>
           <td>Urea Level</td>
           <td>N/A</td>
@@ -85,14 +87,14 @@
           <td>N/A</td>
           <td>20546</td>
         </tr>
-      </table>
+      </table><br>
 
-      <table class="w3-table w3-margin-top">
+      <table class="w3-table w3-bordered w3-border w3-margin-top compact">
         <tr>
-          <th colspan="2">Site Status</th>
+          <th colspan="2" class="center">Site Status</th>
         </tr>
         <tr>
-          <td width="33%">Meter Number</td>
+          <td width="33%">Generator Status</td>
           <td width="66%"></td>
         </tr>
         <tr>
@@ -123,11 +125,11 @@
           <td>Emergency Mode Initiated</td>
           <td></td>
         </tr>
-      </table>
+      </table><br>
 
-      <table class="w3-table w3-margin-top">
-        <tr class="w3-light-gray">
-          <th colspan="2">RTAC Status</th>
+      <table class="w3-table w3-bordered w3-border w3-margin-top compact">
+        <tr>
+          <th colspan="2" class="center">RTAC Status</th>
         </tr>
         <tr>
           <td width="33%">Utility Connect Permission</td>
@@ -149,7 +151,7 @@
           <td>EMCP_Status</td>
           <td></td>
         </tr>
-        <tr><td colspan="2">Communication Devices Status</td></tr>
+        <tr><th colspan="2" class="center">Communication Devices Status</th></tr>
         <tr>
           <td>SEL_Com_Status</td>
           <td></td>
@@ -170,11 +172,11 @@
           <td>EMCP_Status</td>
           <td></td>
         </tr>
-      </table>
+      </table><br>
 
-      <table class="w3-table w3-margin-top">
-        <tr class="w3-light-gray">
-          <td colspan="3">RTAC ALARMS</td>
+      <table class="w3-table w3-bordered w3-border w3-margin-top compact">
+        <tr>
+          <th colspan="3" class="center">RTAC ALARMS</th>
         </tr>
         <tr>
           <td>Start Time</td>
@@ -182,11 +184,11 @@
           <td>Descripton</td>
         </tr>
         <tr>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td width="20%">2018-04-21 15:18:02</td>
+          <td width="20%">2018-04-21 15:20:34</td>
+          <td width="60%">Offline</td>
         </tr>
-      </table>
+      </table><br>
       <br>
 
     </div>
@@ -197,6 +199,14 @@
 
 {% block csscode %}
 .w3-modal { padding: 20px; }
-.w3-table.compact td { padding: 0; }
-.w3-table.compact th { padding: 8px 0; }
+.w3-bordered th { border: 1px solid #ddd; }
+.w3-bordered td { border: 1px solid #ddd; }
+.w3-table.padding0 td { padding: 0 2px; }
+.w3-table.padding0 th { padding: 0 2px; }
+.w3-table.compact td { padding: 2px; }
+.w3-table.compact th { padding: 2px; }
+.w3-table td.center { text-align: center; }
+.w3-table th.center { text-align: center; }
+.w3-bordered tr td:not(:first-child) { text-align: center; }
+.w3-bordered tr th:not(:first-child) { text-align: center; }
 {% endblock %}

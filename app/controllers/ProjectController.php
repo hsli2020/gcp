@@ -17,7 +17,7 @@ class ProjectController extends ControllerBase
         $this->view->pageTitle = 'Project Details';
         $this->view->now = date('g:i a');
         $this->view->refreshInterval = 60;
-
+/*
         try {
             $details = $this->projectService->getDetails($id);
             $this->view->details = $details;
@@ -28,6 +28,7 @@ class ProjectController extends ControllerBase
                 'action'     => 'error404'
             ]);
         }
+*/
     }
 
     public function combinerAction($key = '')
