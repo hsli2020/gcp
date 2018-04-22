@@ -416,57 +416,19 @@ class Bootstrap
      */
     protected function initServices(Config $config, EventsManager $em)
     {
-        $this->di->setShared('projectService', function () {
-            return new App\Service\ProjectService();
-        });
-
-        $this->di->setShared('deviceService', function () {
-            return new App\Service\DeviceService();
-        });
-
-        $this->di->setShared('dataService', function () {
-            return new App\Service\DataService();
-        });
-
-        $this->di->setShared('solarService', function () {
-            return new App\Service\SolarService();
-        });
-
-        $this->di->setShared('userService', function () {
-            return new App\Service\UserService();
-        });
-
-        $this->di->setShared('reportService', function () {
-            return new App\Service\ReportService();
-        });
-
-        $this->di->setShared('dailyReportService', function () {
-            return new App\Service\DailyReportService();
-        });
-
-        $this->di->setShared('monthlyReportService', function () {
-            return new App\Service\MonthlyReportService();
-        });
-
-        $this->di->setShared('importService', function () {
-            return new App\Service\ImportService();
-        });
-
-        $this->di->setShared('exportService', function () {
-            return new App\Service\ExportService();
-        });
-
-        $this->di->setShared('snapshotService', function () {
-            return new App\Service\SnapshotService();
-        });
-
-        $this->di->setShared('smartAlertService', function () {
-            return new App\Service\SmartAlertService();
-        });
-
-        $this->di->setShared('emailService', function () {
-            return new App\Service\EmailService();
-        });
+        $this->di->setShared('projectService',       '\App\Service\ProjectService');
+        $this->di->setShared('deviceService',        '\App\Service\DeviceService');
+        $this->di->setShared('dataService',          '\App\Service\DataService');
+        $this->di->setShared('solarService',         '\App\Service\SolarService');
+        $this->di->setShared('userService',          '\App\Service\UserService');
+        $this->di->setShared('reportService',        '\App\Service\ReportService');
+        $this->di->setShared('dailyReportService',   '\App\Service\DailyReportService');
+        $this->di->setShared('monthlyReportService', '\App\Service\MonthlyReportService');
+        $this->di->setShared('importService',        '\App\Service\ImportService');
+        $this->di->setShared('exportService',        '\App\Service\ExportService');
+        $this->di->setShared('snapshotService',      '\App\Service\SnapshotService');
+        $this->di->setShared('smartAlertService',    '\App\Service\SmartAlertService');
+        $this->di->setShared('emailService',         '\App\Service\EmailService');
     }
 
     protected function initSecurity(Config $config, EventsManager $em)
