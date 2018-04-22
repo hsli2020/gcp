@@ -463,6 +463,10 @@ class Bootstrap
         $this->di->setShared('smartAlertService', function () {
             return new App\Service\SmartAlertService();
         });
+
+        $this->di->setShared('emailService', function () {
+            return new App\Service\EmailService();
+        });
     }
 
     protected function initSecurity(Config $config, EventsManager $em)
