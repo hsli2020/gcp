@@ -143,62 +143,6 @@ class ImportService extends Injectable
         return $data;
     }
 
-    protected function importCombiners($project, $dir)
-    {
-        foreach (glob($dir . '/*.csv') as $filename) {
-            echo "\t", $filename, EOL;
-
-            // filename: c:\FTP-Backup\125Bermondsey_001EC6053434\mb-001.57BEE4B7_1.log.csv
-            $parts = explode('.', basename($filename));
-            $dev  = $parts[0]; // mb-001
-            $hash = $parts[1]; // 57BEE4B7_1
-
-            if (!isset($project->devices[$dev])) {
-               #$this->log("Invalid Filename: $filename");
-                continue;
-            }
-
-            $device = $project->devices[$dev];
-            $table = $device->getDeviceTable();
-            $columns = $device->getTableColumns();
-
-            #$columns = [ 'time', 'error', 'low_alarm', 'high_alarm',
-            #    'CB_1',  'CB_2',  'CB_3',  'CB_4',  'CB_5',  'CB_6',  'CB_7',  'CB_8',  'CB_9',
-            #    'CB_10', 'CB_11', 'CB_12', 'CB_13', 'CB_14', 'CB_15', 'CB_16', 'CB_17', 'CB_18',
-            #    'CB_19', 'CB_20', 'CB_21', 'CB_22' ];
-
-            $columnList = '`' . implode('`, `', $columns) . '`';
-
-            if (($handle = fopen($filename, "r")) !== FALSE) {
-                fgetcsv($handle); // skip first line
-
-                while (($fields = fgetcsv($handle)) !== FALSE) {
-                    if (count($columns) != count($fields)) {
-                        $this->log("DATA ERROR: $filename\n\t" . implode(', ', $fields));
-                        continue;
-                    };
-
-                   #$data = array_combine($columns, $fields);
-                   #$values = "'" . implode("', '", $data). "'";
-
-                    $values = "'" . implode("', '", $fields). "'";
-
-                    $sql = "INSERT INTO $table ($columnList) VALUES ($values)";
-
-                    try {
-                        $this->db->execute($sql);
-                    } catch (\Exception $e) {
-                        echo $e->getMessage(), EOL;
-                    }
-                }
-
-                fclose($handle);
-
-                $this->backupFile($filename, $dir);
-            }
-        }
-    }
-
     public function importWhitby()
     {
         $dir = 'c:\\GCS-FTP-ROOT\\GCP_Whitby_001EC60548B8\\';
