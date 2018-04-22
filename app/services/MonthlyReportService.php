@@ -17,34 +17,13 @@ class MonthlyReportService extends Injectable
         $this->report = [];
         foreach ($projects as $project) {
             $projectId = $project->id;
-            $monthly = $project->getMonthlyBudget(date('Y'), date('m'));
 
-            $Project_Name        = $project->name;
-            $Date                = date('M-Y');
-            $Monthly_Budget      = $monthly['Budget'];
-            $IE_Insolation       = $monthly['IE_POA_Insolation'];
-
-            $Insolation_Actual   = $this->getInsolationActual($project);
-            $Insolation_Reference= $this->getInsolationReference($monthly);
-            $Energy_Measured     = $this->getEnergyMeasured($project);
-            $Energy_Expected     = $this->getEnergyExpected($Insolation_Actual, $Insolation_Reference, $Monthly_Budget);
-            $Energy_Budget       = $this->getEnergyBudget($monthly);
-
-            $Weather_Performance = $this->getWeatherPerformance($Energy_Expected, $Energy_Budget);
-            $Actual_Budget       = $this->getActualBudget($Energy_Measured, $Energy_Budget);
-            $Actual_Expected     = $this->getActualExpected($Energy_Measured, $Energy_Expected);
+            $Project_Name = $project->name;
+            $Date         = date('M-Y');
 
             $this->report[$projectId] = [
                 'Project_Name'          =>  $Project_Name,
                 'Date'                  =>  $Date,
-                'Insolation_Actual'     =>  number_format($Insolation_Actual,    1, '.', ''),
-                'Insolation_Reference'  =>  number_format($Insolation_Reference, 1, '.', ''),
-                'Energy_Expected'       =>  number_format($Energy_Expected,      1, '.', ''),
-                'Energy_Measured'       =>  number_format($Energy_Measured,      1, '.', ''),
-                'Energy_Budget'         =>  number_format($Energy_Budget,        1, '.', ''),
-                'Actual_Budget'         => (number_format($Actual_Budget,        3, '.', '')*100).'%',
-                'Actual_Expected'       => (number_format($Actual_Expected,      3, '.', '')*100).'%',
-                'Weather_Performance'   => (number_format($Weather_Performance,  3, '.', '')*100).'%',
             ];
         }
 
@@ -132,14 +111,6 @@ class MonthlyReportService extends Injectable
         foreach ($report as $data) {
             $sheet->setCellValue("B$row", $data['Project_Name']);
             $sheet->setCellValue("C$row", $data['Date']);
-            $sheet->setCellValue("D$row", $data['Insolation_Actual']);
-            $sheet->setCellValue("E$row", $data['Insolation_Reference']);
-            $sheet->setCellValue("F$row", $data['Energy_Measured']);
-            $sheet->setCellValue("G$row", $data['Energy_Expected']);
-            $sheet->setCellValue("H$row", $data['Energy_Budget']);
-            $sheet->setCellValue("I$row", $data['Actual_Budget']);
-            $sheet->setCellValue("J$row", $data['Actual_Expected']);
-            $sheet->setCellValue("K$row", $data['Weather_Performance']);
             $row++;
         }
 
@@ -182,108 +153,13 @@ class MonthlyReportService extends Injectable
         return $result;
     }
 
-    public function getMonthList()
-    {
-        $sql = "SELECT DISTINCT(`month`) FROM monthly_reports ORDER BY `month` DESC LIMIT 24";
-        $result = $this->db->fetchAll($sql);
-        return array_column($result, 'month');
-    }
-
-    protected function getInsolationActual($project)
-    {
-        return $project->getIRR('THIS-MONTH') / 1000.0;
-    }
-
-    protected function getInsolationReference($monthly)
-    {
-         return $monthly['IE_POA_Insolation'];
-    }
-
-    protected function getEnergyExpected($Insolation_Actual, $Insolation_Reference, $Monthly_Budget)
-    {
-        // ("MEASURED INSOLATION"/INSOLATION REFERENCE") * (REFERENCE PRODUCTION KWH)
-
-        if ($Insolation_Reference == 0) {
-            return 0;
-        }
-
-        return ($Insolation_Actual / $Insolation_Reference) * $Monthly_Budget;
-    }
-
-    protected function getEnergyMeasured($project)
-    {
-        return $project->getKWH('THIS-MONTH');
-    }
-
-    protected function getEnergyBudget($monthly)
-    {
-        return $monthly['Budget'];
-    }
-
-    protected function getWeatherPerformance($Energy_Expected, $Energy_Budget)
-    {
-        // "EXPECTED KWH" / "REFERENCE KWH"
-
-        if ($Energy_Budget == 0) {
-            return 0;
-        }
-
-        return $Energy_Expected / $Energy_Budget;
-    }
-
-    protected function getActualBudget($Energy_Measured, $Energy_Budget)
-    {
-        // "MEASURED PRODUCTION" / "REFERENCE PRODUCTION"
-
-        if ($Energy_Budget == 0) {
-            return 0;
-        }
-
-        return $Energy_Measured / $Energy_Budget;
-    }
-
-    protected function getActualExpected($Energy_Measured, $Energy_Expected)
-    {
-        // "MEASURED PRODUCTION" / "EXPECTED PRODUCTION"
-
-        if ($Energy_Expected == 0) {
-            return 0;
-        }
-
-        return $Energy_Measured / $Energy_Expected;
-    }
-
     protected function sendMonthlyReport($recepient, $body, $filename)
     {
-        $mail = new \PHPMailer();
-
-        $mail->SMTPOptions = [
-            'ssl' => [
-                'verify_peer' => false,
-                'verify_peer_name' => false,
-                'allow_self_signed' => true
-            ]
-        ];
-
         $today = date('Y-m-d');
+        $subject = "Monthly Solar Energy Production Report ($today)";
 
-#       $mail->SMTPDebug = 3;
-        $mail->isSMTP();
-        $mail->Host = '10.6.200.200';
-        $mail->Port = 25;
-        $mail->SMTPAuth = false;
-        $mail->SMTPSecure = false;
-        $mail->From = "OMS@greatcirclesolar.ca";
-        $mail->FromName = "Great Circle Solar";
-        $mail->addAddress($recepient);
-        $mail->addAttachment($filename, basename($filename));
-        $mail->isHTML(true);
-        $mail->Subject = "Monthly Solar Energy Production Report ($today)";
-        $mail->Body = $body;
-        $mail->AltBody = "Please find the Daily Report in attachment.";
-
-        if (!$mail->send()) {
-            $this->log("Mailer Error: " . $mail->ErrorInfo);
+        if (!$this->emailService->send($recepient, $subject, $body, $filename)) {
+            $this->log("Mailer Error: " . $this->emailService->getErrorInfo());
         } else {
             $this->log("Monthly report sent to $recepient.");
         }

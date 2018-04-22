@@ -30,10 +30,6 @@ class ImportService extends Injectable
                 $this->importFile($filename, $project);
                 $this->backupFile($filename, $dir);
             }
-
-            if ($project->cbdir) {
-                $this->importCombiners($project, $project->cbdir);
-            }
         }
 
         $this->log("Importing completed, $fileCount file(s) imported.\n");

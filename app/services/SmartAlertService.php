@@ -301,34 +301,8 @@ class SmartAlertService extends Injectable
 
     protected function sendEmail($recepient, $subject, $body)
     {
-        $mail = new \PHPMailer();
-
-        $mail->SMTPOptions = [
-            'ssl' => [
-                'verify_peer' => false,
-                'verify_peer_name' => false,
-                'allow_self_signed' => true
-            ]
-        ];
-
-        $today = date('Y-m-d');
-
-#       $mail->SMTPDebug = 3;
-        $mail->isSMTP();
-        $mail->Host = '10.6.200.200';
-        $mail->Port = 25;
-        $mail->SMTPAuth = false;
-        $mail->SMTPSecure = false;
-        $mail->From = "OMS@greatcirclesolar.ca";
-        $mail->FromName = "Great Circle Solar";
-        $mail->addAddress($recepient);
-        $mail->isHTML(true);
-        $mail->Subject = $subject;
-        $mail->Body = $body;
-        $mail->AltBody = "Smart Alert can only display in HTML format";
-
-        if (!$mail->send()) {
-            $this->log("Mailer Error: " . $mail->ErrorInfo);
+        if (!$this->emailService->send($recepient, $subject, $body)) {
+            $this->log("Mailer Error: " . $this->emailService->getErrorInfo());
         } else {
             $this->log("Smart Alert sent to $recepient.");
         }
