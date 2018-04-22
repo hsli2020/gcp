@@ -1,19 +1,20 @@
-Modbus	Tag Name                    Title
+Modbus  Tag Name                    Title
 ===================================================================
-21026   Genset_Status               Emergency Start Initiated
-20507	Emergency_Mode              Remote Start Initiated
-20523	Remote Start                Generator Power kW
-20532   Total_Gen_Power             Store Load kW
-20535   Total_mains_pow             Generator Breaker (52U) Status
-20509	Generator Breaker Status    Main Breaker (52G) Status
-20508	Utility Breaker Status      Generator Running in Parallel
-20503	Parallel                    Start Inhibit Status
-20537	M_Start_Inhibit             Utility Connect Permission
-20512	RTAC_Perm_Stat              Utility Allow Connect
-20513	RTAC_Allow                  Utility Trip Disconnect Command
-20510	RTAC_TRIP                   Utility Block Connect
-20511	RTAC_Block                  Project Alarm
+21026   Genset_Status               Generator Run Status
+20507   Emergency_Mode              Emergency Start Initiated
+20523   Remote Start                Remote Start Initiated
+20532   Total_Gen_Power             Generator Power kW
+20535   Total_mains_pow             Store Load kW
+20509   Generator Breaker Status    Generator Breaker (52U) Status
+20508   Utility Breaker Status      Main Breaker (52G) Status
+20503   Parallel                    Generator Running in Parallel
+20537   M_Start_Inhibit             Start Inhibit Status
+20512   RTAC_Perm_Stat              Utility Connect Permission
+20513   RTAC_Allow                  Utility Allow Connect
+20510   RTAC_TRIP                   Utility Trip Disconnect Command
+20511   RTAC_Block                  Utility Block Connect
 
+?????   ---------------             Project Alarm
 ?????   Generator Alarm             UREA Level
 
 Modbus-Address
@@ -33,32 +34,32 @@ Modbus-Address
 20511,  Bool,  RTAC_Block,          Block Command,
 
 CREATE TABLE `dashboard` (
-	`project_id` INT(11) NOT NULL,
-	`project_number` INT(11) NOT NULL,
-	`F_21026` INT(11) NOT NULL COMMENT 'Genset_Status',
-	`F_20507` INT(11) NOT NULL COMMENT 'Emergency_Mode',
-	`F_20523` INT(11) NOT NULL COMMENT 'M_Start_Auto',
-	`F_20532` INT(11) NOT NULL COMMENT 'Total_Gen_Power',
-	`F_20535` INT(11) NOT NULL COMMENT 'Total_mains_pow',
-	`F_20509` INT(11) NOT NULL COMMENT 'Dig_Input_1',
-	`F_20508` INT(11) NOT NULL COMMENT 'Dig_Input_0',
-	`F_20503` INT(11) NOT NULL COMMENT 'EZ_G_13',
-	`F_20537` INT(11) NOT NULL COMMENT 'M_Start_Inhibit',
-	`F_20512` INT(11) NOT NULL COMMENT 'RTAC_Perm_Stat',
-	`F_20513` INT(11) NOT NULL COMMENT 'RTAC_Allow',
-	`F_20510` INT(11) NOT NULL COMMENT 'RTAC_Trip',
-	`F_20511` INT(11) NOT NULL COMMENT 'RTAC_Block',
-	`Alarm` INT(11) NOT NULL,
-	`UREA` INT(11) NOT NULL
+    `project_id` INT(11) NOT NULL,
+    `project_number` INT(11) NOT NULL,
+    `F_21026` INT(11) NOT NULL COMMENT 'Genset_Status',
+    `F_20507` INT(11) NOT NULL COMMENT 'Emergency_Mode',
+    `F_20523` INT(11) NOT NULL COMMENT 'M_Start_Auto',
+    `F_20532` INT(11) NOT NULL COMMENT 'Total_Gen_Power',
+    `F_20535` INT(11) NOT NULL COMMENT 'Total_mains_pow',
+    `F_20509` INT(11) NOT NULL COMMENT 'Dig_Input_1',
+    `F_20508` INT(11) NOT NULL COMMENT 'Dig_Input_0',
+    `F_20503` INT(11) NOT NULL COMMENT 'EZ_G_13',
+    `F_20537` INT(11) NOT NULL COMMENT 'M_Start_Inhibit',
+    `F_20512` INT(11) NOT NULL COMMENT 'RTAC_Perm_Stat',
+    `F_20513` INT(11) NOT NULL COMMENT 'RTAC_Allow',
+    `F_20510` INT(11) NOT NULL COMMENT 'RTAC_Trip',
+    `F_20511` INT(11) NOT NULL COMMENT 'RTAC_Block',
+    `Alarm` INT(11) NOT NULL,
+    `UREA` INT(11) NOT NULL
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
 Full Fields
 
 CREATE TABLE `dashboard_full` (
-	`project_id` INT(11) NOT NULL,
-	`project_number` INT(11) NOT NULL,
+    `project_id` INT(11) NOT NULL,
+    `project_number` INT(11) NOT NULL,
 --  ...
-	`Alarm`   INT(11) NOT NULL,
-	`UREA`    INT(11) NOT NULL
+    `Alarm`   INT(11) NOT NULL,
+    `UREA`    INT(11) NOT NULL
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 

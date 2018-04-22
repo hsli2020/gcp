@@ -56,18 +56,20 @@
   </tr>
   {% for row in data %}
   <tr>
-    <td>Whitby</th>
-    <td>{{ Green1_Red0(row['Genset_status']) }}</th>
-    <td>{{ row['Total_Gen_Power'] }}</th>
-    <td>{{ row['Total_mains_pow'] }}</th>
-    <td>{{ row['Hrs_until_maint'] }}</th>
-    <td>{{ GreenClose1_RedOpen0(row['D_12_Gen_Closed']) }}</th>
-    <td>{{ GreenClose1_RedOpen0(row['D_11_Main_Closed']) }}</th>
-    <td>{{ Green0_Red1(row['SEL_Com_Status']) }}</th>
-    <td>{{ Green1_Red0(row['EZ_Com_Status']) }}</th>
-    <td>{{ Green1_Red0(row['ACMG_Com_Status']) }}</th>
-    <td>{{ Green1_Red0(row['EMCP_Status']) }}</th>
-    <td>{{ row['ltime'] }}</th>
+    <td>{{ row['project_name'] }}</th>
+    <td>{{ row['F_21026.Genset_Status'] }}</th>
+    <td>{{ row['F_20507.Emergency_Mode'] }}</th>
+    <td>{{ row['F_20523.M_Start_Auto'] }}</th>
+    <td>{{ row['F_20532.Total_Gen_Power'] }}</th>
+    <td>{{ row['F_20535.Total_mains_pow'] }}</th>
+    <td>{{ row['F_20509.Dig_Input_1'] }}</th>
+    <td>{{ row['F_20508.Dig_Input_0'] }}</th>
+    <td>{{ row['F_20503.EZ_G_13'] }}</th>
+    <td>{{ row['F_20537.M_Start_Inhibit'] }}</th>
+    <td>{{ row['F_20512.RTAC_Perm_Stat'] }}</th>
+    <td>{{ row['F_20513.RTAC_Allow'] }}</th>
+    <td>{{ row['F_20510.RTAC_Trip'] }}</th>
+    <td>{{ row['F_20511.RTAC_Block'] }}</th>
   </tr>
   {% endfor %}
 {# endif #}
