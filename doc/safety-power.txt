@@ -1,0 +1,125 @@
+2496771 => Richmond Hill #1028
+{
+    "payload": [
+        {
+            "name": "SS120_o",
+            "description": "Mode of operation  0=Standby, 1=Startup, 2=Run, 3=Shutdown",
+            "laststate": {
+                "value": "0",
+                "timestamp": "1524354229"
+            }
+        },
+        {
+            "name": "SS120_o_runtime",
+            "description": "Total SCR injection time in seconds",
+            "laststate": {
+                "value": "847588",
+                "timestamp": "1524354229"
+            }
+        },
+        {
+            "name": "SS120_o_fault",
+            "description": "SCR system fault",
+            "laststate": {
+                "value": "0",
+                "timestamp": "1524354229"
+            }
+        },
+        {
+            "name": "SS120_o_alarm",
+            "description": "SCR system alarm",
+            "laststate": {
+                "value": "0",
+                "timestamp": "1524354229"
+            }
+        },
+        {
+            "name": "EL040_o",
+            "description": "Engine Load in KW",
+            "laststate": {
+                "value": "0",
+                "timestamp": "1524354228"
+            }
+        },
+        {
+            "name": "UF210_o_lph",
+            "description": "Total Flow Rate for all pumps in L\/H",
+            "laststate": {
+                "value": "0",
+                "timestamp": "1524354229"
+            }
+        },
+        {
+            "name": "UP210_o",
+            "description": "Urea Pump speed command in mV 0-5V signal",
+            "laststate": {
+                "value": "0",
+                "timestamp": "1524354229"
+            }
+        },
+        {
+            "name": "NX010_o_NOx",
+            "description": "Outlet NOx in ppm",
+            "laststate": {
+                "value": "1",
+                "timestamp": "1524354229"
+            }
+        },
+        {
+            "name": "NX010_o_O2",
+            "description": "Outlet O2 in %",
+            "laststate": {
+                "value": "20",
+                "timestamp": "1524354229"
+            }
+        },
+        {
+            "name": "TC215_o",
+            "description": "SCR Catalyst Temperature in deg C",
+            "laststate": {
+                "value": "24",
+                "timestamp": "1524421619"
+            }
+        },
+        {
+            "name": "PR030_o_dp",
+            "description": "DPF Differential Pressure",
+            "laststate": {
+                "value": "0",
+                "timestamp": "1524354229"
+            }
+        },
+        {
+            "name": "ML060_o",
+            "description": "Urea day tank level",
+            "laststate": {
+                "value": "101",
+                "timestamp": "1524354229"
+            }
+        },
+        {
+            "name": "NX020_o_NOx",
+            "description": "Inlet NOx in ppm",
+            "laststate": {
+                "value": "1",
+                "timestamp": "1524354229"
+            }
+        },
+        {
+            "name": "XX111_o_cputemp",
+            "description": "Controller cpu temperature",
+            "laststate": {
+                "value": "41",
+                "timestamp": "1524411158"
+            }
+        },
+        {
+            "name": "XX111_o_system_boottime",
+            "description": "Controller boottime as a unixtime",
+            "laststate": {
+                "value": "1518800000",
+                "timestamp": "1524354230"
+            }
+        }
+    ]
+}
