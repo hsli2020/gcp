@@ -2,7 +2,7 @@
 
 namespace App\System;
 
-abstract class Device
+class Device
 {
     protected $project;
     protected $type;

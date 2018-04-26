@@ -13,14 +13,14 @@ class ProjectService extends Injectable
     public function getAll(/* $includeInactive = false */)
     {
         if (!$this->projects) {
-            $sql = "SELECT * FROM projects WHERE active=1";
+            $sql = "SELECT * FROM project WHERE active=1";
             $projects = $this->db->fetchAll($sql);
 
             foreach ($projects as $project) {
                 $id = $project['id'];
                 $object = new Project($project);
 
-                $sql = "SELECT * FROM devices WHERE project_id='$id'";
+                $sql = "SELECT * FROM device WHERE project_id='$id'";
                 $devices = $this->db->fetchAll($sql);
 
                 foreach ($devices as $device) {
@@ -38,12 +38,12 @@ class ProjectService extends Injectable
 
     public function get($id)
     {
-        if (!$this->projects) {
-            $this->getAll();
-        }
+        $this->getAll();
+
         if (isset($this->projects[$id])) {
             return $this->projects[$id];
         }
+
         throw new \Exception("Invalid Parameter: $id");
     }
 
