@@ -35,8 +35,9 @@ class Project
 
     public function initDevices($info)
     {
-        $type = $info['type'];
         $code = $info['devcode'];
+        $device = new Device($this, $info);
+        $this->devices[$code] = $device;
     }
 
     protected function getDb()

@@ -7,23 +7,12 @@ abstract class Device
     protected $project;
     protected $type;
     protected $code;
-    protected $table;
-    protected $model;
 
     public function __construct($project, $info)
     {
-        $this->project   = $project;
-        $this->type      = $info['type'];
-        $this->code      = $info['devcode'];
-        $this->table     = $info['table'];
-        $this->model     = $info['model'];
-        $this->reference = $info['reference'];
-    }
-
-    public function __toString()
-    {
-       #return 'P' .$this->project->id. ' ' .$this->type. ' ' .$this->code;
-        return $this->type. ' ' .$this->code. ' of Project ' .$this->project->name;
+        $this->project = $project;
+        $this->type    = $info['type'];
+        $this->code    = $info['devcode'];
     }
 
     protected function getDb()
@@ -49,19 +38,7 @@ abstract class Device
 
     public function getTable()
     {
-        return $this->table;
-    }
-
-    public function getModel()
-    {
-        return $this->model;
-    }
-
-    public function getDeviceTable()
-    {
-        return 'p'.$this->project->id.'_'.
-               str_replace('-', '_', $this->code).'_'.
-               strtolower($this->type);
+        return 'p'.$this->project->id.'_'.str_replace('-', '_', $this->code);
     }
 
     public function getTableColumns()
