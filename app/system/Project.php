@@ -21,6 +21,7 @@ class Project
     public function __construct($info)
     {
         $this->id            = $info['id'];
+        $this->name          = $info['site_name'];  // alias of siteName
         $this->projectNumber = $info['project_number'];
         $this->fundName      = $info['fund_name'];
         $this->projectSize   = $info['project_size'];

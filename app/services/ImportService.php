@@ -110,7 +110,7 @@ class ImportService extends Injectable
         }
 
         $id = $project->id;
-        $name = addslashes($project->name);
+        $name = addslashes($project->siteName);
         $time = $data['time_utc'];
         $devtype = $device->type;
         $devcode = $device->code;
