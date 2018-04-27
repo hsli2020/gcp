@@ -15,6 +15,15 @@ class Device
         $this->code    = $info['devcode'];
     }
 
+    public function __get($prop)
+    {
+        if (isset($this->$prop)) {
+            return $this->$prop;
+        }
+
+        return null;
+    }
+
     protected function getDb()
     {
         $di = \Phalcon\Di::getDefault();

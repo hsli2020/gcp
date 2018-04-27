@@ -14,9 +14,10 @@ class ImportService extends Injectable
 
         $fileCount = 0;
         foreach ($projects as $project) {
-            echo $project->name, EOL;
+            echo $project->siteName, EOL;
 
-            $dir = $project->ftpdir;
+            $dir = 'C:/GCP-FTP-ROOT/'.$project->ftpdir;
+
             foreach (glob($dir . '/*.csv') as $filename) {
                 echo "\t", $filename, EOL;
 
@@ -38,21 +39,22 @@ class ImportService extends Injectable
     protected function backupFile($filename, $ftpdir)
     {
         // move file to BACKUP folder, even it's not imported
-        $dir = 'C:\\FTP-Backup\\' . basename($ftpdir);
+        $dir = $ftpdir . '/archive/' . date('Y/m/d', filemtime($filename));
         if (!file_exists($dir) && !is_dir($dir)) {
-            mkdir($dir);
+            mkdir($dir, 0777, true);
         }
 
-        $newfile = $dir . '\\' . basename($filename);
+        $newfile = $dir . '/' . basename($filename);
         rename($filename, $newfile);
     }
 
     protected function importFile($filename, $project)
     {
-        // filename: c:\FTP-Backup\125Bermondsey_001EC6053434\mb-001.57BEE4B7_1.log.csv
+        // filename: c:\GCP-FTP-ROOT\GCP_Glen_Erin_001EC605493D\mb-001.5AE11A04_1.log.csv
+
         $parts = explode('.', basename($filename));
         $dev  = $parts[0]; // mb-001
-        $hash = $parts[1]; // 57BEE4B7_1
+        $hash = $parts[1]; // 5AE11A04_1
 
         if (!isset($project->devices[$dev])) {
            #$this->log("Invalid Filename: $filename");
@@ -73,9 +75,8 @@ class ImportService extends Injectable
                 };
 
                 $data = array_combine($columns, $fields);
-                $data = $this->fixValues($project, $dev, $data);
 
-                $this->insertIntoDeviceTable($project, $device, $data);
+                $this->insertIntoDatabase($project, $device, $data);
 
                 $latest = $data;
             }
@@ -85,10 +86,10 @@ class ImportService extends Injectable
         }
     }
 
-    protected function insertIntoDeviceTable($project, $device, $data)
+    protected function insertIntoDatabase($project, $device, $data)
     {
         // insert into devtab
-        $devtab = $device->getDeviceTable();
+        $devtab = $device->getTable();
 
         $columnList = '`' . implode('`, `', array_keys($data)) . '`';
         $values = "'" . implode("', '", $data). "'";
@@ -110,12 +111,12 @@ class ImportService extends Injectable
 
         $id = $project->id;
         $name = addslashes($project->name);
-        $time = $data['time'];
+        $time = $data['time_utc'];
         $devtype = $device->type;
         $devcode = $device->code;
         $json = addslashes(json_encode($data));
 
-        $sql = "REPLACE INTO latest_data SET"
+        $sql = "REPLACE INTO latest SET"
              . " project_id = $id,"
              . " project_name = '$name',"
              . " time = '$time',"
@@ -124,55 +125,6 @@ class ImportService extends Injectable
              . " data = '$json'";
 
         $this->db->execute($sql);
-    }
-
-    protected function fixValues($project, $dev, $data)
-    {
-        $table = $project->devices[$dev]->getTable();
-
-        if ($table == 'table_genmeter_ion') {
-            $data['vln_a'] = $data['vln_ave'];
-            $data['vln_b'] = $data['vln_ave'];
-            $data['vln_c'] = $data['vln_ave'];
-        } else if ($table == 'table_genmeter_ion_tcp') {
-            $data['vln_a'] = $data['vln'];
-            $data['vln_b'] = $data['vln'];
-            $data['vln_c'] = $data['vln'];
-        }
-
-        return $data;
-    }
-
-    public function importWhitby()
-    {
-        $dir = 'c:\\GCS-FTP-ROOT\\GCP_Whitby_001EC60548B8\\';
-        $table = 'GCP_Whitby';
-
-        // we can do this way because csv file and table have the same structure
-        $records = $this->db->fetchAll("DESC $table");
-        $columns = array_column($records, 'Field');
-
-        foreach (glob($dir . '*.csv') as $filename) {
-            if (($file = @fopen($filename, 'rb')) === false) {
-                continue;
-            }
-
-            fgetcsv($file); // skip the first line
-
-            while (($fields = fgetcsv($file))) {
-                $fields = array_slice($fields, 0, 20);
-                $data = array_combine($columns, $fields);
-                try {
-                    $this->db->insertAsDict($table, $data);
-                } catch (\Exception $e) {
-                    $this->log($e->getMessage());
-                }
-            }
-
-            fclose($file);
-
-            $this->backupFile($filename, $dir);
-        }
     }
 
     protected function log($str)
