@@ -45,6 +45,9 @@ class SnapshotService extends Injectable
 
             $data = json_decode($row['data'], true);
 
+            $alarm = $this->getAlarm($data, $project);
+            $ureaLevel = $this->getUreaLevel($project);
+
             $sql = "REPLACE INTO snapshot SET"
                 . ' project_id='.       $row['project_id']
                 . ",project_name='".    $row['project_name']."'"
@@ -60,9 +63,41 @@ class SnapshotService extends Injectable
                 . ',RTAC_Perm_Stat='.   $data['RTAC_Perm_Stat']
                 . ',RTAC_Allow='.       $data['RTAC_Allow']
                 . ',RTAC_Trip='.        $data['RTAC_Trip']
-                . ',RTAC_Block='.       $data['RTAC_Block'];
+                . ',RTAC_Block='.       $data['RTAC_Block']
+                . ',project_alarm='.    $alarm
+                . ',urea_level='.       $ureaLevel;
 
             $this->db->execute($sql);
         }
+    }
+
+    protected function getAlarm($data, $project)
+    {
+        static $tags = [];
+
+        if (empty($tags)) {
+            $rows = $this->db->fetchAll("SELECT * FROM modbus WHERE address>=20613 AND address<=20644");
+            $tags = array_column($rows, 'tag_name', 'address');
+        }
+
+        if ($project->operationMode == 'Closed Transition') {
+            return 9;
+        }
+
+        $alarm = 0;
+        foreach ($tags as $key => $tag) {
+            if ($data[$tag] != 0) {
+                $alarm = 1;
+                break;
+            }
+        }
+
+        return $alarm;
+    }
+
+    protected function getUreaLevel($project)
+    {
+        $projectNumber = $project->projectNumber;
+        return 0;
     }
 }
