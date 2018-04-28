@@ -81,7 +81,7 @@ class SnapshotService extends Injectable
         }
 
         if ($project->operationMode == 'Closed Transition') {
-            return 9;
+            return 9; // N/A
         }
 
         $alarm = 0;

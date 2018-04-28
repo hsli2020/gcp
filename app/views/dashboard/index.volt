@@ -23,17 +23,19 @@
 
 {%- macro GreenClose1_RedOpen0(val) %}
   {% if val == 1 %}
-    <img src="/assets/app/img/green-close.png" width="32">
+    <img src="/assets/app/img/green-close.png" width="40">
   {% elseif val == 0 %}
     <img src="/assets/app/img/red-open.png" width="32">
   {% endif %}
 {%- endmacro %}
 
-{%- macro Green0_Red1(val) %}
+{%- macro Green0_Red1_NA(val) %}
   {% if val == 0 %}
     <img src="/assets/app/img/green.png" width="32">
   {% elseif val == 1 %}
     <img src="/assets/app/img/red.png" width="32">
+  {% elseif val == 9 %}
+    <img src="/assets/app/img/black-na.png" width="32">
   {% endif %}
 {%- endmacro %}
 
@@ -66,15 +68,15 @@
     <td class="noL">{{ Green1_Red0(row['M_Start_Auto']) }}</th>
     <td class="noR">{{ row['Total_Gen_Power'] }}</th>
     <td class="noL">{{ row['Total_mains_pow'] }}</th>
-    <td class="noR">{{ Green1_Red0(row['Dig_Input_1']) }}</th>
-    <td class="noL">{{ Green1_Red0(row['Dig_Input_0']) }}</th>
+    <td class="noR">{{ GreenClose1_RedOpen0(row['Dig_Input_1']) }}</th>
+    <td class="noL">{{ GreenClose1_RedOpen0(row['Dig_Input_0']) }}</th>
     <td>{{ Green1_Red0(row['EZ_G_13']) }}</th>
     <td class="noR">{{ Green1_Red0(row['M_Start_Inhibit']) }}</th>
     <td class="noL noR">{{ Green1_Red0(row['RTAC_Perm_Stat']) }}</th>
     <td class="noL noR">{{ Green1_Red0(row['RTAC_Allow']) }}</th>
     <td class="noL noR">{{ Green1_Red0(row['RTAC_Trip']) }}</th>
     <td class="noL">{{ Green1_Red0(row['RTAC_Block']) }}</th>
-    <td>{{ row['project_alarm'] }}</th>
+    <td>{{ Green0_Red1_NA(row['project_alarm']) }}</th>
     <td>{{ row['urea_level'] }}%</th>
   </tr>
   {% endfor %}
