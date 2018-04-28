@@ -33,7 +33,7 @@ foreach ($sites as $id => $name) {
             echo $payload->name, '=', $payload->laststate->value, PHP_EOL;
         }
     }
-
+    echo PHP_EOL;
     //break;
 }
 
@@ -50,6 +50,11 @@ function httpGet($url)
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
     $output = curl_exec($ch);
+
+    if ($output == false) {
+        print_r(curl_error($ch));
+    }
+
     curl_close($ch);
 
     return $output ;
