@@ -1,9 +1,9 @@
-Modbus Address ,Data Type,Tag Name,Description
-20503,Bool ,EZ_G_13,The genset runs mains parallel
+Modbus Address,Data Type,Tag Name,Description
+20503,Bool,EZ_G_13,The genset runs mains parallel
 20507,Bool,Emergency_Mode,
 20508,Bool,Dig_Input_0,Utility breaker status
 20509,Bool,Dig_Input_1,Gen breaker status
-20510,Bool ,RTAC_Trip,Trip command
+20510,Bool,RTAC_Trip,Trip command
 20511,Bool,RTAC_Block,Block Command
 20512,Bool,RTAC_Perm_Stat,Permission Status
 20513,Bool,RTAC_Allow,Allow Connection Permit
@@ -66,8 +66,8 @@ Modbus Address ,Data Type,Tag Name,Description
 20038,Float,S_Gen_real_enrg,Gen. real energy
 20532,Word,Total_Gen_Power,Generator Power (kW)
 20535,Int,Total_mains_pow,Store Load (kW)
-20546,Word,Hrs_until_maint ,Hours until next maintenance
-20547,Word,Gen_Hrs,Gen. hours of operation * * * Scale Req * бн
+20546,Word,Hrs_until_maint,Hours until next maintenance
+20547,Word,Gen_Hrs,Gen. hours of operation * * * Scale Req *
 20660,Float,M_Gen_Power_fac,Power Factor
 20664,Float,M_Av_Gen_DeltaV,Volts
 20668,Float,M_Main_power_pf,Power Factor
