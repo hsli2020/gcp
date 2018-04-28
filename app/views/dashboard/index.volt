@@ -11,25 +11,25 @@
 
 {%- macro Green1_Red0(val) %}
   {% if val == 1 %}
-    <img src="/img/green.png" width="40">
+    <img src="/assets/app/img/green.png" width="32">
   {% elseif val == 0 %}
-    <img src="/img/red.png" width="40">
+    <img src="/assets/app/img/red.png" width="32">
   {% endif %}
 {%- endmacro %}
 
 {%- macro GreenClose1_RedOpen0(val) %}
   {% if val == 1 %}
-    <img src="/img/green-close.png" width="40">
+    <img src="/assets/app/img/green-close.png" width="32">
   {% elseif val == 0 %}
-    <img src="/img/red-open.png" width="40">
+    <img src="/assets/app/img/red-open.png" width="32">
   {% endif %}
 {%- endmacro %}
 
 {%- macro Green0_Red1(val) %}
   {% if val == 0 %}
-    <img src="/img/green.png" width="40">
+    <img src="/assets/app/img/green.png" width="32">
   {% elseif val == 1 %}
-    <img src="/img/red.png" width="40">
+    <img src="/assets/app/img/red.png" width="32">
   {% endif %}
 {%- endmacro %}
 
@@ -57,21 +57,21 @@
   {% for row in data %}
   <tr>
     <td>{{ row['project_name'] }}</th>
-    <td>{{ row['Genset_Status'] }}</th>
-    <td>{{ row['Emergency_Mode'] }}</th>
-    <td>{{ row['M_Start_Auto'] }}</th>
+    <td>{{ Green1_Red0(row['Genset_Status']) }}</th>
+    <td>{{ Green1_Red0(row['Emergency_Mode']) }}</th>
+    <td>{{ Green1_Red0(row['M_Start_Auto']) }}</th>
     <td>{{ row['Total_Gen_Power'] }}</th>
     <td>{{ row['Total_mains_pow'] }}</th>
-    <td>{{ row['Dig_Input_1'] }}</th>
-    <td>{{ row['Dig_Input_0'] }}</th>
-    <td>{{ row['EZ_G_13'] }}</th>
-    <td>{{ row['M_Start_Inhibit'] }}</th>
-    <td>{{ row['RTAC_Perm_Stat'] }}</th>
-    <td>{{ row['RTAC_Allow'] }}</th>
-    <td>{{ row['RTAC_Trip'] }}</th>
-    <td>{{ row['RTAC_Block'] }}</th>
+    <td>{{ Green1_Red0(row['Dig_Input_1']) }}</th>
+    <td>{{ Green1_Red0(row['Dig_Input_0']) }}</th>
+    <td>{{ Green1_Red0(row['EZ_G_13']) }}</th>
+    <td>{{ Green1_Red0(row['M_Start_Inhibit']) }}</th>
+    <td>{{ Green1_Red0(row['RTAC_Perm_Stat']) }}</th>
+    <td>{{ Green1_Red0(row['RTAC_Allow']) }}</th>
+    <td>{{ Green1_Red0(row['RTAC_Trip']) }}</th>
+    <td>{{ Green1_Red0(row['RTAC_Block']) }}</th>
     <td>{{ row['project_alarm'] }}</th>
-    <td>{{ row['urea_level'] }}</th>
+    <td>{{ row['urea_level'] }}%</th>
   </tr>
   {% endfor %}
 {# endif #}
