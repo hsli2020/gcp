@@ -97,7 +97,41 @@ class SnapshotService extends Injectable
 
     protected function getUreaLevel($project)
     {
-        $projectNumber = $project->projectNumber;
         return 0;
+        $tagName = "ML060_o";
+
+        $projectNumber = $project->projectNumber;
+        $url = "https://safetypower.net/api/1.0/stations/$projectNumber/tags";
+
+        $res = $this->httpGet($url);
+        $json = json_decode($res);
+
+        if ($json) {
+            foreach ($json->payload as $payload) {
+                if ($payload->name == $tagName) {
+                    return $payload->laststate->value;
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    protected function httpGet($url)
+    {
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $accessToken = "QJbs0soFrj3IukQQNyIAvTi0l7iLNQAtAL";
+
+        $headers = [ "Authorization: Bearer $accessToken" ];
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        $output = curl_exec($ch);
+        curl_close($ch);
+
+        return $output ;
     }
 }

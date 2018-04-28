@@ -27,12 +27,14 @@ foreach ($sites as $id => $name) {
     $res = httpGet($url);
     $json = json_decode($res);
 
-    foreach ($json->payload as $payload) {
-        echo date('Y-m-d H:i:s ', $payload->laststate->timestamp);
-        echo $payload->name, '=', $payload->laststate->value, PHP_EOL;
+    if ($json) {
+        foreach ($json->payload as $payload) {
+            echo date('Y-m-d H:i:s ', $payload->laststate->timestamp);
+            echo $payload->name, '=', $payload->laststate->value, PHP_EOL;
+        }
     }
 
-    break;
+    //break;
 }
 
 function httpGet($url)
