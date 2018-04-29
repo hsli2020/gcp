@@ -46,8 +46,8 @@ class SnapshotService extends Injectable
             $data = json_decode($row['data'], true);
 
             $sql = "REPLACE INTO snapshot SET"
-                . ' project_id='.       $data['project_id']
-                . ',project_name='.     $data['project_name']
+                . ' project_id='.       $row['project_id']
+                . ",project_name='".    $row['project_name']."'"
                 . ',Genset_Status='.    $data['Genset_Status']
                 . ',Emergency_Mode='.   $data['Emergency_Mode']
                 . ',M_Start_Auto='.     $data['M_Start_Auto']

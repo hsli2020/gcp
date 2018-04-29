@@ -70,6 +70,8 @@
     <td>{{ row['RTAC_Allow'] }}</th>
     <td>{{ row['RTAC_Trip'] }}</th>
     <td>{{ row['RTAC_Block'] }}</th>
+    <td>&nbsp;</th>
+    <td>&nbsp;</th>
   </tr>
   {% endfor %}
 {# endif #}
