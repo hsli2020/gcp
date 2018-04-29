@@ -129,8 +129,6 @@ class ImportService extends Injectable
 
     public function getUreaLevel()
     {
-        $tagName = "ML060_o";
-
         $rows = $this->db->fetchAll("SELECT * FROM urea");
         $rows = array_column($rows, 'tag', 'project_id');
 
@@ -143,16 +141,7 @@ class ImportService extends Injectable
                 $sql = "UPDATE urea SET data='$data' WHERE project_id=$projectId";
                 $this->db->execute($sql);
 
-                $json = json_decode($res);
-                foreach ($json->payload as $payload) {
-                    if ($payload->name == $tagName) {
-                        $val = $payload->laststate->value;
-                        $sql = "UPDATE snapshot SET urea_level=$val WHERE project_id=$projectId";
-                        $this->db->execute($sql);
-                        echo "UREA Level: Project $projectId $tag $tagName=$val\n";
-                        break;
-                    }
-                }
+                echo "UREA Level: Project $projectId $tag\n";
             }
         }
     }
