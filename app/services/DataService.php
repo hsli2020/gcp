@@ -106,14 +106,4 @@ class DataService extends Injectable
 
         echo EOL;
     }
-
-    public function loadWhitby()
-    {
-        $table = 'gcp_whitby';
-
-        $sql = "SELECT *, CONVERT_TZ(time, 'UTC', 'America/Toronto') AS ltime FROM $table ORDER BY time DESC LIMIT 1";
-
-        $result = $this->db->fetchAll($sql);
-        return $result;
-    }
 }
