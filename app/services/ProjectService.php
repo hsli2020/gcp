@@ -49,13 +49,13 @@ class ProjectService extends Injectable
 
     public function getDetails($id)
     {
-        $details = [];
+        $info = [];
 
         $project = $this->get($id);
 
-        $details['project_name'] = $project->name;
-        $details['address'] = $project->name;
+        $info['project'] = $project;
+        $info['details'] = [];
 
-        return $details;
+        return $info;
     }
 }

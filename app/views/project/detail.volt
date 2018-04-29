@@ -1,5 +1,31 @@
 {% extends "layouts/public.volt" %}
 
+{%- macro Green1_Red0(val) %}
+  {% if val == 1 %}
+    <img src="/assets/app/img/green.png" width="32">
+  {% elseif val == 0 %}
+    <img src="/assets/app/img/red.png" width="32">
+  {% endif %}
+{%- endmacro %}
+
+{%- macro GreenClose1_RedOpen0(val) %}
+  {% if val == 1 %}
+    <img src="/assets/app/img/green-close.png" width="40">
+  {% elseif val == 0 %}
+    <img src="/assets/app/img/red-open.png" width="32">
+  {% endif %}
+{%- endmacro %}
+
+{%- macro Green0_Red1_NA(val) %}
+  {% if val == 0 %}
+    <img src="/assets/app/img/green.png" width="32">
+  {% elseif val == 1 %}
+    <img src="/assets/app/img/red.png" width="32">
+  {% elseif val == 9 %}
+    <img src="/assets/app/img/black-na.png" width="32">
+  {% endif %}
+{%- endmacro %}
+
 {% block main %}
 <div class="container">
   <div class="w3-modal" style="display: block;">
@@ -9,23 +35,23 @@
       <table class="w3-table padding0">
         <tr>
           <td width="20%">Project Name</td>
-          <td width="80%">Whitby</td>
+          <td width="80%">{{ project->siteName }}</td>
         </tr>
         <tr>
           <td>Project Address</td>
-          <td>200 Taunton Rd W</td>
+          <td>{{ project->address }}</td>
         </tr>
         <tr>
           <td>Project Size</td>
-          <td>1000</td>
+          <td>{{ project->projectSize }}</td>
         </tr>
         <tr>
           <td>Store Number</td>
-          <td>1058</td>
+          <td>{{ project->storeNumber }}</td>
         </tr>
         <tr>
           <td>Operation Mode</td>
-          <td>Closed Transition</td>
+          <td>{{ project->operationMode }}</td>
         </tr>
       </table>
 
