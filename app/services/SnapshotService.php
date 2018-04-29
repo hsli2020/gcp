@@ -104,7 +104,7 @@ class SnapshotService extends Injectable
         $sql = "SELECT * FROM safety_power WHERE project_id=$id";
         $row = $this->db->fetchOne($sql);
 
-        if ($row) {
+        if ($row && $row['data']) {
             $json = json_decode($row['data']);
             foreach ($json->payload as $payload) {
                 if ($payload->name == $tagName) {
