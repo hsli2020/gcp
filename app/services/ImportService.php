@@ -127,6 +127,54 @@ class ImportService extends Injectable
         $this->db->execute($sql);
     }
 
+    public function getUreaLevel()
+    {
+        $tagName = "ML060_o";
+
+        $rows = $this->db->fetchAll("SELECT * FROM urea");
+        $rows = array_column($rows, 'tag', 'project_id');
+
+        foreach ($rows as $projectId => $tag) {
+            $url = "https://safetypower.net/api/1.0/stations/$tag/tags";
+            $res = $this->httpGet($url);
+
+            if ($res) {
+                $data = addslashes($res);
+                $sql = "UPDATE urea SET data='$data' WHERE project_id=$projectId";
+                $this->db->execute($sql);
+
+                $json = json_decode($res);
+                foreach ($json->payload as $payload) {
+                    if ($payload->name == $tagName) {
+                        $val = $payload->laststate->value;
+                        $sql = "UPDATE snapshot SET urea_level=$val WHERE project_id=$projectId";
+                        $this->db->execute($sql);
+                        echo "UREA Level: Project $projectId $tag $tagName=$val\n";
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    protected function httpGet($url)
+    {
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $accessToken = "QJbs0soFrj3IukQQNyIAvTi0l7iLNQAtAL";
+
+        $headers = [ "Authorization: Bearer $accessToken" ];
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        $output = curl_exec($ch);
+        curl_close($ch);
+
+        return $output ;
+    }
+
     protected function log($str)
     {
         $filename = BASE_DIR . '/app/logs/import.log';
