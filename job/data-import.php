@@ -6,3 +6,6 @@ $di = \Phalcon\Di::getDefault();
 
 $service = $di->get('importService');
 $service->import();
+
+$snapshot = $di->get('snapshotService');
+$snapshot->generate();

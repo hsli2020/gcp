@@ -8,35 +8,25 @@ class SnapshotService extends Injectable
 {
     public function load()
     {
-        $nothing = [
-            'rows'  => [],
-            'total' => [
-                'current_power' => '',
-                'project_size_ac' => '',
-                'average_irradiance' => '',
-                'performance' => '',
-            ]
-        ];
-
         $result = $this->db->fetchAll("SELECT * FROM snapshot");
 
-        $auth = $this->session->get('auth');
-        if (!is_array($auth)) {
-            return $nothing; // if user not logged in, display nothing
-        }
+       #$auth = $this->session->get('auth');
+       #if (!is_array($auth)) {
+       #    return []; // if user not logged in, display nothing
+       #}
 
-        $userProjects = $this->userService->getUserProjects($auth['id']);
+       #$userProjects = $this->userService->getUserProjects($auth['id']);
 
         $data = [];
         foreach ($result as $key => $val) {
-            if (!in_array($val['project_id'], $userProjects)) {
-                continue; // current user doesn't have permission to the project
-            }
+           #if (!in_array($val['project_id'], $userProjects)) {
+           #    continue; // current user doesn't have permission to the project
+           #}
 
             $data[$key] = $result[$key];
         }
 
-        return [ 'rows' => $data, 'total' => $total ];
+        return $data;
     }
 
     public function generate()
@@ -47,28 +37,30 @@ class SnapshotService extends Injectable
 
         foreach ($projects as $project) {
             $id = $project->id;
-            $name = $project->name;
-            $sizeAC = $project->capacityAC;
 
-            $GCPR                 = $this->getGCPR($project);
-            $currentPower         = $this->getCurrentPower($project);
-            $irradiance           = $this->getIrradiance($project);
-            $temperature          = $this->getTemperature($project);
-            $invertersGenerating  = $this->getGeneratingInverters($project, $currentPower, $irradiance);
-            $devicesCommunicating = $this->getCommunicatingDevices($project);
-            $lastCom              = $this->getLastCom($project);
+            $row = $this->db->fetchOne("SELECT * FROM latest WHERE project_id=$id");
+            if (!$row) {
+                continue;
+            }
+
+            $data = json_decode($row['data'], true);
 
             $sql = "REPLACE INTO snapshot SET"
-                 . " project_id = $id,"
-                 . " project_name = '$name',"
-                 . " project_size_ac = '$sizeAC',"
-                 . " GCPR = '$GCPR',"
-                 . " current_power = '$currentPower',"
-                 . " irradiance = '$irradiance',"
-                 . " temperature = '$temperature',"
-                 . " inverters_generating = '$invertersGenerating',"
-                 . " devices_communicating = '$devicesCommunicating',"
-                 . " last_com = '$lastCom'";
+                . ' project_id='.       $data['project_id']
+                . ',project_name='.     $data['project_name']
+                . ',Genset_Status='.    $data['Genset_Status']
+                . ',Emergency_Mode='.   $data['Emergency_Mode']
+                . ',M_Start_Auto='.     $data['M_Start_Auto']
+                . ',Total_Gen_Power='.  $data['Total_Gen_Power']
+                . ',Total_mains_pow='.  $data['Total_mains_pow']
+                . ',Dig_Input_1='.      $data['Dig_Input_1']
+                . ',Dig_Input_0='.      $data['Dig_Input_0']
+                . ',EZ_G_13='.          $data['EZ_G_13']
+                . ',M_Start_Inhibit='.  $data['M_Start_Inhibit']
+                . ',RTAC_Perm_Stat='.   $data['RTAC_Perm_Stat']
+                . ',RTAC_Allow='.       $data['RTAC_Allow']
+                . ',RTAC_Trip='.        $data['RTAC_Trip']
+                . ',RTAC_Block='.       $data['RTAC_Block'];
 
             $this->db->execute($sql);
         }
