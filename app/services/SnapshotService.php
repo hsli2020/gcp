@@ -101,7 +101,7 @@ class SnapshotService extends Injectable
 
         $id = $project->id;
 
-        $sql = "SELECT * FROM urea WHERE project_id=$id";
+        $sql = "SELECT * FROM safety_power WHERE project_id=$id";
         $row = $this->db->fetchOne($sql);
 
         if ($row) {

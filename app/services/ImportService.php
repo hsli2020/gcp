@@ -127,9 +127,9 @@ class ImportService extends Injectable
         $this->db->execute($sql);
     }
 
-    public function getUreaLevel()
+    public function getSafetyPower()
     {
-        $rows = $this->db->fetchAll("SELECT * FROM urea");
+        $rows = $this->db->fetchAll("SELECT * FROM safety_power");
         $rows = array_column($rows, 'tag', 'project_id');
 
         foreach ($rows as $projectId => $tag) {
@@ -138,10 +138,10 @@ class ImportService extends Injectable
 
             if ($res) {
                 $data = addslashes($res);
-                $sql = "UPDATE urea SET data='$data' WHERE project_id=$projectId";
+                $sql = "UPDATE safety_power SET data='$data' WHERE project_id=$projectId";
                 $this->db->execute($sql);
 
-                echo "UREA Level: Project $projectId $tag\n";
+                echo "Safety Power: Project $projectId $tag\n";
             }
         }
     }
