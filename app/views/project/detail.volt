@@ -1,5 +1,6 @@
 {% extends "layouts/public.volt" %}
 
+{% block main %}
 {%- macro Green1_Red0(val) %}
   {% if val == 1 %}
     <img src="/assets/app/img/green.png" width="32">
@@ -26,7 +27,6 @@
   {% endif %}
 {%- endmacro %}
 
-{% block main %}
 <div class="container">
   <div class="w3-modal" style="display: block;">
     <div class="w3-modal-content w3-card-8 w3-padding" style="max-width:900px">
@@ -35,23 +35,23 @@
       <table class="w3-table padding0">
         <tr>
           <td width="20%">Project Name</td>
-          <td width="80%">{{ project->siteName }}</td>
+          <td width="80%">{{ project.siteName }}</td>
         </tr>
         <tr>
           <td>Project Address</td>
-          <td>{{ project->address }}</td>
+          <td>{{ project.address }}</td>
         </tr>
         <tr>
           <td>Project Size</td>
-          <td>{{ project->projectSize }}</td>
+          <td>{{ project.projectSize }}</td>
         </tr>
         <tr>
           <td>Store Number</td>
-          <td>{{ project->storeNumber }}</td>
+          <td>{{ project.storeNumber }}</td>
         </tr>
         <tr>
           <td>Operation Mode</td>
-          <td>{{ project->operationMode }}</td>
+          <td>{{ project.operationMode }}</td>
         </tr>
       </table>
 
