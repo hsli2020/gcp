@@ -12,7 +12,6 @@
   {% block cssfile %}{% endblock %}
 
   <style>
-    html,body,h1,h2,h3,h4,h5 {font-family: "Segoe UI",Arial,sans-serif}
     #toast {
         height:auto;
         position:absolute;
