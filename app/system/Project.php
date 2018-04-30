@@ -60,4 +60,12 @@ class Project
 
         return null;
     }
+
+    public function getLatest()
+    {
+        $id = $this->id;
+        $sql = "SELECT * FROM latest WHERE project_id=$id";
+        $row = $this->getDb()->fetchOne($sql);
+        return $row ? $row : [];
+    }
 }
