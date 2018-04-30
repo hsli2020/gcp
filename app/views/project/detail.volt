@@ -63,23 +63,23 @@
         </tr>
         <tr>
           <td>Total Power, kW</td>
-          <td>20684</td>
-          <td>20684</td>
+          <td data-tag="20684">{{ data['M_Total_Main_po'] }}</td>
+          <td data-tag="20680 ">{{ data['M_Gen_real_enrg'] }}</td>
         </tr>
         <tr>
           <td>Average Current, A</td>
-          <td>20684</td>
-          <td>20684</td>
+          <td data-tag="20676">{{ data['M_Av_Main_Curnt'] }}</td>
+          <td data-tag="20678">{{ data['M_Av_Gen_Crnt'] }}</td>
         </tr>
         <tr>
           <td>Average Voltage, V</td>
-          <td>20684</td>
-          <td>20684</td>
+          <td data-tag="20670">{{ data['M_Av_Main_Del_V'] }}</td>
+          <td data-tag="20664">{{ data['M_Av_Gen_DeltaV'] }}</td>
         </tr>
         <tr>
           <td>Power Factor, pF</td>
-          <td>20684</td>
-          <td>20684</td>
+          <td data-tag="20668">{{ data['M_Main_power_pf'] }}</td>
+          <td data-tag="20660">{{ data['M_Gen_Power_fac'] }}</td>
         </tr>
         <tr><td colspan="3" class="w3-light-gray"></td></tr>
         <tr>
@@ -111,7 +111,7 @@
         <tr>
           <td>Hours till Next Maintenance</td>
           <td>N/A</td>
-          <td>20546</td>
+          <td data-tag="20546">{{ data['Hrs_until_maint'] }}</td>
         </tr>
       </table><br>
 
@@ -132,7 +132,7 @@
           <td></td>
         </tr>
         <tr>
-          <td>Operation Mode: Parallel</td>
+          <td>Operation Mode: {{ project.operationMode }}</td>
           <td></td>
         </tr>
         <tr>
