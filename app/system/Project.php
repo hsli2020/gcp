@@ -66,6 +66,14 @@ class Project
         $id = $this->id;
         $sql = "SELECT * FROM latest WHERE project_id=$id";
         $row = $this->getDb()->fetchOne($sql);
+        return $row ? json_decode($row['data'], true) : [];
+    }
+
+    public function getSnapshot()
+    {
+        $id = $this->id;
+        $sql = "SELECT * FROM snapshot WHERE project_id=$id";
+        $row = $this->getDb()->fetchOne($sql);
         return $row ? $row : [];
     }
 }

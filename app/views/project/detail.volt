@@ -106,7 +106,7 @@
         <tr>
           <td>Urea Level</td>
           <td>N/A</td>
-          <td>97%</td>
+          <td>{{ data['urea_level'] }}%</td>
         </tr>
         <tr>
           <td>Hours till Next Maintenance</td>
