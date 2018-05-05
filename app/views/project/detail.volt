@@ -117,85 +117,103 @@
 
       <table class="w3-table w3-bordered w3-border w3-margin-top compact">
         <tr>
-          <th colspan="2" class="center">Site Status</th>
+          <th colspan="3" class="center">Site Status</th>
         </tr>
         <tr>
           <td width="33%">Generator Status</td>
-          <td width="66%"></td>
+          <td width="33%">{{ Green1_Red0(data['Genset_Status']) }}</td>
+          <td width="33%"></td>
         </tr>
         <tr>
           <td>Main Breaker Status</td>
+          <td>{{ GreenClose1_RedOpen0(data['Dig_Input_0']) }}</td>
           <td></td>
         </tr>
         <tr>
           <td>Generator Breaker Status</td>
+          <td>{{ GreenClose1_RedOpen0(data['Dig_Input_1']) }}</td>
           <td></td>
         </tr>
         <tr>
           <td>Operation Mode: {{ project.operationMode }}</td>
+          <td>{{ Green0_Red1_NA(data['project_alarm']) }}</td>
           <td></td>
         </tr>
         <tr>
           <td>Remote Start Initiated</td>
+          <td>{{ Green1_Red0(data['M_Start_Inhibit']) }}</td>
           <td></td>
         </tr>
         <tr>
           <td>86G Lockout</td>
+          <td>{{ Green1_Red0(data['M_86GLo_Tr']) }}</td>
           <td></td>
         </tr>
         <tr>
           <td>86U Lockout</td>
+          <td>{{ Green1_Red0(data['M_86MLo_Tr']) }}</td>
           <td></td>
         </tr>
         <tr>
           <td>Emergency Mode Initiated</td>
+          <td></td>
           <td></td>
         </tr>
       </table><br>
 
       <table class="w3-table w3-bordered w3-border w3-margin-top compact">
         <tr>
-          <th colspan="2" class="center">RTAC Status</th>
+          <th colspan="3" class="center">RTAC Status</th>
         </tr>
         <tr>
           <td width="33%">Utility Connect Permission</td>
-          <td width="66%"></td>
+          <td width="33%">{{ Green1_Red0(data['RTAC_Perm_Stat']) }}</td>
+          <td width="33%"></td>
         </tr>
         <tr>
           <td>Utility Allow Connect</td>
+          <td>{{ Green1_Red0(data['RTAC_Allow']) }}</td>
           <td></td>
         </tr>
         <tr>
           <td>Utility Trip Disconnect Command</td>
+          <td>{{ Green1_Red0(data['RTAC_Trip']) }}</td>
           <td></td>
         </tr>
         <tr>
           <td>Utility Block Connect</td>
+          <td>{{ Green1_Red0(data['RTAC_Block']) }}</td>
           <td></td>
         </tr>
         <tr>
           <td>EMCP_Status</td>
+          <td>{{ Green1_Red0(data['EMCP_Status']) }}</td>
           <td></td>
         </tr>
-        <tr><th colspan="2" class="center">Communication Devices Status</th></tr>
+        <tr><th colspan="3" class="center">Communication Devices Status</th></tr>
         <tr>
           <td>SEL_Com_Status</td>
+          <td>{{ Green1_Red0(data['SEL_Com_Status']) }}</td>
           <td></td>
         </tr>
         <tr>
           <td>EZ_Com_Status</td>
+          <td>{{ Green1_Red0(data['EZ_Com_Status']) }}</td>
           <td></td>
         </tr>
         <tr>
           <td>ACMG_Com_Status</td>
+          <td>{{ Green1_Red0(data['ACMG_Com_Status']) }}</td>
           <td></td>
         </tr>
         <tr>
           <td>Primary Modem State</td>
+          <td>??</td>
           <td></td>
         </tr>
         <tr>
           <td>EMCP_Status</td>
+          <td>{{ Green1_Red0(data['EMCP_Status']) }}</td>
           <td></td>
         </tr>
       </table><br>
