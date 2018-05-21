@@ -66,9 +66,9 @@
     <td class="noR">{{ Green1_Red0(row['Genset_Status']) }}</th>
     <td class="noL noR">{{ Green1_Red0(row['Emergency_Mode']) }}</th>
     <td class="noL">{{ Green1_Red0(row['M_Start_Auto']) }}</th>
-    <td class="noR">{{ row['Total_Gen_Power'] }}</th>
-    <td class="noL">{{ row['Total_mains_pow'] }}</th>
-    <td class="noR">{{ GreenClose1_RedOpen0(row['Dig_Input_1']) }}</th>
+    <td class="noR">{{ row['M_Gen_real_enrg'] }}</th>
+    <td class="noL">{{ row['M_Total_Main_po'] }}</th>
+    <td class="noR">{{ GreenClose1_RedOpen0(row['M_Brkr52MAux']) }}</th>
     <td class="noL">{{ GreenClose1_RedOpen0(row['Dig_Input_0']) }}</th>
     <td>{{ Green1_Red0(row['EZ_G_13']) }}</th>
     <td class="noR">{{ Green1_Red0(row['M_Start_Inhibit']) }}</th>

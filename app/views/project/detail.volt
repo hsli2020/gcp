@@ -208,7 +208,7 @@
         </tr>
         <tr>
           <td>Primary Modem State</td>
-          <td>??</td>
+          <td>{{ data['COM4_ModemState'] }}</td>
           <td></td>
         </tr>
         <tr>
