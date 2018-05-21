@@ -45,6 +45,11 @@ class SnapshotService extends Injectable
 
             // NOTICE: table `snapshot` contains all fields from table `latest`
             $data = json_decode($row['data'], true);
+
+            if ($project->operationMode == 'Closed Transition') {
+                $data['EZ_G_13'] = 9; // N/A
+            }
+
             $fields = '';
             foreach ($data as $key => $val) {
                 $fields .= ",$key = '$val'";
@@ -73,9 +78,9 @@ class SnapshotService extends Injectable
             $tags = array_column($rows, 'tag_name', 'address');
         }
 
-        if ($project->operationMode == 'Closed Transition') {
-            return 9; // N/A
-        }
+       #if ($project->operationMode == 'Closed Transition') {
+       #    return 9; // N/A
+       #}
 
         $alarm = 0;
         foreach ($tags as $key => $tag) {

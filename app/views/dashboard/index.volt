@@ -37,7 +37,7 @@
   {% endif %}
 {%- endmacro %}
 
-{%- macro Green0_Red1_NA(val) %}
+{%- macro Green1_Red0_NA(val) %}
   {% if val == 0 %}
     <img src="/assets/app/img/green.png" width="32">
   {% elseif val == 1 %}
@@ -78,7 +78,7 @@
     <td class="noL">{{ row['M_Total_Main_po'] }}</th>
     <td class="noR">{{ GreenClose1_RedOpen0(row['M_Brkr52MAux']) }}</th>
     <td class="noL">{{ GreenClose1_RedOpen0(row['Dig_Input_0']) }}</th>
-    <td>{{ Green0_Red1_NA(row['EZ_G_13']) }}</th>
+    <td>{{ Green1_Red0_NA(row['EZ_G_13']) }}</th>
     <td class="noR">{{ Green0_Red1(row['M_Start_Inhibit']) }}</th>
     <td class="noL noR">{{ Green0_Red1(row['RTAC_Perm_Stat']) }}</th>
     <td class="noL noR">{{ Green0_Red1(row['RTAC_Allow']) }}</th>
