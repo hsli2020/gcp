@@ -9,6 +9,14 @@
   {% endif %}
 {%- endmacro %}
 
+{%- macro Green_Red(val, expected) %}
+  {% if val == expected %}
+    <img src="/assets/app/img/green.png" width="32">
+  {% else %}
+    <img src="/assets/app/img/red.png" width="32">
+  {% endif %}
+{%- endmacro %}
+
 {%- macro GreenClose1_RedOpen0(val) %}
   {% if val == 1 %}
     <img src="/assets/app/img/green-close.png" width="40">
@@ -208,7 +216,7 @@
         </tr>
         <tr>
           <td>Primary Modem State</td>
-          <td>{{ data['COM4_ModemState'] }}</td>
+          <td>{{ Green_Red(data['COM4_ModemState'], 7) }}</td>
           <td></td>
         </tr>
         <tr>
