@@ -43,7 +43,12 @@ class SnapshotService extends Injectable
                 continue;
             }
 
+            // NOTICE: table `snapshot` contains all fields from table `latest`
             $data = json_decode($row['data'], true);
+            $fields = '';
+            foreach ($data as $key => $val) {
+                $fields .= ",$key = '$val'";
+            }
 
             $alarm = $this->getAlarm($data, $project);
             $ureaLevel = $this->getUreaLevel($project);
@@ -51,19 +56,7 @@ class SnapshotService extends Injectable
             $sql = "REPLACE INTO snapshot SET"
                 . ' project_id='.       $row['project_id']
                 . ",project_name='".    $row['project_name']."'"
-                . ',Genset_Status='.    $data['Genset_Status']
-                . ',Emergency_Mode='.   $data['Emergency_Mode']
-                . ',M_Start_Auto='.     $data['M_Start_Auto']
-                . ',Total_Gen_Power='.  $data['Total_Gen_Power']
-                . ',Total_mains_pow='.  $data['Total_mains_pow']
-                . ',Dig_Input_1='.      $data['Dig_Input_1']
-                . ',Dig_Input_0='.      $data['Dig_Input_0']
-                . ',EZ_G_13='.          $data['EZ_G_13']
-                . ',M_Start_Inhibit='.  $data['M_Start_Inhibit']
-                . ',RTAC_Perm_Stat='.   $data['RTAC_Perm_Stat']
-                . ',RTAC_Allow='.       $data['RTAC_Allow']
-                . ',RTAC_Trip='.        $data['RTAC_Trip']
-                . ',RTAC_Block='.       $data['RTAC_Block']
+                . $fields               // NOTICE: table `snapshot` contains all fields from table `latest`
                 . ',project_alarm='.    $alarm
                 . ',urea_level='.       $ureaLevel;
 
