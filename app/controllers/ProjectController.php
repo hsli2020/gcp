@@ -22,6 +22,7 @@ class ProjectController extends ControllerBase
             $info = $this->projectService->getDetails($id);
             $this->view->project = $info['project'];
             $this->view->data = $info['details'];
+            $this->view->alarms = $info['alarms'];
         } catch (\Exception $e) {
            #$this->response->redirect('/error/404');
             $this->dispatcher->forward([

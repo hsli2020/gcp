@@ -32,7 +32,7 @@
     <div class="w3-modal-content w3-card-8 w3-padding" style="max-width:900px">
       <h2>Project Details</h2>
 
-      <table class="w3-table padding0">
+      <table id="details" class="w3-table padding0">
         <tr>
           <td width="20%">Project Name</td>
           <td width="80%">{{ project.siteName }}</td>
@@ -218,7 +218,8 @@
         </tr>
       </table><br>
 
-      <table class="w3-table w3-bordered w3-border w3-margin-top compact">
+      <div class="w3-margin-top" style="height: 300px; overflow-y: scroll;">
+      <table id="alarms" class="w3-table w3-bordered w3-border compact">
         <tr>
           <th colspan="3" class="center">RTAC ALARMS</th>
         </tr>
@@ -227,13 +228,16 @@
           <td>End Time</td>
           <td>Descripton</td>
         </tr>
+        {% for alarm in alarms %}
         <tr>
-          <td width="20%">2018-04-21 15:18:02</td>
-          <td width="20%">2018-04-21 15:20:34</td>
-          <td width="60%">Offline</td>
+          <td width="25%">{{ alarm['start_time'] }}</td>
+          <td width="25%">{{ alarm['end_time'] }}</td>
+          <td width="50%">{{ alarm['description'] }}</td>
         </tr>
-      </table><br>
-      <br>
+        {% endfor %}
+      </table>
+      </div>
+      <br><br>
 
     </div>
     <p>&nbsp;</p>
@@ -253,4 +257,6 @@
 .w3-table th.center { text-align: center; }
 .w3-bordered tr td:not(:first-child) { text-align: center; }
 .w3-bordered tr th:not(:first-child) { text-align: center; }
+#alarms tr td:not(:first-child) { text-align: left; }
+#alarms tr th:not(:first-child) { text-align: left; }
 {% endblock %}

@@ -76,4 +76,12 @@ class Project
         $row = $this->getDb()->fetchOne($sql);
         return $row ? $row : [];
     }
+
+    public function getAlarms()
+    {
+        $id = $this->id;
+        $sql = "SELECT * FROM alarm WHERE project_id=$id ORDER BY id DESC";
+        $rows = $this->getDb()->fetchAll($sql);
+        return $rows;
+    }
 }

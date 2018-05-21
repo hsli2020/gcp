@@ -83,6 +83,7 @@ class ImportService extends Injectable
             fclose($handle);
 
             $this->saveLatestData($project, $device, $latest);
+            $this->generateAlarm($project, $device, $latest);
         }
     }
 
@@ -125,6 +126,34 @@ class ImportService extends Injectable
              . " data = '$json'";
 
         $this->db->execute($sql);
+    }
+
+    public function generateAlarm($project, $device, $data)
+    {
+        if (empty($this->modbus)) {
+            $sql = "SELECT * FROM modbus";
+            $rows = $this->db->fetchAll($sql);
+            $this->modbus = array_column($rows, null, 'tag_name');
+        }
+
+        foreach ($this->modbus as $tagname => $info) {
+            $dataType = strtoupper($info['data_type']);
+            $description = $info['description'];
+            if ($description == '') {
+                $description = $tagname;
+            }
+            if ($dataType == 'BOOL' && isset($data[$tagname]) && $data[$tagname] != 0) {
+                $this->db->insertAsDict('alarm', [
+                    'project_id'  => $project->id,
+                    'start_time'  => $data['time_utc'],
+                    'end_time'    => null,
+                    'devcode'     => $device->code,
+                    'tagname'     => $tagname,
+                    'value'       => $data[$tagname],
+                    'description' => $description,
+                ]);
+            }
+        }
     }
 
     public function getSafetyPower()

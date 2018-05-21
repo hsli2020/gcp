@@ -54,9 +54,11 @@ class ProjectService extends Injectable
         $project = $this->get($id);
         $latest = $project->getLatest();
         $snapshot = $project->getSnapshot();
+        $alarms = $project->getAlarms();
 
         $info['project'] = $project;
         $info['details'] = $latest + $snapshot;
+        $info['alarms'] = $alarms;
 
         return $info;
     }
