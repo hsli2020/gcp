@@ -80,7 +80,7 @@ class Project
     public function getAlarms()
     {
         $id = $this->id;
-        $sql = "SELECT * FROM alarm WHERE project_id=$id ORDER BY id DESC";
+        $sql = "SELECT * FROM alarm WHERE project_id=$id ORDER BY id DESC LIMIT 300";
         $rows = $this->getDb()->fetchAll($sql);
         return $rows;
     }
