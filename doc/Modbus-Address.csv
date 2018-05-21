@@ -1,4 +1,4 @@
-Modbus Address,Data Type,Tag Name,Description
+Modbus Address ,Data Type,Tag Name,Description
 20503,Bool,EZ_G_13,The genset runs mains parallel
 20507,Bool,Emergency_Mode,
 20508,Bool,Dig_Input_0,Utility breaker status
@@ -9,6 +9,8 @@ Modbus Address,Data Type,Tag Name,Description
 20513,Bool,RTAC_Allow,Allow Connection Permit
 20519,Bool,M_86GLo_Tr,86G Lock Out Trip
 20520,Bool,M_86MLo_Tr,86U Lock Out Trip
+20521,Bool,M_Brkr52GAux,
+20522,Bool,M_Brkr52MAux,
 20523,Bool,M_Start_Auto,Remote Start Initiated
 20537,Bool,M_Start_Inhibit,
 20613,Bool,SEL_D_1,50 PHASE
@@ -66,8 +68,8 @@ Modbus Address,Data Type,Tag Name,Description
 20038,Float,S_Gen_real_enrg,Gen. real energy
 20532,Word,Total_Gen_Power,Generator Power (kW)
 20535,Int,Total_mains_pow,Store Load (kW)
-20546,Word,Hrs_until_maint,Hours until next maintenance
-20547,Word,Gen_Hrs,Gen. hours of operation * * * Scale Req *
+20546,Word,Hrs_until_maint ,Hours until next maintenance
+20547,Word,Gen_Hrs,Gen. hours of operation * * * Scale Req * 
 20660,Float,M_Gen_Power_fac,Power Factor
 20664,Float,M_Av_Gen_DeltaV,Volts
 20668,Float,M_Main_power_pf,Power Factor
@@ -81,3 +83,4 @@ Modbus Address,Data Type,Tag Name,Description
 20844,Word,ACMG_Com_Status,ACMG_Com_Status
 20895,Word,EMCP_Status,EMCP_Status
 21026,Word,Genset_Status,Generator Run Status
+22413,Byte,COM4_ModemState,Modem state 
