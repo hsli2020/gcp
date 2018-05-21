@@ -137,12 +137,17 @@ class ImportService extends Injectable
         }
 
         foreach ($this->modbus as $tagname => $info) {
-            $dataType = strtoupper($info['data_type']);
+            $normval = $info['normval'];
+            if ($normval == 'NA') {
+                continue;
+            }
+
             $description = $info['description'];
             if ($description == '') {
                 $description = $tagname;
             }
-            if ($dataType == 'BOOL' && isset($data[$tagname]) && $data[$tagname] != 0) {
+
+            if (isset($data[$tagname]) && $data[$tagname] != $normval) {
                 $this->db->insertAsDict('alarm', [
                     'project_id'  => $project->id,
                     'start_time'  => $data['time_utc'],
