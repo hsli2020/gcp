@@ -67,6 +67,7 @@
     <th class="noL">Utility Block<br>Connect</th>
     <th>Project Alarm</th>
     <th>UREA Level</th>
+    <th>Time</th>
   </tr>
   {% for row in data %}
   <tr>
@@ -86,6 +87,7 @@
     <td class="noL">{{ Green0_Red1(row['RTAC_Block']) }}</th>
     <td>{{ Green0_Red1(row['project_alarm']) }}</th>
     <td>{{ row['urea_level'] }}%</th>
+    <td>{{ row['time'] }}</th>
   </tr>
   {% endfor %}
 {# endif #}
