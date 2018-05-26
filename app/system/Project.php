@@ -87,5 +87,30 @@ class Project
 
     public function export($params)
     {
+        $filename = BASE_DIR.'/tmp/export-'.str_replace(' ', '-', $this->name).'-'.date('Ymd-His').'.csv';
+
+        $file = fopen($filename, 'w');
+
+        $today = date('Y-m-d');
+        $tomorrow = date('Y-m-d', strtotime('1 day'));
+
+        $startTime = empty($params['start-time']) ? $today    : $params['start-time'];
+        $endTime   = empty($params['end-time'])   ? $tomorrow : $params['end-time'];
+
+        if ($startTime == $endTime) {
+            $endTime = date('Y-m-d', strtotime('1 day', strtotime($startTime)));
+        }
+
+        fputs($file, 'Project:    ' .$this->name. PHP_EOL);
+        fputs($file, 'Start Time: ' .$startTime. PHP_EOL);
+        fputs($file, 'End Time:   ' .$endTime. PHP_EOL. PHP_EOL);
+
+        foreach ($this->devices as $device) {
+            $device->export($file, $startTime, $endTime);
+        }
+
+        fclose($file);
+
+        return $filename;
     }
 }

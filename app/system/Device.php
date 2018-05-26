@@ -56,4 +56,26 @@ class Device
         $columns = $this->getDb()->fetchAll("DESC $table");
         return array_column($columns, 'Field');
     }
+
+    public function export($file, $start, $end)
+    {
+        $table = $this->getTable();
+
+        # CONVERT_TZ(time_utc, 'UTC', 'America/Toronto')
+
+        $sql = "SELECT *
+                  FROM $table
+                 WHERE time_utc >= CONVERT_TZ('$start', 'America/Toronto', 'UTC') AND
+                       time_utc <  CONVERT_TZ('$end',   'America/Toronto', 'UTC') AND error=0";
+
+        $data = $this->getDb()->fetchAll($sql);
+
+        fputcsv($file, $this->getTableColumns());
+
+        foreach ($data as $row) {
+            fputcsv($file, $row);
+        }
+
+        fputs($file, PHP_EOL);
+    }
 }
