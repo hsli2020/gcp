@@ -239,7 +239,7 @@
         {% for alarm in alarms %}
         <tr>
           <td width="25%">{{ alarm['start_time'] }}</td>
-          <td width="25%">{{ alarm['end_time'] }}</td>
+          <td width="25%">{{ alarm['end_time'] ? alarm['end_time'] : 'Now' }}</td>
           <td width="50%">{{ alarm['description'] }}</td>
         </tr>
         {% endfor %}
