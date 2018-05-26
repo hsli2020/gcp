@@ -147,16 +147,33 @@ class ImportService extends Injectable
                 $description = $tagname;
             }
 
-            if (isset($data[$tagname]) && $data[$tagname] != $normval) {
-                $this->db->insertAsDict('alarm', [
-                    'project_id'  => $project->id,
-                    'start_time'  => $data['time_utc'],
-                    'end_time'    => null,
-                    'devcode'     => $device->code,
-                    'tagname'     => $tagname,
-                    'value'       => $data[$tagname],
-                    'description' => $description,
-                ]);
+            if (isset($data[$tagname])) {
+                $tagval = $data[$tagname];
+
+                // find last Not-Closed alarm
+                $sql = "SELECT * FROM alarm
+                         WHERE project_id={$project->id} AND tagname='$tagname' AND end_time IS NULL
+                         ORDER BY id DESC";
+                $lastAlarm = $this->db->fetchOne($sql);
+
+                if ($lastAlarm) {
+                    if ($lastAlarm['value'] != $tagval) {
+                        $this->db->updateAsDict('alarm', [
+                            'end_time' => $data['time_utc'],
+                        ],
+                        'id='.$lastAlarm['id']);
+                    }
+                } else if ($tagval != $normval) {
+                    $this->db->insertAsDict('alarm', [
+                        'project_id'  => $project->id,
+                        'start_time'  => $data['time_utc'],
+                        'end_time'    => null,
+                        'devcode'     => $device->code,
+                        'tagname'     => $tagname,
+                        'value'       => $data[$tagname],
+                        'description' => $description,
+                    ]);
+                }
             }
         }
     }
