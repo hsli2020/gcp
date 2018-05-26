@@ -31,4 +31,18 @@ class ProjectController extends ControllerBase
             ]);
         }
     }
+
+    public function exportAction()
+    {
+        $this->view->pageTitle = 'Data Exporting';
+
+        if ($this->request->isPost()) {
+            $params = $this->request->getPost();
+            $filename = $this->exportService->export($params);
+            $this->startDownload($filename);
+        }
+
+        $projects = $this->projectService->getAll();
+        $this->view->projects = $projects;
+    }
 }
