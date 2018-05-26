@@ -84,4 +84,8 @@ class Project
         $rows = $this->getDb()->fetchAll($sql);
         return $rows;
     }
+
+    public function export($params)
+    {
+    }
 }
