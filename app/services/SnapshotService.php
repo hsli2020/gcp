@@ -105,9 +105,11 @@ class SnapshotService extends Injectable
 
         if ($row && $row['data']) {
             $json = json_decode($row['data']);
-            foreach ($json->payload as $payload) {
-                if ($payload->name == $tagName) {
-                    return $payload->laststate->value;
+            if ($json) {
+                foreach ($json->payload as $payload) {
+                    if ($payload->name == $tagName) {
+                        return $payload->laststate->value;
+                    }
                 }
             }
         }
