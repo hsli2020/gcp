@@ -63,16 +63,20 @@ class Device
 
         # CONVERT_TZ(time_utc, 'UTC', 'America/Toronto')
 
-        $sql = "SELECT *
+        $sql = "SELECT *, CONVERT_TZ(time_utc, 'UTC', 'EST') AS time
                   FROM $table
                  WHERE time_utc >= CONVERT_TZ('$start', 'America/Toronto', 'UTC') AND
                        time_utc <  CONVERT_TZ('$end',   'America/Toronto', 'UTC') AND error=0";
 
         $data = $this->getDb()->fetchAll($sql);
 
-        fputcsv($file, $this->getTableColumns());
+        $columns = $this->getTableColumns();
+        $columns[0] = 'time'; // time_utc => time
+        fputcsv($file, $columns);
 
         foreach ($data as $row) {
+            $row['time_utc'] = $row['time'];
+            unset($row['time']);
             fputcsv($file, $row);
         }
 
