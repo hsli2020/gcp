@@ -66,7 +66,8 @@ class Device
         $sql = "SELECT *, CONVERT_TZ(time_utc, 'UTC', 'EST') AS time
                   FROM $table
                  WHERE time_utc >= CONVERT_TZ('$start', 'America/Toronto', 'UTC') AND
-                       time_utc <  CONVERT_TZ('$end',   'America/Toronto', 'UTC') AND error=0";
+                       time_utc <  CONVERT_TZ('$end',   'America/Toronto', 'UTC') AND error=0
+              ORDER BY time_utc";
 
         $data = $this->getDb()->fetchAll($sql);
 
