@@ -52,39 +52,25 @@
 {# if data is not empty #}
   <tr class="w3-light-gray">
     <th>Project</th>
-    <th class="noR">Generator Run<br>Status</th>
+    <th class="noL">Generator Status</th>
     <th class="noL noR">Emergency Start<br>Initiated</th>
-    <th class="noL">Remote Start<br>Initiated</th>
     <th class="noR">Generator Power<br>kW</th>
     <th class="noL">Store Load<br>kW</th>
-    <th class="noR">Generator Breaker<br>(52U) Status</th>
-    <th class="noL">Main Breaker<br>(52G) Status</th>
-    <th>Generator Running<br>in Parallel</th>
-    <th class="noR">Start Inhibit<br>Status</th>
-    <th class="noL noR">Utility Connect<br>Permission</th>
-    <th class="noL noR">Utility Allow<br>Connect</th>
-    <th class="noL noR">Utility Trip<br>Disconnect Command</th>
-    <th class="noL">Utility Block<br>Connect</th>
-    <th>Project Alarm</th>
+    <th class="noR">Generator Breaker<br>(52G) Status</th>
+    <th class="noL">Main Breaker<br>(52U) Status</th>
+    <th>P&C Alarm</th>
     <th>UREA Level</th>
     <th>Time</th>
   </tr>
   {% for row in data %}
   <tr>
     <td><a href="/project/detail/{{ row['project_id'] }}" target="_blank">{{ row['project_name'] }}</a></th>
-    <td class="noR">{{ Green1_Red0(row['Genset_Status']) }}</th>
-    <td class="noL noR">{{ Green1_Red0(row['Emergency_Mode']) }}</th>
     <td class="noL">{{ Green0_Red1(row['M_Start_Auto']) }}</th>
+    <td class="noL noR">{{ Green1_Red0(row['Emergency_Mode']) }}</th>
     <td class="noR">{{ row['M_Gen_real_enrg'] }}</th>
     <td class="noL">{{ row['M_Total_Main_po'] }}</th>
     <td class="noR">{{ GreenClose1_RedOpen0(row['M_Brkr52MAux']) }}</th>
     <td class="noL">{{ GreenClose1_RedOpen0(row['Dig_Input_0']) }}</th>
-    <td>{{ Green1_Red0_NA(row['EZ_G_13']) }}</th>
-    <td class="noR">{{ Green0_Red1(row['M_Start_Inhibit']) }}</th>
-    <td class="noL noR">{{ Green0_Red1(row['RTAC_Perm_Stat']) }}</th>
-    <td class="noL noR">{{ Green0_Red1(row['RTAC_Allow']) }}</th>
-    <td class="noL noR">{{ Green0_Red1(row['RTAC_Trip']) }}</th>
-    <td class="noL">{{ Green0_Red1(row['RTAC_Block']) }}</th>
     <td>{{ Green0_Red1(row['project_alarm']) }}</th>
     <td>{{ row['urea_level'] }}%</th>
     <td>{{ row['time'] }}</th>
