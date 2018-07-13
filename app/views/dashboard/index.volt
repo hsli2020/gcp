@@ -37,6 +37,14 @@
   {% endif %}
 {%- endmacro %}
 
+{%- macro RedClose1_GreenOpen0(val) %}
+  {% if val == 1 %}
+    <img src="/assets/app/img/close-red.jpg" width="32">
+  {% elseif val == 0 %}
+    <img src="/assets/app/img/open-green.jpg" width="40">
+  {% endif %}
+{%- endmacro %}
+
 {%- macro Green1_Red0_NA(val) %}
   {% if val == 0 %}
     <img src="/assets/app/img/green.png" width="32">
@@ -69,8 +77,8 @@
     <td class="noL noR">{{ Green1_Red0(row['Emergency_Mode']) }}</th>
     <td class="noR">{{ row['M_Gen_real_enrg'] }}</th>
     <td class="noL">{{ row['M_Total_Main_po'] }}</th>
-    <td class="noR">{{ GreenClose1_RedOpen0(row['M_Brkr52MAux']) }}</th>
-    <td class="noL">{{ GreenClose1_RedOpen0(row['Dig_Input_0']) }}</th>
+    <td class="noR">{{ RedClose1_GreenOpen0(row['M_Brkr52MAux']) }}</th>
+    <td class="noL">{{ RedClose1_GreenOpen0(row['Dig_Input_0']) }}</th>
     <td>{{ Green0_Red1(row['project_alarm']) }}</th>
     <td>{{ row['urea_level'] }}%</th>
     <td>{{ row['time'] }}</th>
