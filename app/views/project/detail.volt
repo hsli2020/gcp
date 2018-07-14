@@ -229,7 +229,7 @@
       <div class="w3-margin-top" style="height: 300px; overflow-y: scroll;">
       <table id="alarms" class="w3-table w3-bordered w3-border compact">
         <tr>
-          <th colspan="3" class="center">RTAC ALARMS</th>
+          <th colspan="3" class="center">Alarms</th>
         </tr>
         <tr>
           <td>Start Time</td>
