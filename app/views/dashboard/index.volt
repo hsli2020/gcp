@@ -13,6 +13,42 @@
   .w3-table th.noR { border-right: none; }
 </style>
 
+<style>
+  #statsbox .numval { font-size: 24px; text-align: right; }
+  #statsbox .label  { font-size: 12px; text-align: right; }
+  .bg-box1 { border: 5px solid #eee; }
+  .bg-box2 { border: 5px solid #eee; }
+  .bg-box3 { border: 5px solid #eee; }
+  .bg-box4 { border: 5px solid #eee; }
+</style>
+
+<div id="statsbox" class="w3-row-padding w3-margin-bottom">
+  <div class="w3-col" style="width:33%">
+    <div class="w3-container bg-box1">
+      <div class="w3-right w3-padding-12">
+        <div class="numval"></div>
+        <div class="label">Total Project Size KWAC</div>
+      </div>
+    </div>
+  </div>
+  <div class="w3-col" style="width:33%">
+    <div class="w3-container bg-box1">
+      <div class="w3-right w3-padding-12">
+        <div class="numval"></div>
+        <div class="label">Total Number of Projects</div>
+      </div>
+    </div>
+  </div>
+  <div class="w3-col" style="width:33%">
+    <div class="w3-container bg-box2">
+      <div class="w3-right w3-padding-12">
+        <div class="numval"></div>
+        <div class="label">Total Current Power</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 {%- macro Green1_Red0(val) %}
   {% if val == 1 %}
     <img src="/assets/app/img/green.png" width="32">
