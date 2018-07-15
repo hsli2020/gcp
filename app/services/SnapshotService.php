@@ -18,14 +18,28 @@ class SnapshotService extends Injectable
 
        #$userProjects = $this->userService->getUserProjects($auth['id']);
 
-        $data = [];
+        $rows = [];
+        $power = 0;
+        $generators = 0;
+
         foreach ($result as $key => $val) {
            #if (!in_array($val['project_id'], $userProjects)) {
            #    continue; // current user doesn't have permission to the project
            #}
 
-            $data[$key] = $result[$key];
+            $rows[$key] = $result[$key];
+            if ($val['M_Gen_real_enrg'] > 0) {
+                $generators += 1;
+            }
+
+            $power += $val['M_Gen_real_enrg'];
         }
+
+        $data = [];
+        $data['rows'] = $rows;
+        $data['project_count'] = count($rows);
+        $data['power'] = $power;
+        $data['generators'] = $generators;
 
         return $data;
     }

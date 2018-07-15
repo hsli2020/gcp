@@ -26,24 +26,24 @@
   <div class="w3-col" style="width:33%">
     <div class="w3-container bg-box1">
       <div class="w3-right w3-padding-12">
-        <div class="numval"></div>
-        <div class="label">Total Project Size KWAC</div>
+        <div class="numval">{{ data['project_count'] }}</div>
+        <div class="label">Total Number of Projects</div>
       </div>
     </div>
   </div>
   <div class="w3-col" style="width:33%">
     <div class="w3-container bg-box1">
       <div class="w3-right w3-padding-12">
-        <div class="numval"></div>
-        <div class="label">Total Number of Projects</div>
+        <div class="numval">{{ data['generators'] }}</div>
+        <div class="label">Number of Running Generators</div>
       </div>
     </div>
   </div>
-  <div class="w3-col" style="width:33%">
+  <div class="w3-col" style="width:34%">
     <div class="w3-container bg-box2">
       <div class="w3-right w3-padding-12">
-        <div class="numval"></div>
-        <div class="label">Total Current Power</div>
+        <div class="numval">{{ data['power'] }}</div>
+        <div class="label">Total Generator Power</div>
       </div>
     </div>
   </div>
@@ -106,7 +106,7 @@
     <th>UREA Level</th>
     <th>Time</th>
   </tr>
-  {% for row in data %}
+  {% for row in data['rows'] %}
   <tr>
     <td><a href="/project/detail/{{ row['project_id'] }}" target="_blank">{{ row['project_name'] }}</a></th>
     <td class="noL">{{ Green0_Red1(row['M_Start_Auto']) }}</th>
