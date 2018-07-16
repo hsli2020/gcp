@@ -25,6 +25,14 @@
   {% endif %}
 {%- endmacro %}
 
+{%- macro RedClose0_GreenOpen1(val) %}
+  {% if val == 0 %}
+    <img src="/assets/app/img/close-red.jpg" width="40">
+  {% elseif val == 1 %}
+    <img src="/assets/app/img/open-green.jpg" width="40">
+  {% endif %}
+{%- endmacro %}
+
 {%- macro Green0_Red1_NA(val) %}
   {% if val == 0 %}
     <img src="/assets/app/img/green.png" width="32">
@@ -134,12 +142,12 @@
         </tr>
         <tr>
           <td>Main Breaker Status</td>
-          <td>{{ GreenClose1_RedOpen0(data['Dig_Input_0']) }}</td>
+          <td>{{ RedClose0_GreenOpen1(data['M_SLD_Brkr52MAux']) }}</td>
           <td></td>
         </tr>
         <tr>
           <td>Generator Breaker Status</td>
-          <td>{{ GreenClose1_RedOpen0(data['Dig_Input_1']) }}</td>
+          <td>{{ RedClose0_GreenOpen1(data['M_SLD_Brkr52MAux']) }}</td>
           <td></td>
         </tr>
         <tr>
