@@ -27,7 +27,7 @@
     <div class="w3-container bg-box1">
       <div class="w3-right w3-padding-12">
         <div class="numval">{{ data['project_count'] }}</div>
-        <div class="label">Total Number of Projects</div>
+        <div class="label">Total Number of Generators</div>
       </div>
     </div>
   </div>
@@ -43,7 +43,7 @@
     <div class="w3-container bg-box2">
       <div class="w3-right w3-padding-12">
         <div class="numval">{{ data['power'] }}</div>
-        <div class="label">Total Generator Power</div>
+        <div class="label">Total Generator Power, MWAC</div>
       </div>
     </div>
   </div>
@@ -75,7 +75,7 @@
 
 {%- macro RedClose0_GreenOpen1(val) %}
   {% if val == 0 %}
-    <img src="/assets/app/img/close-red.jpg" width="32">
+    <img src="/assets/app/img/close-red.jpg" width="40">
   {% elseif val == 1 %}
     <img src="/assets/app/img/open-green.jpg" width="40">
   {% endif %}

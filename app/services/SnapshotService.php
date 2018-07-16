@@ -38,7 +38,7 @@ class SnapshotService extends Injectable
         $data = [];
         $data['rows'] = $rows;
         $data['project_count'] = count($rows);
-        $data['power'] = $power;
+        $data['power'] = round($power/1000.0, 1);
         $data['generators'] = $generators;
 
         return $data;
