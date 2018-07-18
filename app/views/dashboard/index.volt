@@ -23,7 +23,7 @@
 </style>
 
 <div id="statsbox" class="w3-row-padding w3-margin-bottom">
-  <div class="w3-col" style="width:33%">
+  <div class="w3-col" style="width:25%">
     <div class="w3-container bg-box1">
       <div class="w3-right w3-padding-12">
         <div class="numval">{{ data['project_count'] }}</div>
@@ -31,7 +31,7 @@
       </div>
     </div>
   </div>
-  <div class="w3-col" style="width:33%">
+  <div class="w3-col" style="width:25%">
     <div class="w3-container bg-box1">
       <div class="w3-right w3-padding-12">
         <div class="numval">{{ data['generators'] }}</div>
@@ -39,11 +39,19 @@
       </div>
     </div>
   </div>
-  <div class="w3-col" style="width:34%">
+  <div class="w3-col" style="width:25%">
     <div class="w3-container bg-box2">
       <div class="w3-right w3-padding-12">
         <div class="numval">{{ data['power'] }}</div>
         <div class="label">Total Generator Power, MWAC</div>
+      </div>
+    </div>
+  </div>
+  <div class="w3-col" style="width:25%">
+    <div class="w3-container bg-box2">
+      <div class="w3-right w3-padding-12">
+        <div class="numval">18419 MW</div>
+        <div class="label">Forecast Peak @18:00 EST</div>
       </div>
     </div>
   </div>
