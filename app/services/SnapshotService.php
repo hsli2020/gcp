@@ -41,6 +41,16 @@ class SnapshotService extends Injectable
         $data['power'] = round($power/1000.0, 1);
         $data['generators'] = $generators;
 
+        $data['peak_hour'] = '00';
+        $data['peak_energy'] = 0;
+
+        $sql = "SELECT * FROM forecast_peak ORDER BY time_utc DESC LIMIT 1";
+        $result = $this->db->fetchOne($sql);
+        if ($result) {
+            $data['peak_hour'] = $result['peak_hour'];
+            $data['peak_energy'] = $result['peak_energy'];
+        }
+
         return $data;
     }
 

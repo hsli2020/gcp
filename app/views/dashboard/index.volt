@@ -50,8 +50,8 @@
   <div class="w3-col" style="width:25%">
     <div class="w3-container bg-box2">
       <div class="w3-right w3-padding-12">
-        <div class="numval">18419 MW</div>
-        <div class="label">Forecast Peak @18:00 EST</div>
+        <div class="numval">{{ data['peak_energy'] }} MW</div>
+        <div class="label">Forecast Peak @{{ data['peak_hour'] }}:00 EST</div>
       </div>
     </div>
   </div>
