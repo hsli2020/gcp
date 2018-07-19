@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use Phalcon\Di\Injectable;
+use phpseclib\Net\SFTP;
 
 class ImportService extends Injectable
 {
@@ -235,6 +236,49 @@ class ImportService extends Injectable
             sleep(5);
             exec('net start "FileZilla Server FTP server"');
             $this->log("=> Restart FTP Server\n");
+        }
+    }
+
+    public function getForecastPeak()
+    {
+        $today = date('Ymd');
+
+        $user = "gormanm";
+        $pass = "Sunshine4ever!";
+        $host = "reports.ieso.ca";
+        $frmt = "/public/Adequacy2/PUB_Adequacy2_$today.xml";
+        $floc = BASE_DIR."/tmp/".basename($frmt);
+
+        if (time() - filemtime($floc) < 60*30) {
+            return;
+        }
+
+        $sftp = new SFTP($host);
+        if (!$sftp->login($user, $pass)) {
+            return;
+        }
+
+        $sftp->get($frmt, $floc);
+
+        $xml = simplexml_load_file($floc);
+
+        $peakMW = 0;
+        $peakHour = 0;
+
+        foreach ($xml->DocBody->ForecastDemand->OntarioDemand->ForecastOntDemand->Demand as $demand) {
+            if (intval($demand->EnergyMW) > $peakMW) {
+                $peakMW = intval($demand->EnergyMW);
+                $peakHour = intval($demand->DeliveryHour);
+            }
+        }
+
+        try {
+            $this->db->insertAsDict('forecast_peak', [
+                'time_utc'    => strval($xml->DocHeader->CreatedAt),
+                'peak_hour'   => $peakHour,
+                'peak_energy' => $peakMW,
+            ]);
+        } catch (\Exception $e) {
         }
     }
 
