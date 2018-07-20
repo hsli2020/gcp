@@ -124,7 +124,7 @@
     <td class="noR">{{ RedClose0_GreenOpen1(row['M_SLD_Gen_Brkr52GAux']) }}</th>
     <td class="noL">{{ RedClose0_GreenOpen1(row['M_SLD_Brkr52MAux']) }}</th>
     <td>{{ Green0_Red1(row['project_alarm']) }}</th>
-    <td>{{ row['urea_level'] }}%</th>
+    <td {% if row['urea_level'] < 51 %}class="w3-text-red" style="font-weight:bold"{% endif %}>{{ row['urea_level'] }}%</th>
     <td>{{ row['time'] }}</th>
   </tr>
   {% endfor %}
