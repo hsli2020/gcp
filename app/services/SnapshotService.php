@@ -48,7 +48,7 @@ class SnapshotService extends Injectable
         $result = $this->db->fetchOne($sql);
         if ($result) {
             $data['peak_hour'] = $result['peak_hour'];
-            $data['peak_energy'] = $result['peak_energy'];
+            $data['peak_energy'] = number_format($result['peak_energy']);
         }
 
         return $data;
