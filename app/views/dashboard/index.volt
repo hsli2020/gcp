@@ -112,7 +112,7 @@
     <th class="noL">Main Breaker<br>(52U) Status</th>
     <th>P&C Alarm</th>
     <th>UREA Level</th>
-    <th>Time</th>
+    <th>Time, EST</th>
   </tr>
   {% for row in data['rows'] %}
   <tr>
