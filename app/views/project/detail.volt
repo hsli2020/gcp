@@ -147,7 +147,7 @@
         </tr>
         <tr>
           <td>Generator Breaker Status</td>
-          <td>{{ RedClose0_GreenOpen1(data['M_SLD_Brkr52MAux']) }}</td>
+          <td>{{ RedClose0_GreenOpen1(data['M_SLD_Gen_Brkr52GAux']) }}</td>
           <td></td>
         </tr>
         <tr>
