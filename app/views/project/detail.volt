@@ -255,8 +255,8 @@
           <th colspan="3" class="center">Alarms</th>
         </tr>
         <tr>
-          <td>Start Time</td>
-          <td>End Time</td>
+          <td>Start Time (EST)</td>
+          <td>End Time (EST)</td>
           <td>Descripton</td>
         </tr>
         {% for alarm in alarms %}

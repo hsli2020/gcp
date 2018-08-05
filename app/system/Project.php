@@ -80,7 +80,10 @@ class Project
     public function getAlarms()
     {
         $id = $this->id;
-        $sql = "SELECT * FROM alarm WHERE project_id=$id ORDER BY id DESC LIMIT 300";
+        $sql = "SELECT project_id, devcode, tagname, value, description,
+                       CONVERT_TZ(start_time, 'UTC', 'EST') AS start_time,
+                       CONVERT_TZ(end_time,   'UTC', 'EST') AS end_time
+                  FROM alarm WHERE project_id=$id ORDER BY id DESC LIMIT 200";
         $rows = $this->getDb()->fetchAll($sql);
         return $rows;
     }
