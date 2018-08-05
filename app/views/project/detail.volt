@@ -9,6 +9,14 @@
   {% endif %}
 {%- endmacro %}
 
+{%- macro Green0_Red1(val) %}
+  {% if val == 0 %}
+    <img src="/assets/app/img/green.png" width="32">
+  {% elseif val == 1 %}
+    <img src="/assets/app/img/red.png" width="32">
+  {% endif %}
+{%- endmacro %}
+
 {%- macro Green_Red(val, expected) %}
   {% if val == expected %}
     <img src="/assets/app/img/green.png" width="32">
@@ -64,10 +72,6 @@
         <tr>
           <td>Store Number</td>
           <td>{{ project.storeNumber }}</td>
-        </tr>
-        <tr>
-          <td>Operation Mode</td>
-          <td>{{ project.operationMode }}</td>
         </tr>
       </table>
 
@@ -151,29 +155,40 @@
           <td></td>
         </tr>
         <tr>
-          <td>Operation Mode: {{ project.operationMode }}</td>
-          <td>{{ Green0_Red1_NA(data['project_alarm']) }}</td>
-          <td></td>
-        </tr>
-        <tr>
           <td>Remote Start Initiated</td>
           <td>{{ Green1_Red0(data['M_Start_Inhibit']) }}</td>
           <td></td>
         </tr>
         <tr>
-          <td>86G Lockout</td>
-          <td>{{ Green1_Red0(data['M_86GLo_Tr']) }}</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>86U Lockout</td>
-          <td>{{ Green1_Red0(data['M_86MLo_Tr']) }}</td>
+          <td>Engine Status</td>
+          <td>{{ Green0_Red1(data['Engin_Fault']) }}</td>
           <td></td>
         </tr>
         <tr>
           <td>Emergency Mode Initiated</td>
+          <td>{{ Green0_Red1(data['Emergency_Mode']) }}</td>
           <td></td>
-          <td></td>
+        </tr>
+      </table><br>
+
+      <table class="w3-table w3-bordered w3-border w3-margin-top compact">
+        <tr>
+          <th colspan="3" class="center">Lockout Status</th>
+        </tr>
+        <tr>
+          <td width="33%">86G Lockout</td>
+          <td width="33%">{{ Green0_Red1(data['M_86GLo_Tr']) }}</td>
+          <td width="33%"></td>
+        </tr>
+        <tr>
+          <td width="33%">86U Lockout</td>
+          <td width="33%">{{ Green1_Red0(data['M_86MLo_Tr']) }}</td>
+          <td width="33%"></td>
+        </tr>
+        <tr>
+          <td width="33%">Start Inhibit Status</td>
+          <td width="33%">{{ Green1_Red0(data['M_Start_Inhibit']) }}</td>
+          <td width="33%"></td>
         </tr>
       </table><br>
 
