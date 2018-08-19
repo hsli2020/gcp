@@ -156,7 +156,7 @@
         </tr>
         <tr>
           <td>Remote Start Initiated</td>
-          <td>{{ Green1_Red0(data['M_Start_Inhibit']) }}</td>
+          <td>{{ Green0_Red1(data['M_Start_Inhibit']) }}</td>
           <td></td>
         </tr>
         <tr>
@@ -166,7 +166,7 @@
         </tr>
         <tr>
           <td>Emergency Mode Initiated</td>
-          <td>{{ Green0_Red1(data['Emergency_Mode']) }}</td>
+          <td>{{ Green1_Red0(data['Emergency_Mode']) }}</td>
           <td></td>
         </tr>
       </table><br>
@@ -224,7 +224,7 @@
         <tr><th colspan="3" class="center">Communication Devices Status</th></tr>
         <tr>
           <td>SEL_Com_Status</td>
-          <td>{{ Green1_Red0(data['SEL_Com_Status']) }}</td>
+          <td>{{ Green0_Red1(data['SEL_Com_Status']) }}</td>
           <td></td>
         </tr>
         <tr>
@@ -252,7 +252,7 @@
       <div class="w3-margin-top" style="height: 300px; overflow-y: scroll;">
       <table id="alarms" class="w3-table w3-bordered w3-border compact">
         <tr>
-          <th colspan="3" class="center">Alarms</th>
+          <th colspan="3" class="center">ALARMS</th>
         </tr>
         <tr>
           <td>Start Time (EST)</td>
