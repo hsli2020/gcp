@@ -141,7 +141,7 @@
         </tr>
         <tr>
           <td width="33%">Generator Status</td>
-          <td width="33%">{{ Green1_Red0(data['Genset_Status']) }}</td>
+          <td width="33%">{{ Green0_Red1(data['M_Start_Auto']) }}</td>
           <td width="33%"></td>
         </tr>
         <tr>
