@@ -216,11 +216,6 @@
           <td>{{ Green1_Red0(data['RTAC_Block']) }}</td>
           <td></td>
         </tr>
-        <tr>
-          <td>EMCP_Status</td>
-          <td>{{ Green1_Red0(data['EMCP_Status']) }}</td>
-          <td></td>
-        </tr>
         <tr><th colspan="3" class="center">Communication Devices Status</th></tr>
         <tr>
           <td>SEL_Com_Status</td>
