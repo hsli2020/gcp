@@ -17,7 +17,12 @@ class ImportService extends Injectable
         foreach ($projects as $project) {
             echo $project->siteName, EOL;
 
-            $dir = 'C:/GCP-FTP-ROOT/'.$project->ftpdir;
+            $path = pathinfo($project->ftpdir, PATHINFO_DIRNAME);
+            if (strlen($path) == 1 || $path[1] != ':') { // relative path
+                $dir = 'C:/GCP-FTP-ROOT/'.$project->ftpdir;
+            } else { // absolute path
+                $dir = $project->ftpdir;
+            }
 
             foreach (glob($dir . '/*.csv') as $filename) {
                 echo "\t", $filename, EOL;
@@ -223,7 +228,13 @@ class ImportService extends Injectable
 
         $fileCount = 0;
         foreach ($projects as $project) {
-            $dir = 'C:/GCP-FTP-ROOT/'.$project->ftpdir;
+            $path = pathinfo($project->ftpdir, PATHINFO_DIRNAME);
+            if (strlen($path) == 1 || $path[1] != ':') { // relative path
+                $dir = 'C:/GCP-FTP-ROOT/'.$project->ftpdir;
+            } else { // absolute path
+                $dir = $project->ftpdir;
+            }
+
             foreach (glob($dir . '/*.csv') as $filename) {
                 if (time() - filemtime($filename) > 10*60) {
                     $fileCount++;
