@@ -32,20 +32,24 @@
     </div>
   </div>
   <div class="w3-col" style="width:25%">
-    <div class="w3-container bg-box1">
-      <div class="w3-right w3-padding-12">
-        <div class="numval">{{ data['generators'] }}</div>
-        <div class="label">Number of Running Generators</div>
+    <a href="/dashboard/chart/generators" target="_blank">
+      <div class="w3-container bg-box1">
+        <div class="w3-right w3-padding-12">
+          <div class="numval">{{ data['generators'] }}</div>
+          <div class="label">Number of Running Generators</div>
+        </div>
       </div>
-    </div>
+    </a>
   </div>
   <div class="w3-col" style="width:25%">
-    <div class="w3-container bg-box2">
-      <div class="w3-right w3-padding-12">
-        <div class="numval">{{ data['power'] }}</div>
-        <div class="label">Total Generator Power, MWAC</div>
+    <a href="/dashboard/chart/power" target="_blank">
+      <div class="w3-container bg-box2">
+        <div class="w3-right w3-padding-12">
+          <div class="numval">{{ data['power'] }}</div>
+          <div class="label">Total Generator Power, MWAC</div>
+        </div>
       </div>
-    </div>
+    </a>
   </div>
   <div class="w3-col" style="width:25%">
     <div class="w3-container bg-box2">
