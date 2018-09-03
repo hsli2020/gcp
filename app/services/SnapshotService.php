@@ -86,6 +86,10 @@ class SnapshotService extends Injectable
             $sql = "REPLACE INTO snapshot SET"
                 . ' project_id='.       $row['project_id']
                 . ",project_name='".    $row['project_name']."'"
+                . ",devcode='".         $row['devcode']."'"
+                . ",devtype='".         $row['devtype']."'"
+#               . ",time_utc='".        $row['time']."'"
+                . ",data='".            $row['data']."'"
                 . $fields               // NOTICE: table `snapshot` contains all fields from table `latest`
                 . ',project_alarm='.    $alarm
                 . ',urea_level='.       $ureaLevel;
