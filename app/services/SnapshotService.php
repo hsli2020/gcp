@@ -35,6 +35,9 @@ class SnapshotService extends Injectable
             $power += $val['M_Gen_real_enrg'];
         }
 
+        $sql = "INSERT INTO generator_power (generators, power) VALUE ($generators, $power)";
+        $this->db->execute($sql);
+
         $data = [];
         $data['rows'] = $rows;
         $data['project_count'] = count($rows);
