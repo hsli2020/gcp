@@ -32,6 +32,7 @@ function fpr()
     $args = func_get_args();
     foreach ($args as $var) {
         $str = trim(var_export($var, true), "'");
+#       $str = trim(print_r($var, true));
         $str = preg_replace("/=> \n(\s+)/", "=> ", $str);
         error_log($str."\n", 3, $filename);
     }
