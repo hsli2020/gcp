@@ -146,7 +146,7 @@ var options = {
         autoHighlight: false
     },
     yaxes: [
-        { position: "left", max: 50 },
+        { position: "left", max: 30 },
         { position: "right" }
     ],
     xaxis: {
