@@ -116,8 +116,8 @@ function updateLegend() {
 
 {% block domready %}
 var bar1 = {
-    label: "Power Production",
-    data: [ 1, 2, 3, 4, 5, 6, 7, 8],
+    //label: "Power Production",
+    data: {{ data }},
     color: "rgb(54, 162, 235)",
     shadowSize: 0,
     yaxis: 1,
@@ -125,8 +125,8 @@ var bar1 = {
 }
 
 var line1 = {
-    label: "Irradiance",
-    data: [ 1, 2, 3, 4, 5, 6, 7, 8],
+    //label: "Irradiance",
+    data: {{ data }},
     color: "#c00000",
     shadowSize: 0,
     yaxis: 2,
@@ -141,7 +141,7 @@ var options = {
         mode: "x"
     },
     grid: {
-        hoverable: true,
+        //hoverable: true,
         //clickable: true
         autoHighlight: false
     },
@@ -161,7 +161,7 @@ $(".chart-placeholder").bind("plothover", function (event, pos, item) {
     currentTarget = event.currentTarget.id;
     latestPosition = pos;
     if (!updateLegendTimeout) {
-        updateLegendTimeout = setTimeout(updateLegend, 50);
+        //updateLegendTimeout = setTimeout(updateLegend, 50);
     }
 });
 

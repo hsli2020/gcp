@@ -147,4 +147,24 @@ class SnapshotService extends Injectable
 
         return 0;
     }
+
+    public function getChartData()
+    {
+        $today = date('Y-m-d');
+
+        $sql = "SELECT * FROM generator_power WHERE DATE(time)='$today' GROUP BY UNIX_TIMESTAMP(time) DIV 300";
+        $rows = $this->db->fetchAll($sql);
+
+        // utc time to local time
+        $gens  = [];
+        $power = [];
+        foreach ($rows as $row) {
+            $time = strtotime($row['time'].' UTC') + date('Z');
+            $time -= $time%60; // floor to minute (no seconds)
+            $gens[$time] = [ $time*1000, intval($row['generators']) ];
+            $power[$time] = [ $time*1000, intval($row['power']) ];
+        };
+
+        return [ 'gens' => array_values($gens), 'power' => array_values($power) ];
+    }
 }
