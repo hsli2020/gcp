@@ -13,7 +13,10 @@ class DashboardController extends ControllerBase
     public function chartAction($type = "")
     {
         $data = $this->snapshotService->getChartData();
-
+        $this->view->pageTitle = 'Running Generators and Power';
+        $this->view->gens = json_encode($data['gens']);
+        $this->view->power = json_encode($data['power']);
+/*
         if ($type == "generators") {
             $this->view->pageTitle = 'Numbers of Running Generators';
             $this->view->data = json_encode($data['gens']);
@@ -23,5 +26,6 @@ class DashboardController extends ControllerBase
             $this->view->pageTitle = 'Total Generator Power';
             $this->view->data = json_encode($data['power']);
         }
+*/
     }
 }

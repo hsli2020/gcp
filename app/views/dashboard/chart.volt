@@ -116,8 +116,8 @@ function updateLegend() {
 
 {% block domready %}
 var bar1 = {
-    //label: "Power Production",
-    data: {{ data }},
+    label: "Generators",
+    data: {{ gens }},
     color: "rgb(54, 162, 235)",
     shadowSize: 0,
     yaxis: 1,
@@ -125,8 +125,8 @@ var bar1 = {
 }
 
 var line1 = {
-    //label: "Irradiance",
-    data: {{ data }},
+    label: "Power",
+    data: {{ power }},
     color: "#c00000",
     shadowSize: 0,
     yaxis: 2,
