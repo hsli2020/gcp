@@ -116,7 +116,7 @@ class SnapshotService extends Injectable
 
         $alarm = 0;
         foreach ($tags as $key => $tag) {
-            if ($data[$tag] != 0) {
+            if (isset($data[$tag]) && $data[$tag] != 0) {
                 $alarm = 1;
                 break;
             }
