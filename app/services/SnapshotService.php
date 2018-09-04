@@ -159,7 +159,7 @@ class SnapshotService extends Injectable
         $gens  = [];
         $power = [];
         foreach ($rows as $row) {
-            $time = strtotime($row['time'].' UTC') + date('Z');
+            $time = strtotime($row['time'].' UTC');
             $time -= $time%60; // floor to minute (no seconds)
             $gens[$time] = [ $time*1000, intval($row['generators']) ];
             $power[$time] = [ $time*1000, intval($row['power']) ];
