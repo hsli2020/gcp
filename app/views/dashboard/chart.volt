@@ -15,19 +15,58 @@
 {% endblock %}
 
 {% block main %}
-  <div class="w3-container">
-    <div id="chart-content">
-	  <div id="header">
-        <h2>{{ pageTitle }}</h2>
-	  </div>
+<style>
+  #statsbox .numval { font-size: 24px; text-align: right; }
+  #statsbox .label  { font-size: 12px; text-align: right; }
+  .bg-box1 { border: 5px solid #eee; }
+  .bg-box2 { border: 5px solid #eee; }
+  .bg-box3 { border: 5px solid #eee; }
+  .bg-box4 { border: 5px solid #eee; }
+</style>
 
-      <div id="chart1">
-        <div class="chart-container">
-          <div id="placeholder1" class="chart-placeholder"></div>
-        </div>
+<div id="statsbox" class="w3-row-padding w3-margin-bottom">
+  <div class="w3-col" style="width:33%">
+    <div class="w3-container bg-box1">
+      <div class="w3-right w3-padding-12">
+        <div class="numval">{{ data['project_count'] }}</div>
+        <div class="label">Total Number of Generators</div>
       </div>
     </div>
   </div>
+  <div class="w3-col" style="width:33%">
+    <div class="w3-container bg-box1">
+      <div class="w3-left"><i class="fa fa-line-chart w3-xxxlarge w3-opacity w3-margin-top"></i></div>
+      <div class="w3-right w3-padding-12">
+        <div class="numval">{{ data['generators'] }}</div>
+        <div class="label">Number of Running Generators</div>
+      </div>
+    </div>
+  </div>
+  <div class="w3-col" style="width:33%">
+    <div class="w3-container bg-box2">
+      <div class="w3-left"><i class="fa fa-bar-chart w3-xxxlarge w3-opacity w3-margin-top"></i></div>
+      <div class="w3-right w3-padding-12">
+        <div class="numval">{{ data['power'] }}</div>
+        <div class="label">Total Generator Power, MWAC</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="w3-container">
+  <div id="chart-content">
+    {#
+    <div id="header">
+      <h2>{{ pageTitle }}</h2>
+	</div>
+    #}
+    <div id="chart1">
+      <div class="chart-container">
+        <div id="placeholder1" class="chart-placeholder"></div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block csscode %}
@@ -115,17 +154,9 @@ function updateLegend() {
 {% endblock %}
 
 {% block domready %}
-var bar1 = {
-    label: "Generators",
-    data: {{ gens }},
-    color: "rgb(54, 162, 235)",
-    shadowSize: 0,
-    yaxis: 1,
-    bars: { show: true, barWidth: 1, lineWidth: 1, fill: true }
-}
 
 var line1 = {
-    label: "Power",
+    label: "Total Power, kW",
     data: {{ power }},
     color: "#c00000",
     shadowSize: 0,
@@ -146,8 +177,7 @@ var options = {
         autoHighlight: false
     },
     yaxes: [
-        { position: "left", max: 30 },
-        { position: "right" }
+        { position: "left", min: 0 },
     ],
     xaxis: {
         mode: 'time',
@@ -155,7 +185,7 @@ var options = {
     }
 }
 
-plot1 = $.plot("#placeholder1", [ bar1, line1 ], options);
+plot1 = $.plot("#placeholder1", [ line1 ], options);
 
 $(".chart-placeholder").bind("plothover", function (event, pos, item) {
     currentTarget = event.currentTarget.id;

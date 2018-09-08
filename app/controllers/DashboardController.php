@@ -12,8 +12,10 @@ class DashboardController extends ControllerBase
 
     public function chartAction($type = "")
     {
-        $this->view->pageTitle = 'Running Generators and Power';
+        $this->view->pageTitle = 'Total Power, kW';
         $this->view->refreshInterval = 60;
+
+        $this->view->data = $this->snapshotService->load();
 
         $data = $this->snapshotService->getChartData();
 
