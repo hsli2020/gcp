@@ -27,6 +27,7 @@
 <div id="statsbox" class="w3-row-padding w3-margin-bottom">
   <div class="w3-col" style="width:33%">
     <div class="w3-container bg-box1">
+      <div class="w3-left"><i class="fa fa-pie-chart w3-xxxlarge w3-opacity w3-margin-top"></i></div>
       <div class="w3-right w3-padding-12">
         <div class="numval">{{ data['project_count'] }}</div>
         <div class="label">Total Number of Generators</div>
