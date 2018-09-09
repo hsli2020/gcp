@@ -122,7 +122,7 @@
     <th>UREA Level</th>
     <th>Time, EST</th>
   </tr>
-  {% for row in data['rows'] %}
+  {% for row in data['snapshot'] %}
   <tr>
     <td><a href="/project/detail/{{ row['project_id'] }}" target="_blank">{{ row['project_name'] }}</a></th>
     <td class="noL">{{ Green0_Red1(row['M_Start_Auto']) }}</th>

@@ -9,7 +9,7 @@ class SnapshotService extends Injectable
     public function load()
     {
         $sql = "SELECT *, CONVERT_TZ(time_utc, 'UTC', 'EST') AS time FROM snapshot";
-        $result = $this->db->fetchAll($sql);
+        $rows = $this->db->fetchAll($sql);
 
        #$auth = $this->session->get('auth');
        #if (!is_array($auth)) {
@@ -18,48 +18,51 @@ class SnapshotService extends Injectable
 
        #$userProjects = $this->userService->getUserProjects($auth['id']);
 
-        $rows = [];
-        $power = 0;
+        $snapshot = [];
+        $powersum = 0;
         $generators = 0;
 
-        foreach ($result as $key => $val) {
-           #if (!in_array($val['project_id'], $userProjects)) {
+        foreach ($rows as $row) {
+           #if (!in_array($row['project_id'], $userProjects)) {
            #    continue; // current user doesn't have permission to the project
            #}
 
-            $rows[$key] = $result[$key];
-            if ($val['M_Gen_real_enrg'] > 0) {
+            $data = json_decode($row['data'], true);
+
+            $data['time']          = $row['time'];
+            $data['project_id']    = $row['project_id'];
+            $data['project_name']  = $row['project_name'];
+            $data['project_alarm'] = $row['project_alarm'];
+            $data['urea_level']    = $row['urea_level'];
+
+            $snapshot[] = $data;
+
+            $power = $this->getPower($data);
+            if ($power > 0) {
                 $generators += 1;
+                $powersum += $power;
             }
-
-            $power += $val['M_Gen_real_enrg'];
         }
 
-        $sql = "INSERT INTO generator_power (generators, power) VALUE ($generators, $power)";
-        $this->db->execute($sql);
+        $result = [];
+        $result['snapshot'] = $snapshot;
+        $result['project_count'] = count($snapshot);
+        $result['power'] = round($powersum/1000.0, 1);
+        $result['generators'] = $generators;
 
-        $data = [];
-        $data['rows'] = $rows;
-        $data['project_count'] = count($rows);
-        $data['power'] = round($power/1000.0, 1);
-        $data['generators'] = $generators;
+        $forecast = $this->getForecast();
+        $result['peak_hour'] = $forecast['peak_hour'];
+        $result['peak_energy'] = $forecast['peak_energy'];
 
-        $data['peak_hour'] = '00';
-        $data['peak_energy'] = 0;
-
-        $sql = "SELECT * FROM forecast_peak ORDER BY time_utc DESC LIMIT 1";
-        $result = $this->db->fetchOne($sql);
-        if ($result) {
-            $data['peak_hour'] = $result['peak_hour'];
-            $data['peak_energy'] = number_format($result['peak_energy']);
-        }
-
-        return $data;
+        return $result;
     }
 
     public function generate()
     {
         echo 'Snapshot generating...';
+
+        $powersum = 0;
+        $generators = 0;
 
         $projects = $this->projectService->getAll();
 
@@ -71,16 +74,16 @@ class SnapshotService extends Injectable
                 continue;
             }
 
-            // NOTICE: table `snapshot` contains all fields from table `latest`
             $data = json_decode($row['data'], true);
 
             if ($project->operationMode == 'Closed Transition') {
                 $data['EZ_G_13'] = 9; // N/A
             }
 
-            $fields = '';
-            foreach ($data as $key => $val) {
-                $fields .= ",$key = '$val'";
+            $power = $this->getPower($data);
+            if ($power > 0) {
+                $generators += 1;
+                $powersum += $power;
             }
 
             $alarm = $this->getAlarm($data, $project);
@@ -91,14 +94,16 @@ class SnapshotService extends Injectable
                 . ",project_name='".    $row['project_name']."'"
                 . ",devcode='".         $row['devcode']."'"
                 . ",devtype='".         $row['devtype']."'"
-#               . ",time_utc='".        $row['time']."'"
+                . ",time_utc='".        $row['time']."'"
                 . ",data='".            $row['data']."'"
-                . $fields               // NOTICE: table `snapshot` contains all fields from table `latest`
                 . ',project_alarm='.    $alarm
                 . ',urea_level='.       $ureaLevel;
 
             $this->db->execute($sql);
         }
+
+        $sql = "INSERT INTO generator_power (generators, power) VALUE ($generators, $powersum)";
+        $this->db->execute($sql);
     }
 
     protected function getAlarm($data, $project)
@@ -146,6 +151,27 @@ class SnapshotService extends Injectable
         }
 
         return 0;
+    }
+
+    protected function getPower($data)
+    {
+        return isset($data['M_Gen_real_enrg']) ? $data['M_Gen_real_enrg'] : 0;
+    }
+
+    protected function getForecast()
+    {
+        $result['peak_hour'] = '00';
+        $result['peak_energy'] = 0;
+
+        $sql = "SELECT * FROM forecast_peak ORDER BY time_utc DESC LIMIT 1";
+        $forecast = $this->db->fetchOne($sql);
+
+        if ($forecast) {
+            $result['peak_hour'] = $forecast['peak_hour'];
+            $result['peak_energy'] = number_format($forecast['peak_energy']);
+        }
+
+        return $result;
     }
 
     public function getChartData()
