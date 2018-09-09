@@ -35,6 +35,13 @@ class SnapshotService extends Injectable
             $data['project_alarm'] = $row['project_alarm'];
             $data['urea_level']    = $row['urea_level'];
 
+            $data['generator_status'] = $this->getGeneratorStatus($data);
+            $data['emergency_start'] = $this->getEmergencyStart($data);
+            $data['generator_power'] = $this->getGeneratorPower($data);
+            $data['store_load'] = $this->getStoreLoad($data);
+            $data['generator_breaker_status'] = $this->getGeneratorBreakerStatus($data);
+            $data['main_breaker_status'] = $this->getMainBreakerStatus($data);
+
             $snapshot[] = $data;
 
             $power = $this->getPower($data);
@@ -155,7 +162,7 @@ class SnapshotService extends Injectable
 
     protected function getPower($data)
     {
-        return isset($data['M_Gen_real_enrg']) ? $data['M_Gen_real_enrg'] : 0;
+        return $this->getGeneratorPower($data);
     }
 
     protected function getForecast()
@@ -172,6 +179,66 @@ class SnapshotService extends Injectable
         }
 
         return $result;
+    }
+
+    protected function getGeneratorStatus($data)
+    {
+        if (isset($data['M_Start_Auto'])) {
+            return $data['M_Start_Auto'];
+        }
+        return 0;
+    }
+
+    protected function getEmergencyStart($data)
+    {
+        if (isset($data['Emergency_Mode'])) {
+            return $data['Emergency_Mode'];
+        }
+        return 'N/A';
+    }
+
+    protected function getGeneratorPower($data)
+    {
+        if (isset($data['M_Gen_real_enrg'])) {
+            return $data['M_Gen_real_enrg'];
+        }
+        if (isset($data['Gen_Total_kW'])) {
+            return $data['Gen_Total_kW'];
+        }
+        return 0;
+    }
+
+    protected function getStoreLoad($data)
+    {
+        if (isset($data['M_Total_Main_po'])) {
+            return $data['M_Total_Main_po'];
+        }
+        if (isset($data['Util_kW'])) {
+            return $data['Util_kW'];
+        }
+        return 0;
+    }
+
+    protected function getGeneratorBreakerStatus($data)
+    {
+        if (isset($data['M_SLD_Gen_Brkr52GAux'])) {
+            return $data['M_SLD_Gen_Brkr52GAux'];
+        }
+        if (isset($data['Gen_CB_Pos'])) {
+            return $data['Gen_CB_Pos'];
+        }
+        return 'N/A';
+    }
+
+    protected function getMainBreakerStatus($data)
+    {
+        if (isset($data['M_SLD_Brkr52MAux'])) {
+            return $data['M_SLD_Brkr52MAux'];
+        }
+        if (isset($data['Util_CB_Pos'])) {
+            return $data['Util_CB_Pos'];
+        }
+        return 'N/A';
     }
 
     public function getChartData()

@@ -125,12 +125,12 @@
   {% for row in data['snapshot'] %}
   <tr>
     <td><a href="/project/detail/{{ row['project_id'] }}" target="_blank">{{ row['project_name'] }}</a></th>
-    <td class="noL">{{ Green0_Red1(row['M_Start_Auto']) }}</th>
-    <td class="noL noR">{{ Green1_Red0(row['Emergency_Mode']) }}</th>
-    <td class="noR">{{ row['M_Gen_real_enrg'] }}</th>
-    <td class="noL">{{ row['M_Total_Main_po'] }}</th>
-    <td class="noR">{{ RedClose0_GreenOpen1(row['M_SLD_Gen_Brkr52GAux']) }}</th>
-    <td class="noL">{{ RedClose0_GreenOpen1(row['M_SLD_Brkr52MAux']) }}</th>
+    <td class="noL">{{ Green0_Red1(row['generator_status']) }}</th>
+    <td class="noL noR">{{ Green1_Red0(row['emergency_start']) }}</th>
+    <td class="noR">{{ row['generator_power'] }}</th>
+    <td class="noL">{{ row['store_load'] }}</th>
+    <td class="noR">{{ RedClose0_GreenOpen1(row['generator_breaker_status']) }}</th>
+    <td class="noL">{{ RedClose0_GreenOpen1(row['main_breaker_status']) }}</th>
     <td>{{ Green0_Red1(row['project_alarm']) }}</th>
     <td {% if row['urea_level'] < 51 %}class="w3-text-red" style="font-weight:bold"{% endif %}>{{ row['urea_level'] }}%</th>
     <td>{{ row['time'] }}</th>
