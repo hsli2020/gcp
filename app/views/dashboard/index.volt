@@ -124,7 +124,11 @@
   </tr>
   {% for row in data['snapshot'] %}
   <tr>
+    {% if (row['project_id'] < 18) %}
     <td><a href="/project/detail/{{ row['project_id'] }}" target="_blank">{{ row['project_name'] }}</a></th>
+    {% else %}
+    <td>{{ row['project_name'] }}</th>
+    {% endif %}
     <td class="noL">{{ Green0_Red1(row['generator_status']) }}</th>
     <td class="noL noR">{{ Green1_Red0(row['emergency_start']) }}</th>
     <td class="noR">{{ row['generator_power'] }}</th>
