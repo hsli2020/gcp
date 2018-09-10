@@ -186,6 +186,9 @@ class SnapshotService extends Injectable
         if (isset($data['M_Start_Auto'])) {
             return $data['M_Start_Auto'];
         }
+        if (isset($data['Gen_Total_kW'])) {
+            return $data['Gen_Total_kW'] == 0;
+        }
         return 0;
     }
 
@@ -225,7 +228,7 @@ class SnapshotService extends Injectable
             return $data['M_SLD_Gen_Brkr52GAux'];
         }
         if (isset($data['Gen_CB_Pos'])) {
-            return $data['Gen_CB_Pos'];
+            return $data['Gen_CB_Pos'] == 0;
         }
         return 'N/A';
     }
@@ -236,7 +239,7 @@ class SnapshotService extends Injectable
             return $data['M_SLD_Brkr52MAux'];
         }
         if (isset($data['Util_CB_Pos'])) {
-            return $data['Util_CB_Pos'];
+            return $data['Util_CB_Pos'] == 0;
         }
         return 'N/A';
     }
