@@ -69,13 +69,13 @@ class Device
                        time_utc <  CONVERT_TZ('$end',   'America/Toronto', 'UTC') AND error=0
               ORDER BY time_utc";
 
-        $data = $this->getDb()->fetchAll($sql);
+        $result = $this->getDb()->query($sql);
 
         $columns = $this->getTableColumns();
         $columns[0] = 'time'; // time_utc => time
         fputcsv($file, $columns);
 
-        foreach ($data as $row) {
+        while ($row = $result->fetch()) {
             $row['time_utc'] = $row['time'];
             unset($row['time']);
             fputcsv($file, $row);
