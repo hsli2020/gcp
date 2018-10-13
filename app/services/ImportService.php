@@ -293,6 +293,57 @@ class ImportService extends Injectable
         }
     }
 
+    public function getErthmeter()
+    {
+        $host = "transfers.meterdataservices.com";
+        $user = "GRT_Circle";
+        $pass = "meCLu%M6";
+
+        $sftp = new SFTP($host);
+        if (!$sftp->login($user, $pass)) {
+            return;
+        }
+
+        // table struct is same as csv file
+        $columns = $this->db->fetchAll("DESC erthmeter");
+        $columns = array_column($columns, 'Field');
+
+        $remdir = './BackUp/';
+        $locdir = BASE_DIR."/tmp/erthmeter/";
+
+        $list = $sftp->nlist($remdir);
+
+        foreach ($list as $file) {
+            $remfile = $remdir.$file;
+            $locfile = $locdir.$file;
+
+            if (file_exists($locfile)) {
+                continue;
+            }
+
+            if (!$sftp->get($remfile, $locfile)) {
+                continue;
+            }
+
+            if (($handle = fopen($locfile, "r")) !== FALSE) {
+                fgetcsv($handle); // skip first line
+                while (($values = fgetcsv($handle)) !== FALSE) {
+                    $values = array_map('trim', $values);
+                    $fields = array_combine($columns, $values);
+
+                    try {
+                        $this->db->insertAsDict('erthmeter', $fields);
+                    } catch (\Exception $e) {
+                        // echo $e->getMessage(), EOL;
+                    }
+                }
+                fclose($handle);
+            }
+
+            echo $file, EOL;
+        }
+    }
+
     protected function log($str)
     {
         $filename = BASE_DIR . '/app/logs/import.log';
