@@ -75,7 +75,7 @@ class Device
         $columns[0] = 'time'; // time_utc => time
         fputcsv($file, $columns);
 
-        while ($row = $result->fetch()) {
+        while ($row = $result->fetch(\Phalcon\Db::FETCH_ASSOC)) {
             $row['time_utc'] = $row['time'];
             unset($row['time']);
             fputcsv($file, $row);
