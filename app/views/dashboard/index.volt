@@ -125,19 +125,25 @@
   {% for row in data['snapshot'] %}
   <tr>
     {% if (row['project_id'] < 18) %}
-    <td><a href="/project/detail/{{ row['project_id'] }}" target="_blank">{{ row['project_name'] }}</a></th>
+    <td><a href="/project/detail/{{ row['project_id'] }}" target="_blank">{{ row['project_name'] }}</a></td>
     {% else %}
-    <td>{{ row['project_name'] }}</th>
+    <td>{{ row['project_name'] }}</td>
     {% endif %}
-    <td class="noL">{{ Green0_Red1(row['generator_status']) }}</th>
-    <td class="noL noR">{{ Green1_Red0(row['emergency_start']) }}</th>
-    <td class="noR">{{ row['generator_power'] }}</th>
-    <td class="noL">{{ row['store_load'] }}</th>
-    <td class="noR">{{ RedClose0_GreenOpen1(row['generator_breaker_status']) }}</th>
-    <td class="noL">{{ RedClose0_GreenOpen1(row['main_breaker_status']) }}</th>
-    <td>{{ Green0_Red1(row['project_alarm']) }}</th>
-    <td {% if row['urea_level'] < 51 %}class="w3-text-red" style="font-weight:bold"{% endif %}>{{ row['urea_level'] }}%</th>
-    <td>{{ row['time'] }}</th>
+    <td class="noL">{{ Green0_Red1(row['generator_status']) }}</td>
+    <td class="noL noR">{{ Green1_Red0(row['emergency_start']) }}</td>
+    <td class="noR">{{ row['generator_power'] }}</td>
+    <td class="noL">{{ row['store_load'] }}</td>
+    <td class="noR">{{ RedClose0_GreenOpen1(row['generator_breaker_status']) }}</td>
+    <td class="noL">{{ RedClose0_GreenOpen1(row['main_breaker_status']) }}</td>
+    <td>{{ Green0_Red1(row['project_alarm']) }}</td>
+    {% if row['urea_level'] == 0 %}
+    <td>N/A</td>
+    {% elseif row['urea_level'] < 51 %}
+    <td class="w3-text-red" style="font-weight:bold">{{ row['urea_level'] }}%</td>
+    {% else %}
+    <td>{{ row['urea_level'] }}%</td>
+    {% endif %}
+    <td>{{ row['time'] }}</td>
   </tr>
   {% endfor %}
 {# endif #}
