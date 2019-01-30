@@ -10,6 +10,7 @@ class Project
     protected $projectSize;
     protected $siteName;
     protected $address;
+    protected $erthmeterId;
     protected $storeNumber;
     protected $operationMode;
     protected $primaryIP;
@@ -27,6 +28,7 @@ class Project
         $this->projectSize   = $info['project_size'];
         $this->siteName      = $info['site_name'];
         $this->address       = $info['address'];
+        $this->erthmeterId   = $info['erthmeter_id'];
         $this->storeNumber   = $info['store_number'];
         $this->operationMode = $info['operation_mode'];
         $this->primaryIP     = $info['primary_ip'];
@@ -86,6 +88,14 @@ class Project
                   FROM alarm WHERE project_id=$id ORDER BY id DESC LIMIT 200";
         $rows = $this->getDb()->fetchAll($sql);
         return $rows;
+    }
+
+    public function getErthmeter($date)
+    {
+        $erthid = $this->erthmeterId;
+        $sql = "SELECT * FROM erthmeter WHERE recorder_id='$erthid' AND date='$date' AND ch='03'";
+        $row = $this->getDb()->fetchOne($sql);
+        return $row;
     }
 
     public function export($params)
