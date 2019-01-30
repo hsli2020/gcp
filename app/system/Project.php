@@ -98,6 +98,15 @@ class Project
         return $row;
     }
 
+    public function getTotalPower($start, $end)
+    {
+        $total = 0;
+        foreach ($this->devices as $device) {
+            $total += $device->getTotalPower($start, $end);
+        }
+        return $total;
+    }
+
     public function export($params)
     {
         $filename = BASE_DIR.'/tmp/export-'.str_replace(' ', '-', $this->name).'-'.date('Ymd-His').'.csv';

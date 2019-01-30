@@ -57,6 +57,19 @@ class Device
         return array_column($columns, 'Field');
     }
 
+    public function getTotalPower($start, $end)
+    {
+        $table = $this->getTable();
+
+        $col = ($this->type == 'gcp') ? 'Total_Gen_Power' : 'Gen_Total_kW';
+        $sql = "SELECT SUM($col) AS totalpower
+                  FROM $table
+                 WHERE time_utc >= CONVERT_TZ('$start', 'America/Toronto', 'UTC') AND
+                       time_utc <= CONVERT_TZ('$end',   'America/Toronto', 'UTC') AND error=0";
+        $row = $this->getDb()->fetchOne($sql);
+        return $row['totalpower'];
+    }
+
     public function export($file, $start, $end)
     {
         $table = $this->getTable();
