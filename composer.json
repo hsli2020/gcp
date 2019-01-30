@@ -5,6 +5,7 @@
         "php": ">=5.4",
         "ext-phalcon": ">=2.0.0",
         "phpmailer/phpmailer": "^5.2",
+        "phpoffice/phpexcel": "^1.8",
         "phpseclib/phpseclib": "~2.0"
     },
     "autoload": {
