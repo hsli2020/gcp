@@ -87,8 +87,27 @@ class ReportService extends Injectable
 
     public function generateXls($report)
     {
-        $suffix = 'test'; //date('Ymd');
+        $excel = \PHPExcel_IOFactory::load(BASE_DIR."/job/templates/Erthmeter.xlsx");
+        $excel->setActiveSheetIndex(0);  //set first sheet as active
+
+        $sheet = $excel->getActiveSheet();
+        $sheet->setCellValue("E4", date('F-d-Y'));
+
+        $row = 8;
+        foreach ($report as $project) {
+            $sheet->setCellValue("C$row", $project->storeNumber);
+            $sheet->setCellValue("D$row", $project->siteName);
+            $sheet->setCellValue("E$row", $project->totalPower);
+            $sheet->setCellValue("F$row", $project->totalAmount);
+            $row++;
+        }
+
+        $suffix = date('Ymd');
         $filename = BASE_DIR . "/app/logs/Erthmeter-$suffix.xlsx";
+
+        $xlsWriter = \PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+        $xlsWriter->save($filename);
+
         return $filename;
     }
 
