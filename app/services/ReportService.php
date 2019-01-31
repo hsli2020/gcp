@@ -88,7 +88,7 @@ class ReportService extends Injectable
     public function generateXls($report)
     {
         $suffix = 'test'; //date('Ymd');
-        $filename = BASE_DIR . "/app/logs/Report-$suffix.xlsx";
+        $filename = BASE_DIR . "/app/logs/Erthmeter-$suffix.xlsx";
         return $filename;
     }
 
@@ -96,7 +96,7 @@ class ReportService extends Injectable
     {
         ob_start();
         $date = date('F d, Y');
-        include(BASE_DIR . "/job/templates/report.tpl");
+        include(BASE_DIR . "/job/templates/Erthmeter.tpl");
         $content = ob_get_contents();
         ob_end_clean();
 
