@@ -16,8 +16,7 @@ class ReportService extends Injectable
             'lihsca@gmail.com',
         ];
 
-       #$report = $this->getErthmeterReport(2019, 1);
-        $report = '';
+        $report = $this->getErthmeterReport(2019, 1);
         $filename = $this->generateXls($report);
         $body = $this->generateHtml($report);
 
@@ -34,7 +33,7 @@ class ReportService extends Injectable
     public function getErthmeterReport($year, $month)
     {
         $dayStart = 1;
-        $dayEnd = 15;
+        $dayEnd = 1;
         $report = [];
 
         $projects = $this->projectService->getAll();
@@ -44,6 +43,7 @@ class ReportService extends Injectable
             $name = $project->name;
             $erthid = $project->erthmeterId;
 
+            $project->totalPower = 0;
             $project->totalAmount = 0;
 
             if (strlen($project->erthmeterId) == 0) {
@@ -70,6 +70,7 @@ class ReportService extends Injectable
                     $key = 'T'.($hour+1); // T1,T2,T3...T24
                     $rate = $erthmeter[$key];
 
+                    $project->totalPower += $power;
                     $project->totalAmount += $power*$rate;
 
                     if ($power + $rate > 0) {
@@ -78,6 +79,7 @@ class ReportService extends Injectable
                 }
                 echo EOL;
             }
+
             echo EOL;
             $report[$id] = $project;
         }
@@ -94,11 +96,9 @@ class ReportService extends Injectable
 
     public function generateHtml($report)
     {
-        return '<h1>Report Body</h1>';
-
         ob_start();
         $date = date('F d, Y');
-        include("./templates/report.tpl");
+        include(BASE_DIR . "/job/templates/report.tpl");
         $content = ob_get_contents();
         ob_end_clean();
 
