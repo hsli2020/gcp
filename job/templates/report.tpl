@@ -4,76 +4,35 @@
   <meta charset="utf-8" />
   <style>
     table { border-collapse: collapse; }
-    table, td, th { border: 1px solid gray; padding: 5px 5px; text-align: center; }
+    table, td, th { border: 1px solid gray; padding: 5px 10px; text-align: center; }
+    .center { text-align: center; }
+    .left { text-align: left; }
   </style>
 </head>
 <body>
 
-<p>Following is the Daily Solar Energy Production Report of <b><?= $date; ?></b></p>
+<p>Following is the Erthmeter Report of <b><?= $date; ?></b></p>
 
 <table>
 <tr>
-  <th></th>
-  <th colspan="2"></th>
-  <th colspan="2">Budget Production</th>
-  <th colspan="2">Month-to-Date</th>
-  <th colspan="3">Daily Energy Production</th>
-  <th colspan="3">Month-to-date Performance</th>
-</tr>
-<tr>
-  <!-- <th rowspan="2">No.</th> -->
-  <th rowspan="2">Project Name</th>
-  <!-- <th rowspan="2">Date</th> -->
-  <th colspan="2">Capacity<br>(kW)</th>
-  <th>Monthly Budget</th>
-  <th>IE POA Insolation</th>
-  <th>Total Energy</th>
-  <th>Total Insolation</th>
-  <th>Daily Expected</th>
-  <th>Measured Production</th>
-  <th>Measured POA Insolation</th>
-  <th>Actual /Budget</th>
-  <th>Actual /Expected</th>
-  <th>Weather Performance</th>
-</tr>
-<tr>
-  <th>AC</th>
-  <th>DC</th>
-  <th>kWh</th>
-  <th>kWh/m<sup>2</sup></th>
-  <th>kWh</th>
-  <th>kWh/m<sup>2</sup></th>
-  <th>kWh</th>
-  <th>kWh</th>
-  <th>kWh/m<sup>2</sup></th>
-  <th>%</th>
-  <th>%</th>
-  <th>%</th>
+  <th>Store Number</th>
+  <th>Store Name</th>
+  <th>Generation</th>
+  <th>Amount</th>
 </tr>
 
 <?php $index = 1; ?>
-<?php foreach ($report as $data) { ?>
+<?php foreach ($report as $project) { ?>
 <tr>
-  <!-- <td><?= $index++; ?></td> -->
-  <td><?= $data['Project_Name']; ?></td>
-  <!-- <td><?= $data['Date']; ?></td> -->
-  <td><?= $data['Capacity_AC']; ?></td>
-  <td><?= $data['Capacity_DC']; ?></td>
-  <td><?= $data['Monthly_Budget']; ?></td>
-  <td><?= $data['IE_Insolation']; ?></td>
-  <td><?= $data['Total_Energy']; ?></td>
-  <td><?= $data['Total_Insolation']; ?></td>
-  <td><?= $data['Daily_Expected']; ?></td>
-  <td><?= $data['Measured_Production']; ?></td>
-  <td><?= $data['Measured_Insolation']; ?></td>
-  <td><?= $data['Actual_Budget']; ?></td>
-  <td><?= $data['Actual_Expected']; ?></td>
-  <td><?= $data['Weather_Performance']; ?></td>
+  <td class="center"><?= $project->storeNumber; ?></td>
+  <td class="left"><?= $project->siteName; ?></td>
+  <td class="center"><?= $project->totalPower; ?></td>
+  <td class="center"><?= $project->totalAmount; ?></td>
 </tr>
 <?php } ?>
 </table>
 
-<p>The Daily Report is also attached in Microsoft Excel format.</p>
+<p>The Report is also attached in Microsoft Excel format.</p>
 
 </body>
 </html>
