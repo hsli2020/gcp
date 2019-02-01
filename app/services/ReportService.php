@@ -14,6 +14,7 @@ class ReportService extends Injectable
 
         $users = [
             'lihsca@gmail.com',
+#           'wsong365@gmail.com',
         ];
 
         $report = $this->getErthmeterReport(2019, 1);
@@ -33,7 +34,7 @@ class ReportService extends Injectable
     public function getErthmeterReport($year, $month)
     {
         $dayStart = 1;
-        $dayEnd = 1;
+        $dayEnd = 31;
         $report = [];
 
         $projects = $this->projectService->getAll();
@@ -71,7 +72,7 @@ class ReportService extends Injectable
                     $rate = $erthmeter[$key];
 
                     $project->totalPower += $power;
-                    $project->totalAmount += $power*$rate;
+                    $project->totalAmount += $power*$rate/1000.0;
 
                     if ($power + $rate > 0) {
                         #echo "$id) $start $end  $power x $rate = ", $power*$rate, EOL;
@@ -79,6 +80,7 @@ class ReportService extends Injectable
                 }
             }
 
+            $project->totalAmount = round($project->totalAmount ,2);
             $report[$id] = $project;
         }
 

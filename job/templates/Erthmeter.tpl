@@ -7,6 +7,7 @@
     table, td, th { border: 1px solid gray; padding: 5px 10px; text-align: center; }
     .center { text-align: center; }
     .left { text-align: left; }
+    .right { text-align: right; }
   </style>
 </head>
 <body>
@@ -26,8 +27,8 @@
 <tr>
   <td class="center"><?= $project->storeNumber; ?></td>
   <td class="left"><?= $project->siteName; ?></td>
-  <td class="center"><?= $project->totalPower; ?></td>
-  <td class="center"><?= $project->totalAmount; ?></td>
+  <td class="right"><?= $project->totalPower; ?></td>
+  <td class="right"><?= $project->totalAmount; ?></td>
 </tr>
 <?php } ?>
 </table>
