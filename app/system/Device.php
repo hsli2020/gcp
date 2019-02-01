@@ -61,7 +61,7 @@ class Device
     {
         $table = $this->getTable();
 
-        $col = ($this->type == 'gcp') ? 'Total_Gen_Power' : 'Gen_Total_kW';
+        $col = ($this->type == 'gcp') ? 'M_Gen_real_enrg' : 'Gen_Total_kW';
         $sql = "SELECT SUM($col) AS totalpower
                   FROM $table
                  WHERE time_utc >= CONVERT_TZ('$start', 'America/Toronto', 'UTC') AND
