@@ -6,8 +6,20 @@ use Phalcon\Di\Injectable;
 
 class ReportService extends Injectable
 {
+    protected $report;
+    protected $year;
+    protected $month;
+    protected $dayStart; // will use this
+    protected $dayEnd;   // will use this
+
     public function send()
     {
+        if (!$this->report) {
+            // call getErthmeterReport first to generate report
+            // $this->getErthmeterReport($year, $month);
+            return;
+        }
+
         echo "Sending Report ...", EOL;
 
         $this->log('Start sending daily report');
@@ -17,7 +29,7 @@ class ReportService extends Injectable
 #           'wsong365@gmail.com',
         ];
 
-        $report = $this->getErthmeterReport(2019, 1);
+        $report = $this->report;
         $filename = $this->generateXls($report);
         $body = $this->generateHtml($report);
 
@@ -33,8 +45,13 @@ class ReportService extends Injectable
 
     public function getErthmeterReport($year, $month)
     {
+        $this->year = $year;
+        $this->month = $month;
+
+        $tm = mktime(0, 0, 0, $month, 1, $year);
+
         $dayStart = 1;
-        $dayEnd = 31;
+        $dayEnd = date('t', $tm); // days of the month
         $report = [];
 
         $projects = $this->projectService->getAll();
@@ -83,6 +100,8 @@ class ReportService extends Injectable
             $project->totalAmount = round($project->totalAmount ,2);
             $report[$id] = $project;
         }
+
+        $this->report = $report;
 
         return $report;
     }
