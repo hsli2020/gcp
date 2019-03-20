@@ -22,7 +22,7 @@ class ReportService extends Injectable
 
         echo "Sending Report ...", EOL;
 
-        $this->log('Start sending daily report');
+        $this->log('Start sending erthmeter report');
 
         $users = [
             'lihsca@gmail.com',
