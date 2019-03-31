@@ -73,7 +73,7 @@ class ReportService extends Injectable
 
                 $erthmeter = $project->getErthmeter($date);
                 if (!$erthmeter) {
-                    #echo "SELECT * FROM erthmeter WHERE recorder_id='$erthid' AND date='$date'", EOL;
+                    echo "NO ERTHMETER: SELECT * FROM erthmeter WHERE recorder_id='$erthid' AND date='$date'", EOL;
                     continue;
                 }
 
@@ -82,6 +82,7 @@ class ReportService extends Injectable
                     $end   = sprintf('%s %02d:59:59', $date, $hour);
 
                     $power = $project->getTotalPower($start, $end);
+                    $power /= 60.0;
 
                     $key = 'T'.($hour+1); // T1,T2,T3...T24
                     $rate = $erthmeter[$key];
