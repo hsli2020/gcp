@@ -20,14 +20,7 @@ class ReportService extends Injectable
             return;
         }
 
-        echo "Sending Report ...", EOL;
-
         $this->log('Start sending erthmeter report');
-
-        $users = [
-            'lihsca@gmail.com',
-#           'wsong365@gmail.com',
-        ];
 
         $report = $this->report;
         $filename = $this->generateXls($report);
@@ -35,6 +28,11 @@ class ReportService extends Injectable
 
         $today = date('Y-m-d');
         $subject = "GCP Erthmeter Report ($today)";
+
+        $users = [
+            'lihsca@gmail.com',
+#           'wsong365@gmail.com',
+        ];
 
         foreach ($users as $user) {
             $this->sendEmail($user, $subject, $body, $filename);
