@@ -43,6 +43,9 @@ class ReportService extends Injectable
 
     public function getErthmeterReport($year, $month)
     {
+        $this->downloadPriceReport();
+        $this->importPriceReport();
+
         $this->year = $year;
         $this->month = $month;
 
@@ -71,27 +74,23 @@ class ReportService extends Injectable
             for ($day = $dayStart; $day <= $dayEnd; $day++) {
                 $date = sprintf('%d-%02d-%02d', $year, $month, $day);
 
-                $erthmeter = $project->getErthmeter($date);
-                if (!$erthmeter) {
-                    echo "NO ERTHMETER: SELECT * FROM erthmeter WHERE recorder_id='$erthid' AND date='$date'", EOL;
+                $prices = $this->getPrices($date);
+                if (!$prices) {
+                    echo "NO PRICES: $date", EOL;
                     continue;
                 }
 
-                for ($hour = 0; $hour < 24; $hour++) {
-                    $start = sprintf('%s %02d:00:00', $date, $hour);
-                    $end   = sprintf('%s %02d:59:59', $date, $hour);
+                $powers = $this->getPowers($erthid, $date);
 
-                    $power = $project->getTotalPower($start, $end);
-                    $power /= 60.0;
-
-                    $key = 'T'.($hour+1); // T1,T2,T3...T24
-                    $rate = $erthmeter[$key];
+                for ($hour = 1; $hour <= 24; $hour++) {
+                    $price = $prices[$hour];
+                    $power = $powers["T$hour"];
 
                     $project->totalPower += $power;
-                    $project->totalAmount += $power*$rate/1000.0;
+                    $project->totalAmount += $power*$price/1000.0;
 
-                    if ($power + $rate > 0) {
-                        #echo "$id) $start $end  $power x $rate = ", $power*$rate, EOL;
+                    if ($power + $price > 0) {
+                        #echo "$id) $date $power x $price = ", $power*$price, EOL;
                     }
                 }
             }
@@ -111,7 +110,7 @@ class ReportService extends Injectable
         $excel->setActiveSheetIndex(0);  //set first sheet as active
 
         $sheet = $excel->getActiveSheet();
-        $sheet->setCellValue("E4", date('F-d-Y'));
+        $sheet->setCellValue("E4", $this->year.'-'.$this->month);
 
         $row = 8;
         foreach ($report as $project) {
@@ -122,7 +121,7 @@ class ReportService extends Injectable
             $row++;
         }
 
-        $suffix = date('Ymd');
+        $suffix = $this->year.'-'.$this->month;
         $filename = BASE_DIR . "/app/logs/Erthmeter-$suffix.xlsx";
 
         $xlsWriter = \PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
@@ -140,6 +139,70 @@ class ReportService extends Injectable
         ob_end_clean();
 
         return $content;
+    }
+
+    public function downloadPriceReport()
+    {
+        $filename = BASE_DIR. '/tmp/hoep-price.csv';
+
+        if (file_exists($filename) && (time() - filemtime($filename) < 12*3600)) {
+            return;
+        }
+
+        $year = date('Y');
+        $url = "http://reports.ieso.ca/public/PriceHOEPPredispOR/PUB_PriceHOEPPredispOR_$year.csv";
+        $content = file_get_contents($url);
+        file_put_contents($filename, $content);
+    }
+
+    public function importPriceReport()
+    {
+        if (!($fp = fopen(BASE_DIR. '/tmp/hoep-price.csv', 'r'))) {
+            return;
+        }
+
+        $this->db->execute('TRUNCATE TABLE hoep_price');
+
+        // Skip first three lines
+        fgets($fp);
+        fgets($fp);
+        fgets($fp);
+
+        $columns = fgetcsv($fp);
+
+        while (($values = fgetcsv($fp)) !== false) {
+            if (count($columns) != count($values)) {
+                continue;
+            }
+            $fields = array_combine($columns, $values);
+            $this->db->insertAsDict('hoep_price', [
+                'date'               => $fields['Date'],
+                'hour'               => $fields['Hour'],
+                'hoep'               => $fields['HOEP'],
+                'hour_1_predispatch' => $fields['Hour 1 Predispatch'],
+                'hour_2_predispatch' => $fields['Hour 2 Predispatch'],
+                'hour_3_predispatch' => $fields['Hour 3 Predispatch'],
+                'or_10_min_sync'     => $fields['OR 10 Min Sync'],
+                'or_10_min_non_sync' => $fields['OR 10 Min non-sync'],
+                'or_30_min'          => $fields['OR 30 Min'],
+            ]);
+        }
+
+        fclose($fp);
+    }
+
+    public function getPrices($date)
+    {
+        $sql = "SELECT hour, hoep FROM hoep_price WHERE date='$date'";
+        $rows = $this->db->fetchAll($sql);
+        return array_column($rows, 'hoep', 'hour');
+    }
+
+    public function getPowers($erthid, $date)
+    {
+        $sql = "SELECT * FROM erthmeter WHERE recorder_id='$erthid' AND date='$date' AND ch='03'";
+        $row = $this->db->fetchOne($sql);
+        return $row;
     }
 
     public function sendEmail($recepient, $subject, $body, $filename = '')
