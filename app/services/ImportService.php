@@ -260,7 +260,7 @@ class ImportService extends Injectable
         $frmt = "/public/Adequacy2/PUB_Adequacy2_$today.xml";
         $floc = BASE_DIR."/tmp/".basename($frmt);
 
-        if (time() - filemtime($floc) < 60*30) {
+        if (file_exists($floc) && (time() - filemtime($floc) < 60*30)) {
             return;
         }
 
