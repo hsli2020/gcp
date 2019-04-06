@@ -152,8 +152,7 @@ class ReportService extends Injectable
             return;
         }
 
-        $year = date('Y');
-        $url = "http://reports.ieso.ca/public/PriceHOEPPredispOR/PUB_PriceHOEPPredispOR_$year.csv";
+        $url = "http://reports.ieso.ca/public/PriceHOEPPredispOR/PUB_PriceHOEPPredispOR.csv";
         $content = file_get_contents($url);
         file_put_contents($filename, $content);
     }
