@@ -9,8 +9,8 @@ class ReportService extends Injectable
     protected $report;
     protected $year;
     protected $month;
-    protected $dayStart; // will use this
-    protected $dayEnd;   // will use this
+    protected $dayStart;
+    protected $dayEnd;
 
     public function send()
     {
@@ -41,18 +41,21 @@ class ReportService extends Injectable
         $this->log("Report sent completed.\n");
     }
 
-    public function getErthmeterReport($year, $month)
+    public function getErthmeterReport($year, $month, $dayStart = 1, $dayEnd = 0)
     {
         $this->downloadPriceReport();
         $this->importPriceReport();
 
         $this->year = $year;
         $this->month = $month;
+        $this->dayStart = $dayStart;
+        $this->dayEnd = $dayEnd;
 
-        $tm = mktime(0, 0, 0, $month, 1, $year);
+        if ($dayEnd <= 0) {
+            $tm = mktime(0, 0, 0, $month, 1, $year);
+            $this->dayEnd = $dayEnd = date('t', $tm); // days of the month
+        }
 
-        $dayStart = 1;
-        $dayEnd = date('t', $tm); // days of the month
         $report = [];
 
         $projects = $this->projectService->getAll();
