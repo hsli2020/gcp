@@ -32,7 +32,7 @@ class ReportService extends Injectable
         $users = [
             'lihsca@gmail.com',
             'wsong365@gmail.com',
-            'dmacabales@greatcirclesolar.ca ',
+            'dmacabales@greatcirclesolar.ca',
         ];
 
         foreach ($users as $user) {
