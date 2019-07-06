@@ -32,6 +32,7 @@ class SnapshotService extends Injectable
             $data['time']          = $row['time'];
             $data['project_id']    = $row['project_id'];
             $data['project_name']  = $row['project_name'];
+            $data['devtype']       = $row['devtype'];
             $data['project_alarm'] = $row['project_alarm'];
             $data['urea_level']    = $row['urea_level'];
 

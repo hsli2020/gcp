@@ -124,7 +124,7 @@
   </tr>
   {% for row in data['snapshot'] %}
   <tr>
-    {% if (row['project_id'] < 18) %}
+    {% if (row['devtype'] == 'gcp') %}
     <td><a href="/project/detail/{{ row['project_id'] }}" target="_blank">{{ row['project_name'] }}</a></td>
     {% else %}
     <td>{{ row['project_name'] }}</td>
