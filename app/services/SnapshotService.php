@@ -209,6 +209,9 @@ class SnapshotService extends Injectable
         if (isset($data['Gen_Total_kW'])) {
             return $data['Gen_Total_kW'];
         }
+        if (isset($data['gen_total_kw'])) {
+            return $data['gen_total_kw'];
+        }
         return 0;
     }
 
