@@ -8,7 +8,10 @@ class SnapshotService extends Injectable
 {
     public function load()
     {
-        $sql = "SELECT *, CONVERT_TZ(time_utc, 'UTC', 'EST') AS time FROM snapshot";
+        # CONVERT_TZ(time_utc, 'UTC', 'EST')              Daylight Saving Time not work
+        # CONVERT_TZ(time_utc, 'UTC', 'America/Toronto')  Daylight Saving Time works
+
+        $sql = "SELECT *, CONVERT_TZ(time_utc, 'UTC', 'America/Toronto') AS time FROM snapshot";
         $rows = $this->db->fetchAll($sql);
 
        #$auth = $this->session->get('auth');
