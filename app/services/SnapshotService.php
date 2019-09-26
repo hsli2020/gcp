@@ -193,7 +193,7 @@ class SnapshotService extends Injectable
         if (isset($data['Gen_Total_kW'])) {
             return $data['Gen_Total_kW'] == 0;
         }
-        return 0;
+        return 1;
     }
 
     protected function getEmergencyStart($data)
