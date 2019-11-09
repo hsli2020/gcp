@@ -9,7 +9,7 @@
       </header>
 
       <p style="text-align: center;">
-        <img src="/img/gcs-logo-name-223x38.png">
+        <img src="/assets/app/img/gcs-logo-name-223x38.png">
       </p>
 
       <form class="w3-container" method="POST">
