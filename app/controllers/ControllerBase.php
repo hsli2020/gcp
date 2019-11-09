@@ -15,9 +15,9 @@ class ControllerBase extends Controller
 
     public function beforeExecuteRoute(Dispatcher $dispatcher)
     {
-        if (getenv('GCP') != 'AWS') {
-            return true;
-        }
+        #if (getenv('GCP') != 'AWS') {
+        #    return true;
+        #}
 
         $controllerName = $dispatcher->getControllerName();
 //*
