@@ -215,6 +215,9 @@ class SnapshotService extends Injectable
         if (isset($data['gen_total_kw'])) {
             return $data['gen_total_kw'];
         }
+        if (isset($data['P3X'])) {
+            return $data['P3X'];
+        }
         return 0;
     }
 
@@ -241,7 +244,7 @@ class SnapshotService extends Injectable
             return $data['Gen_CB_Pos'] == 0;
         }
         if (isset($data['ROW78'])) {
-            return (intval($data['ROW78']) & 0x80) == 0x80;
+            return (intval($data['ROW78']) & 0x7F) == 0;
         }
         return 'N/A';
     }
