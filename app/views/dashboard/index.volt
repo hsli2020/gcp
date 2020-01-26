@@ -126,6 +126,8 @@
   <tr>
     {% if (row['devtype'] == 'gcp') %}
     <td><a href="/project/detail/{{ row['project_id'] }}" target="_blank">{{ row['project_name'] }}</a></td>
+    {% elseif (row['devtype'] == 'Tangent') %}
+    <td><a href="/project/tangent/{{ row['project_id'] }}" target="_blank">{{ row['project_name'] }}</a></td>
     {% else %}
     <td>{{ row['project_name'] }}</td>
     {% endif %}
