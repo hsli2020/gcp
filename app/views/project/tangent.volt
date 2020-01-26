@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset=utf-8>
-<title>Project Details</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<style>
+{% extends "layouts/public.volt" %}
+
+{% block csscode %}
   .w3-bordered td { border: 1px solid #ccc; padding: 5px; vertical-align: middle; }
   .w3-bordered th { border: 1px solid #ccc; padding: 5px; vertical-align: middle; }
   #my-table th, #my-table td { border: none; background-color: #222b2e; color: white; }
@@ -16,16 +11,16 @@
   .textfield, .label { text-align: center; }
   .label { font-size: 16px; font-weight: bold; position: relative; top: -20px; }
   .textfield { position: relative; top: -80px; }
-</style>
-</head>
-<body>
-  <h1 class="w3-center">Project Details</h1>
-  <div class="w3-container w3-padding-24">
+{% endblock %}
+
+{% block main %}
+  <!-- h2 class="w3-center">Project Details</h2 -->
+  <div class="w3-container">
     <table class="w3-table w3-bordered">
       <tr>
         <th>Project Details</th>
         <td colspan="2">&nbsp;</td>
-        <td rowspan="24" class="ltgrey">
+        <td rowspan="26" class="ltgrey">
           <div class="w3-row">
             <div class="w3-col w3-twothird">
               <div class="w3-row">
@@ -178,11 +173,12 @@
         </td>
       </tr>
 
-      <tr><th>Project Name</th><td colspan="2">&nbsp;</td></tr>
       <tr><th>Project Address</th><td colspan="2">&nbsp;</td></tr>
       <tr><th>Project Size</th><td colspan="2">&nbsp;</td></tr>
       <tr><th>Store Number</th><td colspan="2">&nbsp;</td></tr>
       <tr><th>Operation Mode</th><td colspan="2">&nbsp;</td></tr>
+
+      <tr><td colspan="3">&nbsp;</td></tr>
 
       <tr>
           <th>Description</th>
@@ -200,7 +196,9 @@
           <th>Power Factor</th>
           <td class="w3-center">pF</td>
           <td class="w3-center">pF</td>
-      </tr><tr>
+      </tr>
+      <tr><td colspan="3">&nbsp;</td></tr>
+      <tr>
           <th>Last Run's Real Energy</th>
           <td class="w3-center">kWh</td>
           <td class="w3-center">kWh</td>
@@ -216,11 +214,15 @@
           <th>Total Real Energy</th>
           <td class="w3-center">kWh</td>
           <td class="w3-center">kWh</td>
-      </tr><tr>
+      </tr>
+      <tr><td colspan="3">&nbsp;</td></tr>
+      <tr>
           <th>Urea Level</th>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
-      </tr><tr>
+      </tr>
+      <tr><td colspan="3">&nbsp;</td></tr>
+      <tr>
           <th>Site</th>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
@@ -249,24 +251,20 @@
           <td>&nbsp;</td>
           <td>&nbsp;</td>
       </tr><tr>
-          <th>Oil Temperature</th>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-      </tr><tr>
           <th>Coolan Temperature</th>
           <td>&nbsp;</td>
           <td>&nbsp;</td>
       </tr>
     </table>
   </div>
+  <p>&nbsp;</p>
+{% endblock %}
 
 {% block jsfile %}
 {{ javascript_include("/assets/lib/gauge/gauge.min.js") }}
 {% endblock %}
 
-<script type='text/javascript' src='/assets/lib/jquery/jquery-2.1.0.min.js'></script>
-
-<script>
+{% block jscode %}
   function initGauge(canvas, textfield) {
     gauge = new Gauge(canvas);
     var opts = {
@@ -299,18 +297,13 @@
     gauge.minValue = 0;
     gauge.maxValue = 3000;
     gauge.set(Math.random()*2500);
-  };
-</script>
+  }
+{% endblock %}
 
-<script>
-  $(document).ready(function() {
-    $('.gauge').each(function() {
-      var canvas = $(this).find('canvas')[0];
-      var textfield = $(this).find('.textfield')[0];
-      initGauge(canvas, textfield);
-    })
-  });
-</script>
-
-</body>
-</html>
+{% block domready %}
+  $('.gauge').each(function() {
+    var canvas = $(this).find('canvas')[0];
+    var textfield = $(this).find('.textfield')[0];
+    initGauge(canvas, textfield);
+  })
+{% endblock %}
