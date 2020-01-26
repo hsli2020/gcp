@@ -56,7 +56,9 @@
 
   <script type='text/javascript' src='/assets/lib/jquery/jquery-2.1.0.min.js'></script>
   {% block jsfile %}{% endblock %}
-  {% block jscode %}{% endblock %}
+  <script type="text/javascript">
+    {% block jscode %}{% endblock %}
+  </script>
 
   <script type="text/javascript">
     $(document).ready(function() {
