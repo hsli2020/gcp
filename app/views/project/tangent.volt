@@ -19,7 +19,7 @@
     <table class="w3-table w3-bordered">
       <tr>
         <th>Project Details</th>
-        <td colspan="2">&nbsp;</td>
+        <td colspan="2">{{ project.siteName }}</td>
         <td rowspan="26" class="ltgrey">
           <div class="w3-row">
             <div class="w3-col w3-twothird">
@@ -83,88 +83,88 @@
                 <tr>
                   <th colspan="2" class="brgrey">System Status</th>
                 </tr><tr>
-                  <th>Control Switch Poistion</th>
+                  <th>Control Switch Position</th>
                   <td>
                     <div>Auto</div>
-                    <span>01/13/2020 02:42 PM</span>
+                    <span>{{ data['time_utc'] }}</span>
                   </td>
                 </tr><tr>
                   <th>Utility Breaker Position</th>
                   <td>
                     <div>Closed</div>
-                    <span>01/13/2020 02:42 PM</span>
+                    <span>{{ data['time_utc'] }}</span>
                   </td>
                 </tr><tr>
                   <th>Generator Breaker Position</th>
                   <td>
                     <div>Open</div>
-                    <span>01/13/2020 02:42 PM</span>
+                    <span>{{ data['time_utc'] }}</span>
                   </td>
                 </tr><tr>
                   <th>Utility Voltage</th>
                   <td>
-                    <div>610.0 V</div>
-                    <span>01/13/2020 02:42 PM</span>
+                    <div>{{ data['Util_VLL_Avg'] }} V</div>
+                    <span>{{ data['time_utc'] }}</span>
                   </td>
                 </tr><tr>
                   <th>Utility Power</th>
                   <td>
-                    <div>377.0 kW</div>
-                    <span>01/13/2020 02:42 PM</span>
+                    <div>{{ data['Util_kW']}} kW</div>
+                    <span>{{ data['time_utc'] }}</span>
                   </td>
                 </tr><tr>
                   <th>Generator Voltage</th>
                   <td>
-                    <div>0.0 V</div>
-                    <span>01/13/2020 02:42 PM</span>
+                    <div>{{ data['Gen_VLL_Avg'] }} V</div>
+                    <span>{{ data['time_utc'] }}</span>
                   </td>
                 </tr><tr>
                   <th>Generator Power</th>
                   <td>
-                    <div>0.0 kW</div>
-                    <span>01/13/2020 02:42 PM</span>
+                    <div>{{ data['Gen_Total_kW']}} kW</div>
+                    <span>{{ data['time_utc'] }}</span>
                   </td>
                 </tr><tr>
                   <th>Generator Frequency</th>
                   <td>
-                    <div>0.0 Hz</div>
-                    <span>01/13/2020 02:42 PM</span>
+                    <div>{{ data['Gen_Frequency'] }}  Hz</div>
+                    <span>{{ data['time_utc'] }}</span>
                   </td>
                 </tr><tr>
                   <th>Battery Voltage</th>
                   <td>
-                    <div>26.8 V</div>
-                    <span>01/13/2020 02:42 PM</span>
+                    <div>{{ data['Battery_Voltage'] }} V</div>
+                    <span>{{ data['time_utc'] }}</span>
                   </td>
                 </tr><tr>
                   <th>RPM</th>
                   <td>
-                    <div>0.0 RPM</div>
-                    <span>01/13/2020 02:42 PM</span>
+                    <div>{{ data['Engine_RPM'] }} RPM</div>
+                    <span>{{ data['time_utc'] }}</span>
                   </td>
                 </tr><tr>
                   <th>Oil Pressure</th>
                   <td>
-                    <div>0.0 psi</div>
-                    <span>01/13/2020 02:42 PM</span>
+                    <div>{{ data['Oil_Pressure'] }} psi</div>
+                    <span>{{ data['time_utc'] }}</span>
                   </td>
                 </tr><tr>
                   <th>Oil Temperature</th>
                   <td>
-                    <div>77.0 F</div>
-                    <span>01/13/2020 02:42 PM</span>
+                    <div>{{ data['Oil_Temp'] }} F</div>
+                    <span>{{ data['time_utc'] }}</span>
                   </td>
                 </tr><tr>
                   <th>Coolan Temperature</th>
                   <td>
-                    <div>118.4 F</div>
-                    <span>01/13/2020 02:42 PM</span>
+                    <div>{{ data['Coolant_Temp'] }} F</div>
+                    <span>{{ data['time_utc'] }}</span>
                   </td>
                 </tr><tr>
                   <th>Retransfer Timer</th>
                   <td>
-                    <div>1260.0 s</div>
-                    <span>01/13/2020 02:42 PM</span>
+                    <div>1260.* s</div>
+                    <span>{{ data['time_utc'] }}</span>
                   </td>
                 </tr>
               </table>
@@ -173,10 +173,10 @@
         </td>
       </tr>
 
-      <tr><th>Project Address</th><td colspan="2">&nbsp;</td></tr>
-      <tr><th>Project Size</th><td colspan="2">&nbsp;</td></tr>
-      <tr><th>Store Number</th><td colspan="2">&nbsp;</td></tr>
-      <tr><th>Operation Mode</th><td colspan="2">&nbsp;</td></tr>
+      <tr><th>Project Address</th><td colspan="2">{{ project.address }}</td></tr>
+      <tr><th>Project Size</th><td colspan="2">{{ project.projectSize }}</td></tr>
+      <tr><th>Store Number</th><td colspan="2">{{ project.storeNumber }}</td></tr>
+      <tr><th>Operation Mode</th><td colspan="2">{{ project.operationMode }}</td></tr>
 
       <tr><td colspan="3">&nbsp;</td></tr>
 
@@ -186,16 +186,16 @@
           <th class="w3-center">Generator</th>
       </tr><tr>
           <th>Total Power</th>
-          <td class="w3-center">kW</td>
-          <td class="w3-center">kW</td>
+          <td class="w3-center">{{ data['Util_kW'] }} kW</td>
+          <td class="w3-center">{{ data['Gen_Total_kW'] }} kW</td>
       </tr><tr>
           <th>Average Voltage</th>
-          <td class="w3-center">V</td>
-          <td class="w3-center">V</td>
+          <td class="w3-center">{{ data['Util_VLL_Avg'] }} V</td>
+          <td class="w3-center">{{ data['Gen_VLL_Avg'] }} V</td>
       </tr><tr>
           <th>Power Factor</th>
-          <td class="w3-center">pF</td>
-          <td class="w3-center">pF</td>
+          <td class="w3-center">{{ data['Util_PF'] }} pF</td>
+          <td class="w3-center">{{ data['Gen_Total_PF'] }} pF</td>
       </tr>
       <tr><td colspan="3">&nbsp;</td></tr>
       <tr>
@@ -218,42 +218,33 @@
       <tr><td colspan="3">&nbsp;</td></tr>
       <tr>
           <th>Urea Level</th>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
+          <td colspan="2" class="w3-center">{{ data['urea_level'] }}</td>
       </tr>
       <tr><td colspan="3">&nbsp;</td></tr>
       <tr>
           <th>Site</th>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
+          <td colspan="2">&nbsp;</td>
       </tr><tr>
           <th>Control Switch Position</th>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
+          <td colspan="2" class="w3-center">{{ data['Control_Switch_Pos'] }}</td>
       </tr><tr>
           <th>Utility Breaker Position</th>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
+          <td colspan="2" class="w3-center">{{ data['Util_CB_Pos'] }}</td>
       </tr><tr>
           <th>Generator Breaker Position</th>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
+          <td colspan="2" class="w3-center">{{ data['Gen_CB_Pos'] }}</td>
       </tr><tr>
           <th>RPM</th>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
+          <td colspan="2" class="w3-center">{{ data['Engine_RPM'] }}</td>
       </tr><tr>
           <th>Oil Pressure</th>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
+          <td colspan="2" class="w3-center">{{ data['Oil_Pressure'] }}</td>
       </tr><tr>
           <th>Oil Temperature</th>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
+          <td colspan="2" class="w3-center">{{ data['Oil_Temp'] }}</td>
       </tr><tr>
           <th>Coolan Temperature</th>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
+          <td colspan="2" class="w3-center">{{ data['Coolant_Temp'] }}</td>
       </tr>
     </table>
   </div>
