@@ -127,7 +127,15 @@
     {% if (row['devtype'] == 'gcp') %}
     <td><a href="/project/detail/{{ row['project_id'] }}" target="_blank">{{ row['project_name'] }}</a></td>
     {% elseif (row['devtype'] == 'Tangent') %}
-    <td><a href="/project/tangent/{{ row['project_id'] }}" target="_blank">{{ row['project_name'] }}</a></td>
+    <td>
+      <a href="/project/tangent/{{ row['project_id'] }}" target="_blank">{{ row['project_name'] }}</a>
+      {% if (row['project_id'] == 18) %}
+        <a href="/tangent/index/{{ row['project_id'] }}" target="_blank" class="w3-right w3-margin-right">
+         <!-- i class="fa fa-camera"></i -->
+         <img src="/assets/app/img/generator.png" width="24">
+        </a>
+      {% endif %}
+    </td>
     {% else %}
     <td>{{ row['project_name'] }}</td>
     {% endif %}
