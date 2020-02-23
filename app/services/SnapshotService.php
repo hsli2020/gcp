@@ -187,80 +187,32 @@ class SnapshotService extends Injectable
 
     protected function getGeneratorStatus($data)
     {
-        if (isset($data['M_Start_Auto'])) {
-            return $data['M_Start_Auto'];
-        }
-        if (isset($data['Gen_Total_kW'])) {
-            return $data['Gen_Total_kW'] == 0;
-        }
-        return 1;
+        return $this->projectService->getGeneratorStatus($data);
     }
 
     protected function getEmergencyStart($data)
     {
-        if (isset($data['Emergency_Mode'])) {
-            return $data['Emergency_Mode'];
-        }
-        return 'N/A';
+        return $this->projectService->getEmergencyStart($data);
     }
 
     protected function getGeneratorPower($data)
     {
-        if (isset($data['M_Gen_real_enrg'])) {
-            return $data['M_Gen_real_enrg'];
-        }
-        if (isset($data['Gen_Total_kW'])) {
-            return $data['Gen_Total_kW'];
-        }
-        if (isset($data['gen_total_kw'])) {
-            return $data['gen_total_kw'];
-        }
-        if (isset($data['P3X'])) {
-            return $data['P3X'];
-        }
-        return 0;
+        return $this->projectService->getGeneratorPower($data);
     }
 
     protected function getStoreLoad($data)
     {
-        if (isset($data['M_Total_Main_po'])) {
-            return $data['M_Total_Main_po'];
-        }
-        if (isset($data['Util_kW'])) {
-            return $data['Util_kW'];
-        }
-        if (isset($data['P3Y'])) {
-            return $data['P3Y'];
-        }
-        return 0;
+        return $this->projectService->getStoreLoad($data);
     }
 
     protected function getGeneratorBreakerStatus($data)
     {
-        if (isset($data['M_SLD_Gen_Brkr52GAux'])) {
-            return $data['M_SLD_Gen_Brkr52GAux'];
-        }
-        if (isset($data['Gen_CB_Pos'])) {
-            return $data['Gen_CB_Pos'] == 0;
-        }
-        if (isset($data['ROW78'])) {
-            return (intval($data['ROW78']) & 0x7F) == 0;
-        }
-        return 'N/A';
+        return $this->projectService->getGeneratorBreakerStatus($data);
     }
 
     protected function getMainBreakerStatus($data)
     {
-        if (isset($data['M_SLD_Brkr52MAux'])) {
-            return $data['M_SLD_Brkr52MAux'];
-        }
-        if (isset($data['Util_CB_Pos'])) {
-            return $data['Util_CB_Pos'] == 0;
-        }
-        if (isset($data['ROW78'])) {
-            return (intval($data['ROW78']) & 0x80) == 0;
-        }
-        return 'N/A';
+        return $this->projectService->getMainBreakerStatus($data);
     }
 
     public function getChartData()
