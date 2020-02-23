@@ -14,15 +14,7 @@ class SmartAlertService extends Injectable
 
         $this->alerts = [];
 
-        $this->checkNoData();
-        $this->checkLowEnergy();
-        $this->checkInverterStatus();
-        $this->checkErrorCode();
-
-       #$this->checkFault();
-       #$this->checkOverHeat();
-       #$this->checkEnvkits();
-       #$this->checkGenMeters();
+        $this->checkStatusChanged();
 
         if ($this->alerts) {
             $this->saveAlerts();
@@ -30,214 +22,68 @@ class SmartAlertService extends Injectable
         }
     }
 
-    protected function checkNoData()
+    protected function checkStatusChanged()
     {
-        $alertType = 'NO-DATA';
-
-        $sql = "SELECT * FROM latest_data";
-        $rows = $this->db->fetchAll($sql);
-
-        $now = time();
-        foreach ($rows as $data) {
-            if ($this->alertTriggered($data['project_id'], $alertType)) {
-                continue;
-            }
-            $time = strtotime($data['time'].' UTC'); // UTC to LocalTime
-            if ($time > 0 && $now - $time >= 35*60) {
-                //$this->log($data['devtype']. ' '. $data['devcode']. ' of '. $data['project_name']. ': '. $alertType);
-                $this->alerts[] = [
-                    'time'         => date('Y-m-d H:i:s'),
-                    'project_id'   => $data['project_id'],
-                    'project_name' => $data['project_name'],
-                    'devtype'      => $data['devtype'],
-                    'devcode'      => $data['devcode'],
-                    'alert'        => $alertType,
-                    'message'      => 'No data received over 30 minutes',
-                ];
-            }
-        }
-    }
-
-    protected function checkLowEnergy()
-    {
-        $alertType = 'LOW-ENERGY';
-
-        $now = date('Hi');
-        if ($now < 830 || $now > 1830) {
-            return;
-        }
-
-        $projects = $this->projectService->getAll();
-
-        foreach ($projects as $project) {
-            if ($this->alertTriggered($project->id, $alertType)) {
-                continue;
-            }
-
-            $irr = $project->getLatestIRR();
-            $kw = $project->getLatestKW();
-
-            if ($irr > 100 && $kw < 6) {
-                //$this->log($project->name. ': '. $alertType);
-                $this->alerts[] = [
-                    'time'         => date('Y-m-d H:i:s'),
-                    'project_id'   => $project->id,
-                    'project_name' => $project->name,
-                    'devtype'      => '', // $data['devtype'],
-                    'devcode'      => '', // $data['devcode'],
-                    'alert'        => $alertType,
-                    'message'      => 'Low energy while irradiance is great than 100',
-                ];
-            }
-        }
-    }
-
-    protected function checkInverterStatus()
-    {
-        $alertType = 'INVERTER-BAD-STATUS';
-
-        $rows = $this->db->fetchAll("SELECT * FROM latest_data");
+        $rows = $this->db->fetchAll("SELECT * FROM status_change");
 
         foreach ($rows as $row) {
-            if ($this->alertTriggered($row['project_id'], $alertType)) {
-                continue;
-            }
-
-            if ($row['devtype'] != 'Inverter') {
+            if ($row['checked']) {
                 continue;
             }
 
             $project = $this->projectService->get($row['project_id']);
+            $projectName = $project->name;
 
-            $devcode = $row['devcode'];
-            $device = $project->devices[$devcode];
+            $genPowerOld = abs($row['gen_power_old']);
+            $genPowerNew = abs($row['gen_power_new']);
 
-            $data = json_decode($row['data'], true);
-
-            $badStatus = false;
-
-            switch ($device->model) {
-            case 'SMA':
-                if ($data['status'] != 309) {
-                    $badStatus = true;
-                }
-                break;
-
-            case 'PVP':
-                if ($data['status'] != 21) {
-                    $badStatus = true;
-                }
-                break;
-
-            case 'FRONIUS':
-                if ($data['status'] != 4) {
-                    $badStatus = true;
-                }
-                break;
-
-            default:
-                break;
-            }
-
-            if ($badStatus) {
-                //$this->log("$device: $alertType (". $data['status']. ")");
-                /*
+            if (abs($genPowerNew - $genPowerOld) > max($genPowerNew, $genPowerOld)/2) {
+                $subject = "GCP Alert: $projectName - Generator Power Changed";
+                $this->log($subject);
+                $this->log(print_r($row, true));
                 $this->alerts[] = [
-                    'time'         => date('Y-m-d H:i:s'),
-                    'project_id'   => $row['project_id'],
-                    'project_name' => $row['project_name'],
-                    'devtype'      => $row['devtype'],
-                    'devcode'      => $row['devcode'],
-                    'alert'        => $alertType,
-                    'message'      => 'Inverter in Bad Status',
+                    'subject' => $subject,
+                    'project' => $project,
+                    'data' => $row,
                 ];
-                */
-            }
-        }
-    }
-
-    protected function checkErrorCode()
-    {
-        $alertType = 'ERROR-NOT-ZERO';
-
-        $rows = $this->db->fetchAll("SELECT * FROM latest_data");
-
-        foreach ($rows as $row) {
-            if ($this->alertTriggered($row['project_id'], $alertType)) {
-                continue;
             }
 
-            $data = json_decode($row['data'], true);
-            $error = $data['error'];
+            $storeLoadOld = abs($row['store_load_old']);
+            $storeLoadNew = abs($row['store_load_new']);
 
-            if ($error != 0) {
-                //$this->log($data['devtype']. ' '. $data['devcode']. ' of '. $data['project_name']. ': '. $alertType);
+            if (abs($storeLoadNew - $storeLoadOld) max($storeLoadNew, $storeLoadOld)/2) {
+                $subject = "GCP Alert: $projectName - Store Load Changed";
+                $this->log($subject);
+                $this->log(print_r($row, true));
                 $this->alerts[] = [
-                    'time'         => date('Y-m-d H:i:s'),
-                    'project_id'   => $row['project_id'],
-                    'project_name' => $row['project_name'],
-                    'devtype'      => $row['devtype'],
-                    'devcode'      => $row['devcode'],
-                    'alert'        => $alertType,
-                    'message'      => 'Error is not zero',
+                    'subject' => $subject,
+                    'project' => $project,
+                    'data' => $row,
                 ];
             }
         }
-    }
 
-    protected function alertTriggered($projectId, $alertType)
-    {
-        $today = date('Y-m-d');
-        $sql = "SELECT * FROM smart_alert_log WHERE project_id=$projectId AND alert='$alertType' AND date(time)='$today'";
-        $result = $this->db->fetchOne($sql);
-        return $result;
+        $this->db->execute("UPDATE status_change SET checked=1");
     }
 
     protected function generateHtml($alerts)
     {
         ob_start();
-        include("./templates/smart-alert.tpl");
+        include(BASE_DIR . "/job/templates/status-change.tpl");
         $content = ob_get_contents();
         ob_end_clean();
 
         return $content;
     }
 
-    protected function getUserSpecificAlerts($user)
-    {
-        if (!$user) {
-            return $this->alerts;
-        }
-
-        $alerts = [];
-
-        $projects = $this->userService->getUserProjects($user['id']);
-
-        foreach ($this->alerts as $alert) {
-            if (in_array($alert['project_id'], $projects)) {
-                $alerts[] = $alert;
-            }
-        }
-
-        return $alerts;
-    }
-
     protected function saveAlerts()
     {
-        // save to file
-        #$filename = BASE_DIR . "/app/logs/smart-alert.html";
-        #$html = $this->generateHtml(null);
-        #file_put_contents($filename, $html);
-
-        // save to database
+        /*
         foreach ($this->alerts as $alert) {
             try {
                 $this->db->insertAsDict('smart_alert_log', [
                     'time'         => $alert['time'],
                     'project_id'   => $alert['project_id'],
-                    'project_name' => $alert['project_name'],
-                    'devtype'      => $alert['devtype'],
-                    'devcode'      => $alert['devcode'],
                     'alert'        => $alert['alert'],
                     'message'      => $alert['message'],
                 ]);
@@ -245,6 +91,7 @@ class SmartAlertService extends Injectable
                 echo $e->getMessage(), EOL;
             }
         }
+        */
     }
 
     protected function sendAlerts()
@@ -252,22 +99,14 @@ class SmartAlertService extends Injectable
         $users = $this->userService->getAll();
 
         foreach ($users as $user) {
-            if ($user['smartAlert'] == 0) {
-                continue;
-            }
+           #if ($user['id'] > 1) break;
 
-           #if ($user['id'] > 2) break;
             if (strpos($user['email'], '@') === false) {
                 continue;
             }
 
-            $alerts = $this->getUserSpecificAlerts($user);
-            if (empty($alerts)) {
-                continue;
-            }
-
-            $html = $this->generateHtml($alerts);
-            $subject = $this->getSubject($alerts);
+            $html = $this->generateHtml($this->alerts);
+            $subject = $this->getSubject($this->alerts);
 
             $this->sendEmail($user['email'], $subject, $html);
         }
@@ -276,27 +115,7 @@ class SmartAlertService extends Injectable
     protected function getSubject($alerts)
     {
         $alert = $alerts[0];
-
-        $lines = [];
-        $lines[] = 'Smart Alert:';
-
-        $lines[] = $alert['project_name'];
-        if ($alert['devtype']) {
-            $lines[] = $alert['devtype'];
-        }
-
-        $type = $alert['alert'];
-        $types = [
-            'NO-DATA'    => 'No Data',
-            'LOW-ENERGY' => 'Inverter is OFFLINE',
-            'ERROR-NOT-ZERO' => 'Something is wrong, please check',
-        ];
-
-        if (isset($types[$type])) {
-            $lines[] = $types[$type];
-        }
-
-        return implode(' ', $lines);
+        return $alert['subject'];
     }
 
     protected function sendEmail($recepient, $subject, $body)
