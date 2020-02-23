@@ -151,6 +151,9 @@ class ImportService extends Injectable
         $storeLoad = $this->projectService->getStoreLoad($data);
         $genPower  = $this->projectService->getGeneratorPower($data);
 
+        $storeLoad = $storeLoad ?: 0; // empty string as 0 to void SQL syntax error
+        $genPower  = $genPower  ?: 0; // empty string as 0 to void SQL syntax error
+
         $sql = "UPDATE status_change
                    SET time_new='$timeNew',
                        store_load_new=$storeLoad,
