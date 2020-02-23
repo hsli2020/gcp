@@ -91,6 +91,7 @@ class ImportService extends Injectable
 
             $this->saveLatestData($project, $device, $latest);
             $this->generateAlarm($project, $device, $latest);
+            $this->saveStatusChange($project, $data);
         }
     }
 
@@ -132,6 +133,30 @@ class ImportService extends Injectable
              . " devcode = '$devcode',"
              . " data = '$json'";
 
+        $this->db->execute($sql);
+    }
+
+    public function saveStatusChange($project, $data)
+    {
+        $id = $project->id;
+
+        $sql = "UPDATE status_change
+                   SET time_old=time_new,
+                       store_load_old=store_load_new,
+                       gen_power_old=gen_power_new
+                 WHERE project_id=$id";
+        $this->db->execute($sql);
+
+        $timeNew   = $data['time_utc'];
+        $storeLoad = $this->projectService->getStoreLoad($data);
+        $genPower  = $this->projectService->getGeneratorPower($data);
+
+        $sql = "UPDATE status_change
+                   SET time_new='$timeNew',
+                       store_load_new=$storeLoad,
+                       gen_power_new=$genPower,
+                       checked=0
+                 WHERE project_id=$id";
         $this->db->execute($sql);
     }
 
