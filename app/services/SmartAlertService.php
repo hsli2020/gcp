@@ -31,9 +31,14 @@ class SmartAlertService extends Injectable
                 continue;
             }
 
+            // UTC to LocalTime
+            $row['time_old'] = strtotime($row['time_old'].' UTC');
+            $row['time_new'] = strtotime($row['time_new'].' UTC');
+
             $project = $this->projectService->get($row['project_id']);
             $projectName = $project->name;
 
+            // check Generator Power
             $genPowerOld = abs($row['gen_power_old']);
             $genPowerNew = abs($row['gen_power_new']);
 
@@ -48,10 +53,11 @@ class SmartAlertService extends Injectable
                 ];
             }
 
+            // check Store Load
             $storeLoadOld = abs($row['store_load_old']);
             $storeLoadNew = abs($row['store_load_new']);
 
-            if (abs($storeLoadNew - $storeLoadOld) max($storeLoadNew, $storeLoadOld)/2) {
+            if (abs($storeLoadNew - $storeLoadOld) > max($storeLoadNew, $storeLoadOld)/2) {
                 $subject = "GCP Alert: $projectName - Store Load Changed";
                 $this->log($subject);
                 $this->log(print_r($row, true));
