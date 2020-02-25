@@ -15,6 +15,7 @@ class SmartAlertService extends Injectable
         $this->alerts = [];
 
         $this->checkStatusChanged();
+        $this->checkDataError();
 
         if ($this->alerts) {
             $this->saveAlerts();
@@ -24,6 +25,8 @@ class SmartAlertService extends Injectable
 
     protected function checkStatusChanged()
     {
+        $alertType = 'STATUS-CHANGED';
+
         $rows = $this->db->fetchAll("SELECT * FROM status_change");
 
         foreach ($rows as $row) {
@@ -47,9 +50,10 @@ class SmartAlertService extends Injectable
                 $this->log($subject);
                 $this->log(print_r($row, true));
                 $this->alerts[] = [
+                    'type'    => $alertType,
                     'subject' => $subject,
                     'project' => $project,
-                    'data' => $row,
+                    'data'    => $row,
                 ];
             }
 
@@ -62,14 +66,57 @@ class SmartAlertService extends Injectable
                 $this->log($subject);
                 $this->log(print_r($row, true));
                 $this->alerts[] = [
+                    'type'    => $alertType,
                     'subject' => $subject,
                     'project' => $project,
-                    'data' => $row,
+                    'data'    => $row,
                 ];
             }
         }
 
         $this->db->execute("UPDATE status_change SET checked=1");
+    }
+
+    protected function checkDataError()
+    {
+        $alertType = 'DATA-ERROR';
+
+        $rows = $this->db->fetchAll("SELECT * FROM latest");
+        foreach ($rows as $row) {
+            $projectId = $row['project_id'];
+            if ($this->dataErrorAlertTriggered($projectId)) {
+                continue;
+            }
+
+            $data = json_decode($row['data'], true);
+            $error = $data['error'];
+
+            if ($error != 0) {
+                $project = $this->projectService->get($projectId);
+                $projectName = $project->name;
+
+                $subject = "GCP Alert: $projectName - Data Error";
+                $this->alerts[] = [
+                    'type'    => $alertType,
+                    'subject' => $subject,
+                    'project' => $project,
+                    'data'    => $data,
+                ];
+
+                $this->db->insertAsDict('data_error_log', [
+                    'project_id' => $projectId,
+                    'error'      => $error,
+                ]);
+            }
+        }
+    }
+
+    protected function dataErrorAlertTriggered($projectId)
+    {
+        $today = date('Y-m-d');
+        $sql = "SELECT * FROM data_error_log WHERE project_id=$projectId AND DATE(createdon)='$today'";
+        $result = $this->db->fetchOne($sql);
+        return $result;
     }
 
     protected function generateHtml($alerts)

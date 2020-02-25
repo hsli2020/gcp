@@ -8,11 +8,13 @@
     .center { text-align: center; }
     .left { text-align: left; }
     .right { text-align: right; }
+    .error { color: red; }
   </style>
 </head>
 <body>
 
 <?php foreach ($alerts as $alert) { ?>
+<?php if ($alert['type'] == 'STATUS-CHANGED') { ?>
 <p>
   <b><?= $alert['subject']; ?></b><br>
 </p>
@@ -34,6 +36,25 @@
 </tr>
 </table>
 <br>
+<?php } ?>
+
+<?php if ($alert['type'] == 'DATA-ERROR') { ?>
+<p>
+  <b class="error"><?= $alert['subject']; ?></b><br>
+</p>
+<table>
+<tr>
+  <th class="center">Time</th>
+  <th class="center">Error Code</th>
+</tr>
+<tr>
+  <td class="center"><?= $alert['data']['time_utc'] ?></td>
+  <td class="center"><?= $alert['data']['error'] ?></td>
+</tr>
+</table>
+<br>
+<?php } ?>
+
 <?php } ?>
 
 </body>
