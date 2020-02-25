@@ -40,6 +40,10 @@ class EmailService extends Injectable
     {
         $mailer = $this->mailer;
 
+       #$mailer->clearAddresses();
+        $mailer->clearAllRecipients();
+        $mailer->clearAttachments();
+
         $mailer->addAddress($recepient);
         $mailer->Subject = $subject;
         $mailer->Body = $body;
