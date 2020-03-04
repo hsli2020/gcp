@@ -122,6 +122,10 @@ class ProjectService extends Injectable
             return $data['Gen_CB_Pos'] == 0;
         }
         if (isset($data['ROW78'])) {
+            // P35 - St. Thomas
+            // Bit7 = 52U (1=closed)
+            // Bit6 = 52G1 (1=closed)
+            // Bit5 = 52G2 (1=closed)
             return (intval($data['ROW78']) & 0x40) == 0;
         }
         return 'N/A';
@@ -136,6 +140,10 @@ class ProjectService extends Injectable
             return $data['Util_CB_Pos'] == 0;
         }
         if (isset($data['ROW78'])) {
+            // P35 - St. Thomas
+            // Bit7 = 52U (1=closed)
+            // Bit6 = 52G1 (1=closed)
+            // Bit5 = 52G2 (1=closed)
             return (intval($data['ROW78']) & 0x80) == 0;
         }
         return 'N/A';
