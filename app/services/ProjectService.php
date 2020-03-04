@@ -122,7 +122,7 @@ class ProjectService extends Injectable
             return $data['Gen_CB_Pos'] == 0;
         }
         if (isset($data['ROW78'])) {
-            return (intval($data['ROW78']) & 0x7F) == 0;
+            return (intval($data['ROW78']) & 0x40) == 0;
         }
         return 'N/A';
     }
