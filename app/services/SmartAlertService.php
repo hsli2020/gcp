@@ -35,8 +35,8 @@ class SmartAlertService extends Injectable
             }
 
             // UTC to LocalTime
-            $row['time_old'] = date('Y-m-d H:i:s', strtotime($row['time_old'].' UTC'));
-            $row['time_new'] = date('Y-m-d H:i:s', strtotime($row['time_new'].' UTC'));
+            $row['time_old'] = changeTimezone($row['time_old'], 'UTC', 'EST');
+            $row['time_new'] = changeTimezone($row['time_new'], 'UTC', 'EST');
 
             $project = $this->projectService->get($row['project_id']);
             $projectName = $project->name;
