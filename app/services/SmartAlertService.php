@@ -27,12 +27,13 @@ class SmartAlertService extends Injectable
     {
         $alertType = 'STATUS-CHANGED';
 
-        $rows = $this->db->fetchAll("SELECT * FROM status_change");
+        $rows = $this->db->fetchAll("SELECT * FROM status_change WHERE checked=0");
 
         foreach ($rows as $row) {
-            if ($row['checked']) {
-                continue;
-            }
+            //if ($row['checked']) { continue; }
+
+            $row['time_old_utc'] = $row['time_old'];
+            $row['time_new_utc'] = $row['time_new'];
 
             // UTC to LocalTime
             $row['time_old'] = changeTimezone($row['time_old'], 'UTC', 'EST');
@@ -49,12 +50,13 @@ class SmartAlertService extends Injectable
                 $subject = "GCP Alert: $projectName - Generator Power Changed";
                 $this->log($subject);
                 $this->log(print_r($row, true));
-                $this->alerts[] = [
+                $this->alerts[] = $alert = [
                     'type'    => $alertType,
                     'subject' => $subject,
                     'project' => $project,
                     'data'    => $row,
                 ];
+                //fpr($alert);
             }
 
             // check Store Load
@@ -65,12 +67,13 @@ class SmartAlertService extends Injectable
                 $subject = "GCP Alert: $projectName - Store Load Changed";
                 $this->log($subject);
                 $this->log(print_r($row, true));
-                $this->alerts[] = [
+                $this->alerts[] = $alert = [
                     'type'    => $alertType,
                     'subject' => $subject,
                     'project' => $project,
                     'data'    => $row,
                 ];
+                //fpr($alert);
             }
         }
 
