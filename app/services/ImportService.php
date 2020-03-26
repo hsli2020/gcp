@@ -91,7 +91,7 @@ class ImportService extends Injectable
 
             $this->saveLatestData($project, $device, $latest);
             $this->generateAlarm($project, $device, $latest);
-            $this->saveStatusChange($project, $data);
+            $this->saveStatusChange($project, $latest);
         }
     }
 
@@ -138,6 +138,10 @@ class ImportService extends Injectable
 
     public function saveStatusChange($project, $data)
     {
+        if (empty($data)) {
+            return;
+        }
+
         $id = $project->id;
 
         $sql = "UPDATE status_change
