@@ -91,6 +91,8 @@ class WebRelayQuad
 
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 30); //timeout in seconds
 
             $output = curl_exec($ch);
            #var_dump($output);
@@ -107,4 +109,4 @@ class WebRelayQuad
 
 #$a = new WebRelayQuad();
 #var_dump($a->getState());
-#var_dump($a->setState(2, 1));
+#var_dump($a->setState(1, 1));
