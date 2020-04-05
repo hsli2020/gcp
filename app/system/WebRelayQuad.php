@@ -62,7 +62,10 @@ class WebRelayQuad
     public function setState($relay, $state)
     {
         $res = $this->httpGet("?relay{$relay}State=$state");
-        return $res;
+        $xml = simplexml_load_string($res);
+        $json = json_encode($xml);
+        $array = json_decode($json, TRUE);
+        return $array;
     }
 
     public function turnOn($relay)
@@ -103,4 +106,5 @@ class WebRelayQuad
 }
 
 #$a = new WebRelayQuad();
+#var_dump($a->getState());
 #var_dump($a->setState(2, 1));
