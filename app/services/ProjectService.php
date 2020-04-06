@@ -164,10 +164,10 @@ class ProjectService extends Injectable
             'user_ip'      => $info['user_ip'],
             'project_id'   => $info['project_id'],
             'project_name' => $info['project_name'],
-            'relay1_state' => $info['relay1_state'],
-            'relay2_state' => $info['relay2_state'],
-            'relay3_state' => $info['relay3_state'],
-            'relay4_state' => $info['relay4_state'],
+            'relay1_state' => $info['relay1state'],
+            'relay2_state' => $info['relay2state'],
+            'relay3_state' => $info['relay3state'],
+            'relay4_state' => $info['relay4state'],
         ]);
     }
 }

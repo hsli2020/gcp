@@ -27,18 +27,15 @@ class TangentController extends ControllerBase
 
         $webRelay = new WebRelayQuad($ips);
         $state = $webRelay->turnOn(1); // relay_1
-
-        // Log the state change of relay
-        $project = $this->projectService->get($projectId);
-        $auth = $this->session->get('auth');
-
-        $info = $state;
-        $info['user_id'] = $auth['id'];
-        $info['user_name'] = $auth['username'];
-        $info['user_ip'] = $this->request->getClientAddress();
-        $info['project_id'] = $projectId;
-        $info['project_name'] = $project->name;
-        $this->projectService->saveWebRelayLog($info);
+        /**
+         * $state = [
+         *    'relay1state' => 0,
+         *    'relay2state' => 0,
+         *    'relay3state' => 0,
+         *    'relay4state' => 0,
+         * ];
+         */
+        $this->saveWebRelayLog($projectId, $state);
 
         return $this->json('OK', $state);
     }
@@ -48,9 +45,27 @@ class TangentController extends ControllerBase
         $ips = $this->projectService->getWebRelayInfo($projectId);
 
         $webRelay = new WebRelayQuad($ips);
-        $state = $webRelay->turnOn(1); // relay_1
+        $state = $webRelay->turnOff(1); // relay_1
+        /**
+         * $state = [
+         *    'relay1state' => 0,
+         *    'relay2state' => 0,
+         *    'relay3state' => 0,
+         *    'relay4state' => 0,
+         * ];
+         */
+        $this->saveWebRelayLog($projectId, $state);
 
-        // Log the state change of relay
+        return $this->json('OK', $state);
+    }
+
+    // Log the state change of relay
+    protected function saveWebRelayLog($projectId, $state)
+    {
+        if (empty($state)) {
+            return;
+        }
+
         $project = $this->projectService->get($projectId);
         $auth = $this->session->get('auth');
 
@@ -61,7 +76,5 @@ class TangentController extends ControllerBase
         $info['project_id'] = $projectId;
         $info['project_name'] = $project->name;
         $this->projectService->saveWebRelayLog($info);
-
-        return $this->json('OK', $state);
     }
 }
