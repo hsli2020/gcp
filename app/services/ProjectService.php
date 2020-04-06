@@ -148,4 +148,26 @@ class ProjectService extends Injectable
         }
         return 'N/A';
     }
+
+    public function getWebRelayInfo($projectId)
+    {
+        $sql = "SELECT * FROM web_relay_info WHERE project_id=$projectId";
+        $info = $this->db->fetchOne($sql);
+        return $info;
+    }
+
+    public function saveWebRelayLog($info)
+    {
+        $this->db->insertAsDict('web_relay_log', [
+            'user_id'      => $info['user_id'],
+            'user_name'    => $info['user_name'],
+            'user_ip'      => $info['user_ip'],
+            'project_id'   => $info['project_id'],
+            'project_name' => $info['project_name'],
+            'relay1_state' => $info['relay1_state'],
+            'relay2_state' => $info['relay2_state'],
+            'relay3_state' => $info['relay3_state'],
+            'relay4_state' => $info['relay4_state'],
+        ]);
+    }
 }
