@@ -4,11 +4,13 @@ namespace App\System;
 
 class WebRelayQuad
 {
-    const ROGERS_HOST = "http://74.198.22.2:9001/state.xml";
-    const BELL_HOST   = "http://184.151.59.10:9001/state.xml";
+    protected $primaryIP;
+    protected $backupIP;
 
-    public function __construct()
+    public function __construct($info)
     {
+        $this->primaryIP = $info['primary_ip'];
+        $this->backupIP  = $info['backup_ip'];
     }
 
     /**
@@ -80,7 +82,10 @@ class WebRelayQuad
 
     protected function httpGet($params)
     {
-        $hosts = [ self::ROGERS_HOST, self::BELL_HOST ];
+        $hosts = [
+            $this->primaryIP,
+            $this->backupIP,
+        ];
 
         $output = "";
         foreach ($hosts as $host) {
