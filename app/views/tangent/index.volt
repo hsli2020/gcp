@@ -36,6 +36,7 @@ img {
 {% block jscode %}
   var timer = 0;
   var working = false;
+  var projectId = {{ projectId }};
 
   function start() {
     $('#start').removeClass('w3-white').addClass('w3-green');
@@ -53,14 +54,14 @@ img {
   }
 
   function getState() {
-    var url = '/tangent/getstate';
+    var url = '/tangent/getstate/' + projectId;
     $.get(url, function(res) {
       updateState(res.data);
     });
   }
 
-  function updateState(st) {
-    console.log('updateState ' + st.time);
+  function updateState(res) {
+    console.log('updateState', res);
   }
 {% endblock %}
 
