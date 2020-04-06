@@ -60,6 +60,20 @@ img {
     });
   }
 
+  function turnOn() {
+    var url = '/tangent/turnon/' + projectId;
+    $.get(url, function(res) {
+      updateState(res.data);
+    });
+  }
+
+  function turnOff() {
+    var url = '/tangent/turnoff/' + projectId;
+    $.get(url, function(res) {
+      updateState(res.data);
+    });
+  }
+
   function updateState(res) {
     console.log('updateState', res);
   }
