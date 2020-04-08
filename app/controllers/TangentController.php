@@ -14,27 +14,37 @@ class TangentController extends ControllerBase
 
     public function getStateAction($projectId = '')
     {
-        $ips = $this->projectService->getWebRelayInfo($projectId);
+        if (1) { // debug
+            $state = [
+                'relay1state' => 0,
+                'relay2state' => 0,
+                'relay3state' => 0,
+                'relay4state' => 0,
+            ];
+        } else {
+            $ips = $this->projectService->getWebRelayInfo($projectId);
+            $webRelay = new WebRelayQuad($ips);
+            $state = $webRelay->getState();
+        }
 
-        $webRelay = new WebRelayQuad($ips);
-        $state = $webRelay->getState();
         return $this->json('OK', $state);
     }
 
     public function turnOnAction($projectId = '')
     {
-        $ips = $this->projectService->getWebRelayInfo($projectId);
+        if (1) { // debug
+            $state = [
+                'relay1state' => 1,
+                'relay2state' => 0,
+                'relay3state' => 0,
+                'relay4state' => 0,
+            ];
+        } else {
+            $ips = $this->projectService->getWebRelayInfo($projectId);
+            $webRelay = new WebRelayQuad($ips);
+            $state = $webRelay->turnOn(1); // relay_1
+        }
 
-        $webRelay = new WebRelayQuad($ips);
-        $state = $webRelay->turnOn(1); // relay_1
-        /**
-         * $state = [
-         *    'relay1state' => 0,
-         *    'relay2state' => 0,
-         *    'relay3state' => 0,
-         *    'relay4state' => 0,
-         * ];
-         */
         $this->saveWebRelayLog($projectId, $state);
 
         return $this->json('OK', $state);
@@ -42,18 +52,19 @@ class TangentController extends ControllerBase
 
     public function turnOffAction($projectId = '')
     {
-        $ips = $this->projectService->getWebRelayInfo($projectId);
+        if (1) { // debug
+            $state = [
+                'relay1state' => 0,
+                'relay2state' => 0,
+                'relay3state' => 0,
+                'relay4state' => 0,
+            ];
+        } else {
+            $ips = $this->projectService->getWebRelayInfo($projectId);
+            $webRelay = new WebRelayQuad($ips);
+            $state = $webRelay->turnOff(1); // relay_1
+        }
 
-        $webRelay = new WebRelayQuad($ips);
-        $state = $webRelay->turnOff(1); // relay_1
-        /**
-         * $state = [
-         *    'relay1state' => 0,
-         *    'relay2state' => 0,
-         *    'relay3state' => 0,
-         *    'relay4state' => 0,
-         * ];
-         */
         $this->saveWebRelayLog($projectId, $state);
 
         return $this->json('OK', $state);
