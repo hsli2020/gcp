@@ -2,23 +2,14 @@
 
 {% block main %}
 <style type="text/css">
-img {
-  width: 90%; margin-left: auto; margin-right: auto; display: block;
+#box {
+  border: 1px solid #ccc; padding: 20px; font-size:24px;
 }
-#pic {
-  border: 1px solid #ccc; padding: 20px;
+#box button {
+  font-size:24px;
 }
-.dot {
-  width: 25px;
-  height: 25px;
-  border: 1px solid gray;
-  border-radius: 50%;
-  background-color: white;
-  vertical-align: middle;
-  display: inline-block;
-}
-.green {
-  background-color: lightgreen;
+#box span {
+  margin-right: 40px;
 }
 </style>
 
@@ -29,7 +20,13 @@ img {
        <button id="stop"  class="w3-button w3-white w3-border" onclick="stop()">Stop</button>
     </div>
   </div>
-  <div id="pic"><img src=""></div>
+
+  <div id="box">
+    <span>Relay 1 State: </span>
+    <button id="btnon"  onclick="turnOn()">ON <i class="fa fa-circle"></i></button>
+    <button id="btnoff" onclick="turnOff()">OFF <i class="fa fa-circle-o"></i></button>
+  </div>
+
 </div>
 {% endblock %}
 
@@ -39,18 +36,19 @@ img {
   var projectId = {{ projectId }};
 
   function start() {
-    $('#start').removeClass('w3-white').addClass('w3-green');
     if (!working) {
       working = true;
-      getState();
+      turnOn();
       timer = setInterval(getState, 5000);
+      $('#start').removeClass('w3-white').addClass('w3-green');
     }
   }
 
   function stop() {
-    $('#start').removeClass('w3-green').addClass('w3-white');
     working = false;
+    turnOff();
     clearInterval(timer);
+    $('#start').removeClass('w3-green').addClass('w3-white');
   }
 
   function getState() {
@@ -76,6 +74,11 @@ img {
 
   function updateState(res) {
     console.log('updateState', res);
+    if (res.relay1state == 1) {
+      $('#btnon').css("color", "red");
+    } else {
+      $('#btnon').css("color", "");
+    }
   }
 {% endblock %}
 
