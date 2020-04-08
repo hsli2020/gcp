@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\System\WebRelayQuad;
 
+const DEBUG = 0;
+
 class TangentController extends ControllerBase
 {
     public function indexAction($projectId = '')
@@ -14,7 +16,7 @@ class TangentController extends ControllerBase
 
     public function getStateAction($projectId = '')
     {
-        if (1) { // debug
+        if (DEBUG) {
             $state = [
                 'relay1state' => 0,
                 'relay2state' => 0,
@@ -32,7 +34,7 @@ class TangentController extends ControllerBase
 
     public function turnOnAction($projectId = '')
     {
-        if (1) { // debug
+        if (DEBUG) {
             $state = [
                 'relay1state' => 1,
                 'relay2state' => 0,
@@ -52,7 +54,7 @@ class TangentController extends ControllerBase
 
     public function turnOffAction($projectId = '')
     {
-        if (1) { // debug
+        if (DEBUG) {
             $state = [
                 'relay1state' => 0,
                 'relay2state' => 0,

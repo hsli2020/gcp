@@ -39,7 +39,7 @@
     if (!working) {
       working = true;
       turnOn();
-      timer = setInterval(getState, 5000);
+      timer = setInterval(getState, 1000*60);
       $('#start').removeClass('w3-white').addClass('w3-green');
     }
   }
