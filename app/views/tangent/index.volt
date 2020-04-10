@@ -11,18 +11,19 @@
 #box span {
   margin-right: 40px;
 }
+#start { margin-right: 4em; }
 </style>
 
 <div class="w3-container">
   <div class="w3-cell-row w3-padding w3-margin-bottom">
     <div class="w3-cell">
-       <button id="start" class="w3-button w3-white w3-border" onclick="start()">Start</button>
-       <button id="stop"  class="w3-button w3-white w3-border" onclick="stop()">Stop</button>
+       <button id="start" class="w3-button w3-white w3-border w3-xlarge" onclick="start()">Start</button>
+       <button id="stop"  class="w3-button w3-white w3-border w3-xlarge" onclick="stop()">Stop</button>
     </div>
   </div>
 
   <div id="box">
-    <span>Relay 1 State: </span>
+    <span>Generator Status: </span>
     <button id="btnon"  onclick="turnOn()">ON <i class="fa fa-circle"></i></button>
     <button id="btnoff" onclick="turnOff()">OFF <i class="fa fa-circle-o"></i></button>
   </div>
@@ -39,7 +40,7 @@
     if (!working) {
       working = true;
       turnOn();
-      timer = setInterval(getState, 1000*60);
+      timer = setInterval(getState, 1000*30);
       $('#start').removeClass('w3-white').addClass('w3-green');
     }
   }
@@ -83,4 +84,5 @@
 {% endblock %}
 
 {% block domready %}
+  getState();
 {% endblock %}
