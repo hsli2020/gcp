@@ -32,6 +32,8 @@ class SmartAlertService extends Injectable
         foreach ($rows as $row) {
             //if ($row['checked']) { continue; }
 
+            $projectId = $row['project_id'];
+
             $row['time_old_utc'] = $row['time_old'];
             $row['time_new_utc'] = $row['time_new'];
 
@@ -39,7 +41,7 @@ class SmartAlertService extends Injectable
             $row['time_old'] = changeTimezone($row['time_old'], 'UTC', 'EST');
             $row['time_new'] = changeTimezone($row['time_new'], 'UTC', 'EST');
 
-            $project = $this->projectService->get($row['project_id']);
+            $project = $this->projectService->get($projectId);
             $projectName = $project->name;
 
             // check Generator Power
@@ -50,7 +52,7 @@ class SmartAlertService extends Injectable
                 $subject = "GCP Alert: $projectName - Generator Power Changed";
                 $this->log($subject);
                 $this->log(print_r($row, true));
-                $this->alerts[] = $alert = [
+                $this->alerts[$projectId][] = $alert = [
                     'type'    => $alertType,
                     'subject' => $subject,
                     'project' => $project,
@@ -67,7 +69,7 @@ class SmartAlertService extends Injectable
                 $subject = "GCP Alert: $projectName - Store Load Changed";
                 $this->log($subject);
                 $this->log(print_r($row, true));
-                $this->alerts[] = $alert = [
+                $this->alerts[$projectId][] = $alert = [
                     'type'    => $alertType,
                     'subject' => $subject,
                     'project' => $project,
@@ -99,7 +101,7 @@ class SmartAlertService extends Injectable
                 $projectName = $project->name;
 
                 $subject = "GCP Alert: $projectName - Data Error";
-                $this->alerts[] = [
+                $this->alerts[$projectId][] = [
                     'type'    => $alertType,
                     'subject' => $subject,
                     'project' => $project,
@@ -135,16 +137,18 @@ class SmartAlertService extends Injectable
     protected function saveAlerts()
     {
         /*
-        foreach ($this->alerts as $alert) {
-            try {
-                $this->db->insertAsDict('smart_alert_log', [
-                    'time'         => $alert['time'],
-                    'project_id'   => $alert['project_id'],
-                    'alert'        => $alert['alert'],
-                    'message'      => $alert['message'],
-                ]);
-            } catch (\Exception $e) {
-                echo $e->getMessage(), EOL;
+        foreach ($this->alerts as $projectId => $alerts) {
+            foreach ($alerts as $alert) {
+                try {
+                    $this->db->insertAsDict('smart_alert_log', [
+                        'time'         => $alert['time'],
+                        'project_id'   => $alert['project_id'],
+                        'alert'        => $alert['alert'],
+                        'message'      => $alert['message'],
+                    ]);
+                } catch (\Exception $e) {
+                    echo $e->getMessage(), EOL;
+                }
             }
         }
         */
@@ -161,10 +165,11 @@ class SmartAlertService extends Injectable
                 continue;
             }
 
-            $html = $this->generateHtml($this->alerts);
-            $subject = $this->getSubject($this->alerts);
-
-            $this->sendEmail($user['email'], $subject, $html);
+            foreach ($this->alerts as $projectId => $alerts) {
+                $html = $this->generateHtml($alerts);
+                $subject = $this->getSubject($alerts);
+                $this->sendEmail($user['email'], $subject, $html);
+            }
         }
     }
 
