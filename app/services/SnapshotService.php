@@ -11,7 +11,11 @@ class SnapshotService extends Injectable
         # CONVERT_TZ(time_utc, 'UTC', 'EST')              Daylight Saving Time not work
         # CONVERT_TZ(time_utc, 'UTC', 'America/Toronto')  Daylight Saving Time works
 
-        $sql = "SELECT *, CONVERT_TZ(time_utc, 'UTC', 'EST') AS time FROM snapshot";
+        $sql = "SELECT sp.*,
+                       CONVERT_TZ(sp.time_utc, 'UTC', 'EST') AS time
+                  FROM snapshot sp
+             LEFT JOIN snapshot_sort st ON sp.project_id=st.project_id
+              ORDER BY st.sort";
         $rows = $this->db->fetchAll($sql);
 
        #$auth = $this->session->get('auth');
