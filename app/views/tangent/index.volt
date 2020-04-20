@@ -2,32 +2,24 @@
 
 {% block main %}
 <style type="text/css">
-#box {
-  border: 1px solid #ccc; padding: 20px; font-size:24px;
-}
-#box button {
-  font-size:24px;
-}
-#box span {
-  margin-right: 40px;
-}
+#box { font-size:24px; }
+#box button { font-size:24px; }
+#box span { margin-right: 40px; }
 #start { margin-right: 4em; }
 </style>
 
 <div class="w3-container">
-  <div class="w3-cell-row w3-padding w3-margin-bottom">
-    <div class="w3-cell">
-       <button id="start" class="w3-button w3-white w3-border w3-xlarge" onclick="start()">Start</button>
-       <button id="stop"  class="w3-button w3-white w3-border w3-xlarge" onclick="stop()">Stop</button>
-    </div>
-  </div>
-
-  <div id="box">
-    <span>Generator Status: </span>
-    <button id="btnon"  onclick="turnOn()">ON <i class="fa fa-circle"></i></button>
-    <button id="btnoff" onclick="turnOff()">OFF <i class="fa fa-circle-o"></i></button>
-  </div>
-
+  <table class="w3-table w3-border w3-padding">
+    <tr>
+      <td><button id="start" class="w3-button w3-white w3-border w3-xlarge" onclick="start()">Start</button></td>
+      <td id="box">
+        <span>Generator Status: </span>
+        <button id="btnon"  onclick="turnOn()">ON <i class="fa fa-circle"></i></button>
+        <button id="btnoff" onclick="turnOff()">OFF <i class="fa fa-circle-o"></i></button>
+      </td>
+      <td><button id="stop"  class="w3-button w3-white w3-border w3-xlarge w3-right" onclick="stop()">Stop</button></td>
+    </tr>
+  </table>
 </div>
 {% endblock %}
 
