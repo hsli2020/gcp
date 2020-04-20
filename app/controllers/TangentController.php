@@ -10,8 +10,11 @@ class TangentController extends ControllerBase
 {
     public function indexAction($projectId = '')
     {
+        $project = $this->projectService->get($projectId);
+
         $this->view->projectId = $projectId;
-        $this->view->pageTitle = 'Tangent';
+        $this->view->project   = $project;
+        $this->view->pageTitle = 'Tangent - '. $project->siteName;
     }
 
     public function getStateAction($projectId = '')

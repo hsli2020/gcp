@@ -89,6 +89,10 @@ class WebRelayQuad
 
         $output = "";
         foreach ($hosts as $host) {
+            if (strlen($host) < 10) {
+                continue; // Not IP
+            }
+
             $ch = curl_init();
 
             $url = $host.$params;
