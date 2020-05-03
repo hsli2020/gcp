@@ -156,6 +156,16 @@ class ProjectService extends Injectable
         return $info;
     }
 
+    public function getWebRelayList()
+    {
+        $sql = "SELECT r.*, p.site_name
+                  FROM web_relay_info r
+             LEFT JOIN project p ON p.id=r.project_id
+              ORDER BY p.id";
+        $list = $this->db->fetchAll($sql);
+        return $list;
+    }
+
     public function saveWebRelayLog($info)
     {
         $this->db->insertAsDict('web_relay_log', [

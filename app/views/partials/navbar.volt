@@ -15,6 +15,8 @@
     <a href="javascript:;" class="">Tools <i class="fa fa-caret-down"></i></a>
     <div class="w3-dropdown-content w3-white w3-card-4">
       <a href="/project/export" class="">Data Exporting</a>
+      <hr style="margin:0.5em;">
+      <a href="/tangent/iplist" class="">Tangent IP List</a>
 {#
       <a href="/project/compare" class="">Analytic Tool</a>
       <hr style="margin:0.5em;">
