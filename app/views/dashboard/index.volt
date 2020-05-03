@@ -129,7 +129,7 @@
     {% elseif (row['devtype'] == 'Tangent') %}
     <td>
       <a href="/project/tangent/{{ row['project_id'] }}" target="_blank">{{ row['project_name'] }}</a>
-      {% if (row['project_id'] == 18 or row['project_id'] == 19 or row['project_id'] == 23) %}
+      {% if row['primary_ip'] is not empty %}
         <a href="/tangent/index/{{ row['project_id'] }}" target="_blank" class="w3-right w3-margin-right">
          <!-- i class="fa fa-camera"></i -->
          <img src="/assets/app/img/generator.png" width="24">
