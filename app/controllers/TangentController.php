@@ -11,9 +11,15 @@ class TangentController extends ControllerBase
     public function indexAction($projectId = '')
     {
         $project = $this->projectService->get($projectId);
+        $webRelay = $this->projectService->getWebRelayInfo($projectId);
+
+        // "http://74.198.22.2:9001/state.xml" => "74.198.22.2"
+        $webRelay['primary_ip'] = parse_url($webRelay['primary_ip'], PHP_URL_HOST);
+        $webRelay['backup_ip'] =  parse_url($webRelay['backup_ip'],  PHP_URL_HOST);
 
         $this->view->projectId = $projectId;
         $this->view->project   = $project;
+        $this->view->webRelay  = $webRelay;
         $this->view->pageTitle = 'Tangent - '. $project->siteName;
     }
 
