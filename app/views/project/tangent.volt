@@ -256,7 +256,7 @@
 {% endblock %}
 
 {% block jscode %}
-  function initGauge(canvas, textfield) {
+  function initGauge(canvas, textfield, data) {
     gauge = new Gauge(canvas);
     var opts = {
       angle: -0.25,
@@ -268,16 +268,23 @@
         color: '#cccccc'
       },
       staticLabels: {
-        font: "10px sans-serif",
-        labels: [200, 500, 2100, 2800],
+        font: "11px sans-serif",
+        color: "#7F7F7F",
+        labels: [
+          data.maxVal*1/5,
+          data.maxVal*2/5,
+          data.maxVal*3/5,
+          data.maxVal*4/5,
+          data.maxVal*5/5,
+        ],
         fractionDigits: 0
       },
       staticZones: [
-         {strokeStyle: "#F03E3E", min: 0, max: 200},
-         {strokeStyle: "#FFDD00", min: 200, max: 500},
-         {strokeStyle: "#30B32D", min: 500, max: 2100},
-         {strokeStyle: "#FFDD00", min: 2100, max: 2800},
-         {strokeStyle: "#F03E3E", min: 2800, max: 3000}
+         {strokeStyle: "#F03E3E", min: 0,               max: data.maxVal/5},
+         {strokeStyle: "#FFDD00", min: data.maxVal*1/5, max: data.maxVal*2/5},
+         {strokeStyle: "#30B32D", min: data.maxVal*2/5, max: data.maxVal*3/5},
+         {strokeStyle: "#FFDD00", min: data.maxVal*3/5, max: data.maxVal*4/5},
+         {strokeStyle: "#F03E3E", min: data.maxVal*4/5, max: data.maxVal*5/5}
       ],
       limitMax: false,
       limitMin: false,
@@ -286,15 +293,27 @@
     gauge.setOptions(opts);
     gauge.setTextField(textfield);
     gauge.minValue = 0;
-    gauge.maxValue = 3000;
-    gauge.set(Math.random()*2500);
+    gauge.maxValue = data.maxVal;
+    gauge.set(data.curVal);
   }
 {% endblock %}
 
 {% block domready %}
-  $('.gauge').each(function() {
+  var guageData = [
+    { label: "Utility Power",        maxVal:  1000,  curVal: {{ data['Util_kW'] }}         },
+    { label: "Utility Voltage",      maxVal:   800,  curVal: {{ data['Util_VLL_Avg'] }}    },
+    { label: "Generator Voltage",    maxVal:  1000,  curVal: {{ data['Gen_VLL_Avg'] }}     },
+    { label: "Generator Frequency",  maxVal:   100,  curVal: {{ data['Gen_Frequency'] }}   },
+    { label: "Battery Voltage",      maxVal:   100,  curVal: {{ data['Battery_Voltage'] }} },
+    { label: "RPM",                  maxVal:  3000,  curVal: {{ data['Engine_RPM'] }}      },
+    { label: "Oil Pressure",         maxVal: 10000,  curVal: {{ data['Oil_Pressure'] }}    },
+    { label: "Oil Temperature",      maxVal:   200,  curVal: {{ data['Oil_Temp'] }}        },
+    { label: "Coolant Temperature",  maxVal:   200,  curVal: {{ data['Coolant_Temp'] }}    },
+  ];
+
+  $('.gauge').each(function(i, e) {
     var canvas = $(this).find('canvas')[0];
     var textfield = $(this).find('.textfield')[0];
-    initGauge(canvas, textfield);
+    initGauge(canvas, textfield, guageData[i]);
   })
 {% endblock %}
