@@ -286,8 +286,8 @@
          {strokeStyle: "#FFDD00", min: data.maxVal*3/5, max: data.maxVal*4/5},
          {strokeStyle: "#F03E3E", min: data.maxVal*4/5, max: data.maxVal*5/5}
       ],
-      limitMax: false,
-      limitMin: false,
+      limitMax: true,
+      limitMin: true,
       highDpiSupport: true
     };
     gauge.setOptions(opts);
