@@ -291,6 +291,10 @@ class Bootstrap
                     //    return "Bootstrap::translate({$key})";
                     //});
 
+                    $volt->getCompiler()->addFunction('round', function ($resolvedArgs, $exprArgs) {
+                        return 'round('. $resolvedArgs .')';
+                    });
+
                     return $volt;
                 },
                 '.phtml' => 'Phalcon\Mvc\View\Engine\Php', // Generate Template files uses PHP itself as the template engine

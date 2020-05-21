@@ -103,13 +103,13 @@
                 </tr><tr>
                   <th>Utility Voltage</th>
                   <td>
-                    <div>{{ data['Util_VLL_Avg'] }} V</div>
+                    <div>{{ round(data['Util_VLL_Avg']) }} V</div>
                     <span>{{ data['time_utc'] }}</span>
                   </td>
                 </tr><tr>
                   <th>Utility Power</th>
                   <td>
-                    <div>{{ data['Util_kW']}} kW</div>
+                    <div>{{ round(data['Util_kW']) }} kW</div>
                     <span>{{ data['time_utc'] }}</span>
                   </td>
                 </tr><tr>
@@ -133,7 +133,7 @@
                 </tr><tr>
                   <th>Battery Voltage</th>
                   <td>
-                    <div>{{ data['Battery_Voltage'] }} V</div>
+                    <div>{{ round(data['Battery_Voltage']) }} V</div>
                     <span>{{ data['time_utc'] }}</span>
                   </td>
                 </tr><tr>
@@ -145,13 +145,13 @@
                 </tr><tr>
                   <th>Oil Pressure</th>
                   <td>
-                    <div>{{ data['Oil_Pressure'] }} psi</div>
+                    <div>{{ round(data['Oil_Pressure']) }} psi</div>
                     <span>{{ data['time_utc'] }}</span>
                   </td>
                 </tr><tr>
                   <th>Oil Temperature</th>
                   <td>
-                    <div>{{ data['Oil_Temp'] }} F</div>
+                    <div>{{ round(data['Oil_Temp']) }} F</div>
                     <span>{{ data['time_utc'] }}</span>
                   </td>
                 </tr><tr>
@@ -186,12 +186,12 @@
           <th class="w3-center">Generator</th>
       </tr><tr>
           <th>Total Power</th>
-          <td class="w3-center">{{ data['Util_kW'] }} kW</td>
-          <td class="w3-center">{{ data['Gen_Total_kW'] }} kW</td>
+          <td class="w3-center">{{ round(data['Util_kW']) }} kW</td>
+          <td class="w3-center">{{ round(data['Gen_Total_kW']) }} kW</td>
       </tr><tr>
           <th>Average Voltage</th>
-          <td class="w3-center">{{ data['Util_VLL_Avg'] }} V</td>
-          <td class="w3-center">{{ data['Gen_VLL_Avg'] }} V</td>
+          <td class="w3-center">{{ round(data['Util_VLL_Avg']) }} V</td>
+          <td class="w3-center">{{ round(data['Gen_VLL_Avg']) }} V</td>
       </tr><tr>
           <th>Power Factor</th>
           <td class="w3-center">{{ data['Util_PF'] }} pF</td>
@@ -241,7 +241,7 @@
           <td colspan="2" class="w3-center">{{ data['Oil_Pressure'] }}</td>
       </tr><tr>
           <th>Oil Temperature</th>
-          <td colspan="2" class="w3-center">{{ data['Oil_Temp'] }}</td>
+          <td colspan="2" class="w3-center">{{ round(data['Oil_Temp']) }}</td>
       </tr><tr>
           <th>Coolan Temperature</th>
           <td colspan="2" class="w3-center">{{ data['Coolant_Temp'] }}</td>
