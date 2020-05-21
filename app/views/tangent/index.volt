@@ -9,10 +9,12 @@
 </style>
 
 <div class="w3-container">
+{#
   <div class="w3-margin-bottom">
     <b>Primary IP</b>: {{ webRelay['primary_ip'] }},
     <b>Backup IP</b>: {{ webRelay['backup_ip'] }}
   </div>
+#}
   <table class="w3-table w3-border w3-padding">
     <tr>
       <td><button id="start" class="w3-button w3-white w3-border w3-xlarge" onclick="start()">Start</button></td>

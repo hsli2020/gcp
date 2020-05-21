@@ -84,8 +84,8 @@ class TangentController extends ControllerBase
     public function ipListAction()
     {
         $this->view->pageTitle = 'Tangent - IP List';
-        $iplist = $this->projectService->getWebRelayList();
-        $this->view->iplist = $iplist;
+       #$iplist = $this->projectService->getWebRelayList();
+        $this->view->iplist = []; //$iplist;
     }
 
     // Log the state change of relay
