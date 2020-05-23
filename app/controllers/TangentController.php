@@ -2,12 +2,20 @@
 
 namespace App\Controllers;
 
+use App\Models\Users;
 use App\System\WebRelayQuad;
 
 const DEBUG = 0;
 
 class TangentController extends ControllerBase
 {
+    protected $mockState = [
+        'relay1state' => 0,
+        'relay2state' => 0,
+        'relay3state' => 0,
+        'relay4state' => 0,
+    ];
+
     public function indexAction($projectId = '')
     {
         $project = $this->projectService->get($projectId);
@@ -25,36 +33,37 @@ class TangentController extends ControllerBase
 
     public function getStateAction($projectId = '')
     {
+       #if (!$this->checkAuth()) {
+       #    return $this->json('OK', $this->mockState);
+       #}
+
         if (DEBUG) {
-            $state = [
-                'relay1state' => 0,
-                'relay2state' => 0,
-                'relay3state' => 0,
-                'relay4state' => 0,
-            ];
-        } else {
-            $ips = $this->projectService->getWebRelayInfo($projectId);
-            $webRelay = new WebRelayQuad($ips);
-            $state = $webRelay->getState();
+            $this->mockState['time'] = time();
+            return $this->json('OK', $this->mockState);
         }
+
+        $ips = $this->projectService->getWebRelayInfo($projectId);
+        $webRelay = new WebRelayQuad($ips);
+        $state = $webRelay->getState();
 
         return $this->json('OK', $state);
     }
 
     public function turnOnAction($projectId = '')
     {
-        if (DEBUG) {
-            $state = [
-                'relay1state' => 1,
-                'relay2state' => 0,
-                'relay3state' => 0,
-                'relay4state' => 0,
-            ];
-        } else {
-            $ips = $this->projectService->getWebRelayInfo($projectId);
-            $webRelay = new WebRelayQuad($ips);
-            $state = $webRelay->turnOn(1); // relay_1
+        if (!$this->checkAuth()) {
+            $this->mockState['relay1state'] = 1;
+            return $this->json('OK', $this->mockState);
         }
+
+        if (DEBUG) {
+            $this->mockState['relay1state'] = 1;
+            return $this->json('OK', $this->mockState);
+        }
+
+        $ips = $this->projectService->getWebRelayInfo($projectId);
+        $webRelay = new WebRelayQuad($ips);
+        $state = $webRelay->turnOn(1); // relay_1
 
         $this->saveWebRelayLog($projectId, $state);
 
@@ -63,18 +72,19 @@ class TangentController extends ControllerBase
 
     public function turnOffAction($projectId = '')
     {
-        if (DEBUG) {
-            $state = [
-                'relay1state' => 0,
-                'relay2state' => 0,
-                'relay3state' => 0,
-                'relay4state' => 0,
-            ];
-        } else {
-            $ips = $this->projectService->getWebRelayInfo($projectId);
-            $webRelay = new WebRelayQuad($ips);
-            $state = $webRelay->turnOff(1); // relay_1
+        if (!$this->checkAuth()) {
+            $this->mockState['relay1state'] = 0;
+            return $this->json('OK', $this->mockState);
         }
+
+        if (DEBUG) {
+            $this->mockState['relay1state'] = 0;
+            return $this->json('OK', $this->mockState);
+        }
+
+        $ips = $this->projectService->getWebRelayInfo($projectId);
+        $webRelay = new WebRelayQuad($ips);
+        $state = $webRelay->turnOff(1); // relay_1
 
         $this->saveWebRelayLog($projectId, $state);
 
@@ -105,5 +115,33 @@ class TangentController extends ControllerBase
         $info['project_id'] = $projectId;
         $info['project_name'] = $project->name;
         $this->projectService->saveWebRelayLog($info);
+    }
+
+    public function checkAuthAction()
+    {
+        $auth = $this->session->get('auth');
+        $username = $auth['username'];
+        $password = $this->request->getPost('password');
+        $auth['authchecked'] = 0;
+
+        $user = Users::findFirstByUsername($username);
+
+        if ($user && $user->active == 'Y' && $this->security->checkHash($password, $user->password)) {
+            $auth['authchecked'] = 1;
+            $this->session->set('auth', $auth);
+            return $this->json('OK', 'Authorized');
+        }
+
+        $message = 'Wrong Username/password.';
+        return $this->json('ERROR', $message);
+    }
+
+    protected function checkAuth()
+    {
+        $auth = $this->session->get('auth');
+        if (empty($auth['authchecked'])) {
+            return false;
+        }
+        return true;
     }
 }

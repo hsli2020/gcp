@@ -77,7 +77,7 @@ class ImportService extends Injectable
             while (($fields = fgetcsv($handle)) !== FALSE) {
                 $fields = array_slice($fields, 0, count($columns));
                 if (count($columns) != count($fields)) {
-                    $this->log("DATA ERROR: $filename\n\t" . implode(', ', $fields));
+                    //$this->log("DATA ERROR: $filename\n\t" . implode(', ', $fields));
                     continue;
                 };
 
