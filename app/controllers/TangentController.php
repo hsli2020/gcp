@@ -117,6 +117,12 @@ class TangentController extends ControllerBase
         $this->projectService->saveWebRelayLog($info);
     }
 
+    public function remoteAction()
+    {
+        $this->view->pageTitle = 'Remote Start/Stop';
+        $this->view->projects = $this->projectService->getWebRelayList();
+    }
+
     public function checkAuthAction()
     {
         $auth = $this->session->get('auth');
