@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\Users;
 use App\System\WebRelayQuad;
 
-const DEBUG = 0;
+const DEBUG = 1;
 
 class TangentController extends ControllerBase
 {
@@ -38,7 +38,7 @@ class TangentController extends ControllerBase
        #}
 
         if (DEBUG) {
-            $this->mockState['time'] = time();
+            $this->mockState['relay1state'] = $this->getMockState($projectId);
             return $this->json('OK', $this->mockState);
         }
 
@@ -52,11 +52,13 @@ class TangentController extends ControllerBase
     public function turnOnAction($projectId = '')
     {
         if (!$this->checkAuth()) {
+            $this->setMockState($projectId, 1);
             $this->mockState['relay1state'] = 1;
             return $this->json('OK', $this->mockState);
         }
 
         if (DEBUG) {
+            $this->setMockState($projectId, 1);
             $this->mockState['relay1state'] = 1;
             return $this->json('OK', $this->mockState);
         }
@@ -73,11 +75,13 @@ class TangentController extends ControllerBase
     public function turnOffAction($projectId = '')
     {
         if (!$this->checkAuth()) {
+            $this->setMockState($projectId, 0);
             $this->mockState['relay1state'] = 0;
             return $this->json('OK', $this->mockState);
         }
 
         if (DEBUG) {
+            $this->setMockState($projectId, 0);
             $this->mockState['relay1state'] = 0;
             return $this->json('OK', $this->mockState);
         }
@@ -120,7 +124,11 @@ class TangentController extends ControllerBase
     public function remoteAction()
     {
         $this->view->pageTitle = 'Remote Start/Stop';
-        $this->view->projects = $this->projectService->getWebRelayList();
+
+        $projects = $this->projectService->getWebRelayList();
+
+        $this->view->projects = $projects;
+        $this->view->ids = implode(',', array_column($projects, 'project_id'));
     }
 
     public function checkAuthAction()
@@ -134,9 +142,10 @@ class TangentController extends ControllerBase
 
         if ($user && $user->active == 'Y' && $this->security->checkHash($password, $user->password)) {
             $auth['authchecked'] = 1;
-            $this->session->set('auth', $auth);
             return $this->json('OK', 'Authorized');
         }
+
+        $this->session->set('auth', $auth);
 
         $message = 'Wrong Username/password.';
         return $this->json('ERROR', $message);
@@ -149,5 +158,18 @@ class TangentController extends ControllerBase
             return false;
         }
         return true;
+    }
+
+    protected function setMockState($projectId, $state)
+    {
+        $mockState = $this->session->get('mock');
+        $mockState[$projectId] = $state;
+        $this->session->set('mock', $mockState);
+    }
+
+    protected function getMockState($projectId)
+    {
+        $mockState = $this->session->get('mock');
+        return isset($mockState[$projectId]) ? $mockState[$projectId] : 0;
     }
 }
