@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\Users;
 use App\System\WebRelayQuad;
 
-const DEBUG = 1;
+const DEBUG = 0;
 
 class TangentController extends ControllerBase
 {
