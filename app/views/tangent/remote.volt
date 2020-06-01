@@ -14,7 +14,7 @@
   <tr class="w3-light-gray">
     <th class="w3-center"><input class="w3--check" type="checkbox" id="check-all" value="0"></th>
     <th>Name</th>
-    <th>WebRelay State</th>
+    <th>Remote Start Status</th>
     <th>Start</th>
     <th>Stop</th>
   </tr>
