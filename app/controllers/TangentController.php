@@ -142,6 +142,7 @@ class TangentController extends ControllerBase
 
         if ($user && $user->active == 'Y' && $this->security->checkHash($password, $user->password)) {
             $auth['authchecked'] = 1;
+            $this->session->set('auth', $auth);
             return $this->json('OK', 'Authorized');
         }
 
