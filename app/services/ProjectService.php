@@ -71,6 +71,9 @@ class ProjectService extends Injectable
         if (isset($data['Gen_Total_kW'])) {
             return $data['Gen_Total_kW'] == 0;
         }
+        if (isset($data['P3X'])) { // St.Thomas
+            return $data['P3X'] == 0; // GeneratorPower is Off (RED on dashboard)
+        }
         return 1;
     }
 
