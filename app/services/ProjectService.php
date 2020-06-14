@@ -65,16 +65,18 @@ class ProjectService extends Injectable
 
     public function getGeneratorStatus($data)
     {
-        if (isset($data['M_Start_Auto'])) {
-            return $data['M_Start_Auto'];
-        }
-        if (isset($data['Gen_Total_kW'])) {
-            return $data['Gen_Total_kW'] == 0;
-        }
-        if (isset($data['P3X'])) { // St.Thomas
-            return $data['P3X'] == 0; // GeneratorPower is Off (RED on dashboard)
-        }
-        return 1;
+        return $this->getGeneratorPower($data) == 0;
+
+        #if (isset($data['M_Start_Auto'])) {
+        #    return $data['M_Start_Auto'];
+        #}
+        #if (isset($data['Gen_Total_kW'])) {
+        #    return $data['Gen_Total_kW'] == 0;
+        #}
+        #if (isset($data['P3X'])) { // St.Thomas
+        #    return $data['P3X'] == 0; // GeneratorPower is Off (RED on dashboard)
+        #}
+        #return 1;
     }
 
     public function getEmergencyStart($data)
