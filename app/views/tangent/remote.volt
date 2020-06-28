@@ -96,8 +96,10 @@
     console.log('updateState ' + id, res);
     if (res.relay1state == 1) {
       $('#'+id + ' .state').text("ON");
-    } else {
+    } else if (res.relay1state == 0) {
       $('#'+id + ' .state').text("OFF");
+    } else {
+      $('#'+id + ' .state').text("Unreachable");
     }
     authorized = false;
   }
