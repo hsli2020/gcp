@@ -123,9 +123,9 @@ class Project
             $endTime = date('Y-m-d', strtotime('1 day', strtotime($startTime)));
         }
 
-        fputs($file, 'Project:    ' .$this->name. PHP_EOL);
-        fputs($file, 'Start Time: ' .$startTime. PHP_EOL);
-        fputs($file, 'End Time:   ' .$endTime. PHP_EOL. PHP_EOL);
+        fputs($file, 'Project:          ' .$this->name. PHP_EOL);
+        fputs($file, 'Start Time (EST): ' .$startTime. PHP_EOL);
+        fputs($file, 'End Time (EST):   ' .$endTime. PHP_EOL. PHP_EOL);
 
         foreach ($this->devices as $device) {
             $device->export($file, $startTime, $endTime);

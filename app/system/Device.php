@@ -64,8 +64,8 @@ class Device
         $col = ($this->type == 'gcp') ? 'M_Gen_real_enrg' : 'Gen_Total_kW';
         $sql = "SELECT SUM($col) AS totalpower
                   FROM $table
-                 WHERE time_utc >= CONVERT_TZ('$start', 'America/Toronto', 'UTC') AND
-                       time_utc <= CONVERT_TZ('$end',   'America/Toronto', 'UTC') AND error=0";
+                 WHERE time_utc >= CONVERT_TZ('$start', 'EST', 'UTC') AND
+                       time_utc <= CONVERT_TZ('$end',   'EST', 'UTC') AND error=0";
         $row = $this->getDb()->fetchOne($sql);
         return $row['totalpower'];
     }
@@ -78,8 +78,8 @@ class Device
 
         $sql = "SELECT *, CONVERT_TZ(time_utc, 'UTC', 'EST') AS time
                   FROM $table
-                 WHERE time_utc >= CONVERT_TZ('$start', 'America/Toronto', 'UTC') AND
-                       time_utc <  CONVERT_TZ('$end',   'America/Toronto', 'UTC')
+                 WHERE time_utc >= CONVERT_TZ('$start', 'EST', 'UTC') AND
+                       time_utc <  CONVERT_TZ('$end',   'EST', 'UTC')
               ORDER BY time_utc";
 
         $result = $this->getDb()->query($sql);
