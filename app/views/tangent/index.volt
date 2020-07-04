@@ -19,7 +19,7 @@
     <tr>
       <td><button id="start" class="w3-button w3-white w3-border w3-xlarge" onclick="start()">Start</button></td>
       <td id="box">
-        <span>Generator Status: </span>
+        <span>Remote Start Status: </span>
         <span id="state"></span>
       </td>
       <td><button id="stop"  class="w3-button w3-white w3-border w3-xlarge w3-right" onclick="stop()">Stop</button></td>
