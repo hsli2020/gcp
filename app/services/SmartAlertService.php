@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\System\WebRelayQuad;
 use Phalcon\Di\Injectable;
 
 class SmartAlertService extends Injectable
@@ -16,6 +17,7 @@ class SmartAlertService extends Injectable
 
         $this->checkStatusChanged();
         $this->checkDataError();
+        $this->checkRemoteStatus();
 
         if ($this->alerts) {
             $this->saveAlerts();
@@ -119,6 +121,41 @@ class SmartAlertService extends Injectable
                     'error'      => $error,
                 ]);
             }
+        }
+    }
+
+    public function checkRemoteStatus()
+    {
+        if ((date('i')%10) != 0) {
+            return; // every 10 minutes
+        }
+
+        $list = $this->projectService->getWebRelayList();
+        foreach ($list as $info) {
+            $siteName = $info['site_name'];
+            $primaryIP = parse_url($info['primary_ip'], PHP_URL_HOST);
+            $backupIP = parse_url($info['backup_ip'], PHP_URL_HOST);
+
+            echo $siteName;
+
+            $webRelay = new WebRelayQuad($info);
+            $state = $webRelay->getState();
+
+            if (!empty($state)) {
+                echo "\tOK\n";
+                continue;
+            }
+
+            echo "\tUnreachable\n";
+
+            $recepient = "wsong365@gmail.com";
+            $subject = "GCP Alert: Unreachable Remote Status";
+            $body  = "<h2>Please check what is wrong!</h2>\n";
+            $body .= "<b>Name:</b> $siteName<br>\n";
+            $body .= "<b>Primary IP:</b> $primaryIP<br>\n";
+            $body .= "<b>Backup IP:</b> $backupIP<br>";
+
+            $this->sendEmail($recepient, $subject, $body);
         }
     }
 
