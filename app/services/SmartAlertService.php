@@ -132,6 +132,9 @@ class SmartAlertService extends Injectable
 
         $list = $this->projectService->getWebRelayList();
         foreach ($list as $info) {
+            if ($info['active'] == 0) {
+                continue;
+            }
             $siteName = $info['site_name'];
             $primaryIP = parse_url($info['primary_ip'], PHP_URL_HOST);
             $backupIP = parse_url($info['backup_ip'], PHP_URL_HOST);
