@@ -138,7 +138,7 @@ class ImportService extends Injectable
 
     public function saveStatusChange($project, $data)
     {
-        if (empty($data)) {
+        if (empty($data) || $data['error'] != 0) {
             return;
         }
 
