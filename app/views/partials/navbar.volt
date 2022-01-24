@@ -17,6 +17,8 @@
       <a href="/project/export" class="">Data Exporting</a>
       <hr style="margin:0.5em;">
       <a href="/tangent/remote" class="">Remote Start/Stop</a>
+      <hr style="margin:0.5em;">
+      <a href="/modbus/brampton" class="">Brampton Testing</a>
 {#
       <a href="/tangent/iplist" class="">Tangent IP List</a>
       <a href="/project/compare" class="">Analytic Tool</a>
