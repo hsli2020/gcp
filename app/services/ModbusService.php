@@ -29,9 +29,12 @@ class ModbusService extends Injectable
             $modbus->writeSingleCoil(1, 5, $data); // 5 seems ok
         }
         catch (Exception $e) {
-            echo $modbus;
-            echo $e;
+            //echo $modbus;
+            //echo $e;
+            return false;
         }
+
+        return true;
     }
 
     public function readRegisters()
@@ -43,9 +46,9 @@ class ModbusService extends Injectable
             $recData = $modbus->readMultipleRegisters(1, 9000, 2);
         }
         catch (Exception $e) {
-            echo $modbus;
-            echo $e;
-            return;
+            //echo $modbus;
+            //echo $e;
+            return 'Error';
         }
 
         return decbin(\PhpType::bytes2unsignedInt($recData)>>16);
