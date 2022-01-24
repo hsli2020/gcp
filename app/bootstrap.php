@@ -433,6 +433,7 @@ class Bootstrap
         $this->di->setShared('snapshotService',      '\App\Service\SnapshotService');
         $this->di->setShared('smartAlertService',    '\App\Service\SmartAlertService');
         $this->di->setShared('emailService',         '\App\Service\EmailService');
+        $this->di->setShared('modbusService',        '\App\Service\ModbusService');
     }
 
     protected function initSecurity(Config $config, EventsManager $em)
