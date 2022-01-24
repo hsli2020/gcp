@@ -44,6 +44,8 @@ class ControllerBase extends Controller
             'dashboard',
             'project',
             'report',
+            'modbus',
+            'tangent',
         );
 
         return in_array($controllerName, $privateControllers);
