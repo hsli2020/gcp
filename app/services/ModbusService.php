@@ -51,7 +51,7 @@ class ModbusService extends Injectable
             return 'Error';
         }
 
-        return decbin(\PhpType::bytes2unsignedInt($recData)>>16);
+        return decbin((\PhpType::bytes2unsignedInt($recData)>>16)&0xFFFF);
 
         // Print status information
         #echo "Status:\n" . $modbus;
