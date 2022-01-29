@@ -118,8 +118,8 @@ class ProjectService extends Injectable
         if (isset($data['P3Y'])) {
             return $data['P3Y'];
         }
-        if (isset($data['LOAD_METER_PWR'])) {
-            return $data['LOAD_METER_PWR'];
+        if (isset($data['SITE_METER_PWR'])) {
+            return $data['SITE_METER_PWR'];
         }
         return 0;
     }
