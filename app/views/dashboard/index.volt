@@ -136,6 +136,8 @@
         </a>
       {% endif %}
     </td>
+    {% elseif (row['devtype'] == 'Ajax-Tesla') %}
+    <td><a href="/project/ajaxtesla" target="_blank">{{ row['project_name'] }}</a></td>
     {% else %}
     <td>{{ row['project_name'] }}</td>
     {% endif %}

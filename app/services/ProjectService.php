@@ -101,6 +101,9 @@ class ProjectService extends Injectable
         if (isset($data['P3X'])) {
             return $data['P3X'];
         }
+        if (isset($data['BATT_METER_PWR'])) {
+            return $data['BATT_METER_PWR'];
+        }
         return 0;
     }
 
@@ -114,6 +117,9 @@ class ProjectService extends Injectable
         }
         if (isset($data['P3Y'])) {
             return $data['P3Y'];
+        }
+        if (isset($data['LOAD_METER_PWR'])) {
+            return $data['LOAD_METER_PWR'];
         }
         return 0;
     }
@@ -152,6 +158,22 @@ class ProjectService extends Injectable
             return (intval($data['ROW78']) & 0x80) == 0;
         }
         return 'N/A';
+    }
+
+    public function getAjaxTeslaData()
+    {
+        $project = $this->get(38);
+        $devices = $project->getDevices();
+
+        $table1 = $devices['mb-100']->getTable();
+        $sql = "SELECT * FROM $table1 ORDER BY time_utc DESC LIMIT 1";
+        $data1 = $this->db->fetchOne($sql);
+
+        $table2 = $devices['mb-200']->getTable();
+        $sql = "SELECT * FROM $table2 ORDER BY time_utc DESC LIMIT 1";
+        $data2 = $this->db->fetchOne($sql);
+
+        return array_merge($data1, $data2);
     }
 
     public function getWebRelayInfo($projectId)

@@ -52,6 +52,13 @@ class ProjectController extends ControllerBase
         }
     }
 
+    public function ajaxTeslaAction()
+    {
+        $this->view->pageTitle = 'Project Details';
+        $data = $this->projectService->getAjaxTeslaData();
+        $this->view->data = $data;
+    }
+
     public function exportAction()
     {
         $this->view->pageTitle = 'Data Exporting';
