@@ -19,6 +19,7 @@
       <a href="/tangent/remote" class="">Remote Start/Stop</a>
       <hr style="margin:0.5em;">
       <a href="/modbus/brampton" class="">Brampton Testing</a>
+      <a href="/modbus/windsor" class="">Windsor Testing</a>
 {#
       <a href="/tangent/iplist" class="">Tangent IP List</a>
       <a href="/project/compare" class="">Analytic Tool</a>

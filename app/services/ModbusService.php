@@ -6,18 +6,31 @@ use Phalcon\Di\Injectable;
 
 class ModbusService extends Injectable
 {
-    private function connectModbus()
+    private function getModbusSetting($project)
     {
+		$sql = "SELECT * FROM modbus_setting WHERE project_id=$project";
+		$row = $this->db->fetchOne($sql);
+		return $row;
+    }
+
+    private function connectModbus($setting)
+    {
+		$ip = $setting['ip1'];
+		$port = $setting['port'];
+
         // Create Modbus object
-        $modbus = new \ModbusMaster("74.198.22.159", "TCP");
-        $modbus->port = 1024;
+        $modbus = new \ModbusMaster($ip, "TCP");
+        $modbus->port = $port;
+
         return $modbus;
     }
 
     // $status: 0 or 1
-    public function writeSingleCoil($status)
+    public function writeSingleCoil($project, $status)
     {
-        $modbus = $this->connectModbus();
+		$setting = $this->getModbusSetting($project);
+        $modbus = $this->connectModbus($setting);
+        $coilAddr = $setting['coil_address']; // 5
 
         // Data to be writen - TRUE, FALSE
         $data_true = array(TRUE);
@@ -37,9 +50,11 @@ class ModbusService extends Injectable
         return true;
     }
 
-    public function readRegisters()
+    public function readRegisters($project)
     {
-        $modbus = $this->connectModbus();
+		$setting = $this->getModbusSetting($project);
+        $modbus = $this->connectModbus($setting);
+        $regAddr = $setting['holding_reg_address'] - 40001; // 49001 - 40001
 
         try {
             // FC 3
