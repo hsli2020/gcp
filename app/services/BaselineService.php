@@ -74,32 +74,34 @@ class BaselineService extends Injectable
 
         /**
          * $data = [
-         *   [
-         *     'date' => '2022-02-23',
-         *     'load' => [ 1 => NNN, 2 => NNN, ..., 23 => NNN ],
+         *   '2022-02-23' => [
+         *       [ 'project' => 1, 'load' => [ 1 => NNN, 2 => NNN, ... 23 => NNN ] ],
+         *       [ 'project' => 2, 'load' => [ 1 => NNN, 2 => NNN, ... 23 => NNN ] ],
+         *       [ 'project' => 3, 'load' => [ 1 => NNN, 2 => NNN, ... 23 => NNN ] ],
          *   ],
-         *   [
-         *     'date' => '2022-02-22',
-         *     'load' => [ 1 => NNN, 2 => NNN, ..., 23 => NNN ],
+         *   '2022-02-22' => [
+         *       [ 'project' => 1, 'load' => [ 1 => NNN, 2 => NNN, ... 23 => NNN ] ],
+         *       [ 'project' => 2, 'load' => [ 1 => NNN, 2 => NNN, ... 23 => NNN ] ],
+         *       [ 'project' => 3, 'load' => [ 1 => NNN, 2 => NNN, ... 23 => NNN ] ],
          *   ],
-         *   [
-         *     'date' => '2022-02-21',
-         *     'load' => [ 1 => NNN, 2 => NNN, ..., 23 => NNN ],
-         *   ],
+         *   ...
          * ];
          */
 
         $days = 0;
         $hourly = [];
 
-        foreach ($data as $rec) {
-            $date = $rec['date'];
-            if ($this->isDateExcluded($date)) {
+        foreach ($data as $dt => $projects) {
+            if ($this->isDateExcluded($dt)) {
                 continue;
             }
 
             foreach (range(0, 23) as $hour) {
-                $hourly[$hour][] = $rec['load'][$hour];
+                $hourSum = 0;
+                foreach ($projects as $project) {
+                    $hourSum += $project['load'][$hour];
+                }
+                $hourly[$hour][] = $hourSum;
             }
 
             if (++$days == 20) {
@@ -125,13 +127,19 @@ class BaselineService extends Injectable
         $sql = "SELECT * FROM actual_load
                  WHERE `date`>='$start' AND `date`<'$date' AND zone_name='$zone'
               ORDER BY `date` DESC";
+
         $data = $this->db->fetchAll($sql);
 
-        foreach ($data as $key => $rec) {
-            $data[$key]['load'] = json_decode($rec['load'], 1);
+        // Re-index by date
+        $result = [];
+        foreach ($data as $rec) {
+            $rec['load'] = json_decode($rec['load'], 1);
+
+            $dt = $rec['date'];
+            $result[$dt][] = $rec;
         }
 
-        return $data;
+        return $result;
     }
 
     public function generateHourlyLoad($dt = '')
