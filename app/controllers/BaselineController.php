@@ -27,11 +27,11 @@ class BaselineController extends ControllerBase
             $params = $this->request->getPost();
             $auth = $this->session->get('auth');
             $params['user'] = $auth['username'];
-            $this->dataService->setDateExcluded($params);
-            $this->response->redirect('/data/exclude');
+            $this->baselineService->setDateExcluded($params);
+            $this->response->redirect('/baseline/exclude');
         }
 
-        $dates = $this->dataService->loadExcludedDateList();
+        $dates = $this->baselineService->loadExcludedDateList();
         $this->view->dates = $dates;
     }
 }
