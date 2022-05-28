@@ -21,7 +21,7 @@ class BaselineService extends Injectable
     }
 
     // Load Baseline history for exporting
-    protected function getBaseline($zone = '', $startDate = '')
+    public function getBaseline($zone = '', $startDate = '')
     {
         $criterias = [];
 
