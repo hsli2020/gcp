@@ -21,19 +21,6 @@
 #}
           <div class="w3-row-padding">
             <div class="w3-third w3-padding-16">
-              <label><b>Data Type</b></label>
-            </div>
-            <div class="w3-twothird w3-padding-8">
-              <select class="w3-select w3-border" name="datatype" required>
-{#              <option disabled selected>Select Data Type</option> #}
-                <option value="raw-data">Raw data</option>
-                <option value="baseline-actual-load">Baseline + Actual Load</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="w3-row-padding">
-            <div class="w3-third w3-padding-16">
               <label><b>Start Date</b></label>
             </div>
             <div class="w3-twothird w3-padding-8">
