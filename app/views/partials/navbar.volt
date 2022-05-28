@@ -11,6 +11,7 @@
     </div>
   </li>
 #}
+
   <li class="w3-dropdown-hover">
     <a href="javascript:;" class="">Tools <i class="fa fa-caret-down"></i></a>
     <div class="w3-dropdown-content w3-white w3-card-4">
@@ -27,6 +28,14 @@
       <a href="#" class="">User Settings</a>
       <a href="#" class="">Smart Alert Settings</a>
 #}
+    </div>
+  </li>
+
+  <li class="w3-dropdown-hover">
+    <a href="javascript:;" class="">Baseline <i class="fa fa-caret-down"></i></a>
+    <div class="w3-dropdown-content w3-white w3-card-4">
+      <a href="/baseline/export" class="">Baseline Export</a>
+      <a href="/baseline/exclude" class="">Exclude Date</a>
     </div>
   </li>
 
