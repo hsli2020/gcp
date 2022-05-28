@@ -21,7 +21,7 @@ class BaselineService extends Injectable
     }
 
     // Load Baseline history for exporting
-    public function getBaseline($zone = '', $startDate = '')
+    public function getBaseline($zone = '', $startDate = '', $endDate = '')
     {
         $criterias = [];
 
@@ -31,6 +31,10 @@ class BaselineService extends Injectable
 
         if ($startDate) {
             $criterias[] = "date>='$startDate'";
+        }
+
+        if ($endDate) {
+            $criterias[] = "date<='$endDate'";
         }
 
         $where = '';
@@ -175,7 +179,7 @@ class BaselineService extends Injectable
         $sql = "SELECT time_utc,
                    --  CONVERT_TZ(time_utc, 'UTC', 'America/Toronto') AS time_edt,
                        CONVERT_TZ(time_utc, 'UTC', 'EST') AS time_est,
-                       $fieldName AS load
+                       $fieldName AS `load`
                   FROM $tableName
                 HAVING DATE(time_est)='$date'";
         $rows = $this->db->fetchAll($sql);
