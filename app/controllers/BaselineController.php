@@ -8,8 +8,8 @@ class BaselineController extends ControllerBase
     {
         $this->view->pageTitle = 'Baseline Exporting';
 
-        $this->view->startTime = date('Y-m-d 00:00:00', strtotime('-35 days'));
-        $this->view->endTime = date('Y-m-d 00:00:00');
+        $this->view->startTime = date('Y-m-d', strtotime('-1 days'));
+        $this->view->endTime = date('Y-m-d');
 
         if ($this->request->isPost()) {
             set_time_limit(0);

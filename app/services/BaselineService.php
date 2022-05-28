@@ -43,10 +43,11 @@ class BaselineService extends Injectable
         }
 
         $sql = "SELECT * FROM baseline_history $where";
+
         $rows = $this->db->fetchAll($sql);
 
         foreach ($rows as $key => $row) {
-            $rows[$key]['baseline'] = json_decode($row['baseline']);
+            $rows[$key]['baseline'] = json_decode($row['baseline'], true);
         }
 
         return $rows;
@@ -54,7 +55,7 @@ class BaselineService extends Injectable
 
     public function generateBaseline($dt = '')
     {
-        $date = $dt ?: date('Y-m-d');
+        $date = $dt ?: date('Y-m-d', strtotime('-1 days'));
 
         $zones = $this->getProjectZones();
 
@@ -62,13 +63,17 @@ class BaselineService extends Injectable
             $b = $this->calcBaseline($zoneName, $date);
 
             // Save Baseline History
-            $this->db->execute("DELETE FROM baseline_history WHERE date='$date' AND zone_name='$zoneName'");
+            try {
+                $this->db->execute("DELETE FROM baseline_history WHERE date='$date' AND zone_name='$zoneName'");
 
-            $this->db->insertAsDict('baseline_history', [
-                'date'      => $date,
-                'zone_name' => $zoneName,
-                'baseline'  => json_encode($b, JSON_FORCE_OBJECT),
-            ]);
+                $this->db->insertAsDict('baseline_history', [
+                    'date'      => $date,
+                    'zone_name' => $zoneName,
+                    'baseline'  => json_encode($b, JSON_FORCE_OBJECT),
+                ]);
+            } catch (\Exception $e) {
+                //echo $e->getMessage(), "\n";
+            }
         }
     }
 
@@ -103,9 +108,13 @@ class BaselineService extends Injectable
             foreach (range(0, 23) as $hour) {
                 $hourSum = 0;
                 foreach ($projects as $project) {
-                    $hourSum += $project['load'][$hour];
+                    if (isset($project['load'][$hour])) {
+                        $hourSum += $project['load'][$hour];
+                    }
                 }
-                $hourly[$hour][] = $hourSum;
+                if ($hourSum > 0) {
+                    $hourly[$hour][] = $hourSum;
+                }
             }
 
             if (++$days == 20) {
@@ -248,5 +257,45 @@ class BaselineService extends Injectable
         $sql = "SELECT * FROM date_excluded ORDER BY `date`";
         $rows = $this->db->fetchAll($sql);
         return $rows;
+    }
+
+    public function export($params)
+    {
+        $startDate = isset($params['start-time']) ? $params['start-time'] : date('Y-m-d', strtotime('-1 days'));
+        $endDate   = isset($params['end-time'])   ? $params['end-time']   : date('Y-m-d');
+
+        $START_HR = 8;
+        $END_HR = 20;
+
+        // Create CSV File
+        $filename = BASE_DIR . '/tmp/export-baseline-'. date('Ymd-His'). '.csv';
+        $fp = fopen($filename, "wb");
+
+        // CSV Title
+        $columns = ['Date', 'Zone'];
+        foreach (range($START_HR, $END_HR) as $hr) {
+            $columns[] = "$hr:00";
+        }
+        fputcsv($fp, $columns);
+
+        // All Zones
+        $baseline = $this->baselineService->getBaseline('', $startDate, $endDate);
+
+        // CSV Data
+        foreach ($baseline as $b) {
+            $data = [];
+
+            $data[] = $b['date'];
+            $data[] = $b['zone_name'];
+
+            foreach (range($START_HR, $END_HR) as $hr) {
+                $data[] = $b['baseline'][$hr];
+            }
+            fputcsv($fp, $data);
+        }
+
+        fclose($fp);
+
+        return $filename;
     }
 }

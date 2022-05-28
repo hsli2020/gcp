@@ -55,5 +55,5 @@
 {% endblock %}
 
 {% block domready %}
-  $('.datepicker').datetimepicker({format: 'Y-m-d H:i', timepicker:true, step: 30});
+  $('.datepicker').datetimepicker({format: 'Y-m-d', timepicker:false, step: 30});
 {% endblock %}
