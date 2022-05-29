@@ -60,16 +60,20 @@ class BaselineService extends Injectable
         $zones = $this->getProjectZones();
 
         foreach ($zones as $zoneName => $zone) {
-            $b = $this->calcBaseline($zoneName, $date);
+            $bl = $this->calcBaseline($zoneName, $date);
+            $al = []; //$this->calcBaseline($zoneName, $date);
+            $ia = []; //$this->calcBaseline($zoneName, $date);
 
             // Save Baseline History
             try {
                 $this->db->execute("DELETE FROM baseline_history WHERE date='$date' AND zone_name='$zoneName'");
 
                 $this->db->insertAsDict('baseline_history', [
-                    'date'      => $date,
-                    'zone_name' => $zoneName,
-                    'baseline'  => json_encode($b, JSON_FORCE_OBJECT),
+                    'date'        => $date,
+                    'zone_name'   => $zoneName,
+                    'actual_load' => json_encode($al, JSON_FORCE_OBJECT),
+                    'inday_adj'   => json_encode($ia, JSON_FORCE_OBJECT),
+                    'baseline'    => json_encode($bl, JSON_FORCE_OBJECT),
                 ]);
             } catch (\Exception $e) {
                 //echo $e->getMessage(), "\n";
