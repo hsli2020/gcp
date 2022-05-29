@@ -47,7 +47,9 @@ class BaselineService extends Injectable
         $rows = $this->db->fetchAll($sql);
 
         foreach ($rows as $key => $row) {
-            $rows[$key]['baseline'] = json_decode($row['baseline'], true);
+            $rows[$key]['baseline']    = json_decode($row['baseline'], true);
+            $rows[$key]['actual_load'] = json_decode($row['actual_load'], true);
+            $rows[$key]['inday_adj']   = json_decode($row['inday_adj'], true);
         }
 
         return $rows;
@@ -60,9 +62,11 @@ class BaselineService extends Injectable
         $zones = $this->getProjectZones();
 
         foreach ($zones as $zoneName => $zone) {
-            $bl = $this->calcBaseline($zoneName, $date);
-            $al = []; //$this->calcActualLoad($zoneName, $date);
-            $ia = []; //$this->calcIndayAdjustment($bl, $al);
+            $data = $this->getHourlyLoad($zoneName, $date);
+
+            $bl = $this->calcBaseline($data);
+            $al = $this->calcActualLoad($data);
+            $ia = $this->calcIndayAdjustment($bl, $al);
 
             // Save Baseline History
             try {
@@ -71,9 +75,9 @@ class BaselineService extends Injectable
                 $this->db->insertAsDict('baseline_history', [
                     'date'        => $date,
                     'zone_name'   => $zoneName,
+                    'baseline'    => json_encode($bl, JSON_FORCE_OBJECT),
                     'actual_load' => json_encode($al, JSON_FORCE_OBJECT),
                     'inday_adj'   => json_encode($ia, JSON_FORCE_OBJECT),
-                    'baseline'    => json_encode($bl, JSON_FORCE_OBJECT),
                 ]);
             } catch (\Exception $e) {
                 //echo $e->getMessage(), "\n";
@@ -81,10 +85,8 @@ class BaselineService extends Injectable
         }
     }
 
-    public function calcBaseline($zone, $date)
+    public function calcBaseline($data)
     {
-        $data = $this->getHourlyLoad($zone, $date);
-
         /**
          * $data = [
          *   '2022-02-23' => [
@@ -136,8 +138,59 @@ class BaselineService extends Injectable
         return $baseline;
     }
 
-    public function calcIndayAdjustment($baseline, $actualLoad);
+    public function calcActualLoad($data)
     {
+        // $data same as calcBaseline($data)
+
+        $days = 0;
+        $hourly = [];
+
+        foreach ($data as $dt => $projects) {
+            if ($this->isDateExcluded($dt)) {
+                continue;
+            }
+
+            foreach (range(0, 23) as $hour) {
+                foreach ($projects as $project) {
+                    if (isset($project['load'][$hour])) {
+                        $hourly[$hour][] = $project['load'][$hour];
+                    }
+                }
+            }
+
+            if (++$days == 20) {
+                break;
+            }
+        }
+
+        $acload = [];
+        foreach (range(0, 23) as $hour) {
+            $acload[$hour] = round(array_sum($hourly[$hour]) / count($hourly[$hour]));
+        }
+
+        return $acload;
+    }
+
+    public function calcIndayAdjustment($baseline, $actualLoad)
+    {
+        $adj = [];
+
+        foreach (range(0, 23) as $hour) {
+            if ($hour < 12) {
+                $adj[$hour] = '';
+                continue;
+            }
+
+            $bl = [ $baseline[$hour-4], $baseline[$hour-3], $baseline[$hour-2] ];
+            $al = [ $actualLoad[$hour-4], $actualLoad[$hour-3], $actualLoad[$hour-2] ];
+
+            $blAvg = array_sum($bl) / count($bl);
+            $alAvg = array_sum($al) / count($al);
+
+            $adj[$hour] = round($alAvg/$blAvg, 2);
+        }
+print_r($adj);
+        return $adj;
     }
 
     public function getHourlyLoad($zone, $date)
@@ -293,14 +346,12 @@ class BaselineService extends Injectable
         foreach ($baseline as $b) {
             fputcsv($fp, [ $b['zone_name'] ]);
 
-            $data[] = $b['date'];
-
             foreach (range($START_HR, $END_HR) as $hr) {
                 $data = [];
                 $data[] = $b['date']. " $hr:00";
                 $data[] = $b['baseline'][$hr];
-                $data[] = 'Actual-Load'; //$b['actual_load'][$hr];
-                $data[] = 'In-Day Adj'; //$b['inday_adj'][$hr];
+                $data[] = $b['actual_load'][$hr];
+                $data[] = $b['inday_adj'][$hr];
                 fputcsv($fp, $data);
             }
 
