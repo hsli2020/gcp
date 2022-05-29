@@ -265,33 +265,38 @@ class BaselineService extends Injectable
         $endDate   = isset($params['end-time'])   ? $params['end-time']   : date('Y-m-d');
 
         $START_HR = 8;
-        $END_HR = 20;
+        $END_HR = 22;
 
         // Create CSV File
         $filename = BASE_DIR . '/tmp/export-baseline-'. date('Ymd-His'). '.csv';
         $fp = fopen($filename, "wb");
 
         // CSV Title
-        $columns = ['Date', 'Zone'];
+        $columns = ['Time(EST)', 'Standard Baseline', 'Actual-Load', 'In-Day Adjustment'];
+        fputcsv($fp, $columns);
         foreach (range($START_HR, $END_HR) as $hr) {
             $columns[] = "$hr:00";
         }
-        fputcsv($fp, $columns);
 
         // All Zones
         $baseline = $this->baselineService->getBaseline('', $startDate, $endDate);
 
         // CSV Data
         foreach ($baseline as $b) {
-            $data = [];
+            fputcsv($fp, [ $b['zone_name'] ]);
 
             $data[] = $b['date'];
-            $data[] = $b['zone_name'];
 
             foreach (range($START_HR, $END_HR) as $hr) {
+                $data = [];
+                $data[] = $b['date']. " $hr:00";
                 $data[] = $b['baseline'][$hr];
+                $data[] = 'Actual-Load'; //$b['actual_load'][$hr];
+                $data[] = 'In-Day Adj'; //$b['inday_adj'][$hr];
+                fputcsv($fp, $data);
             }
-            fputcsv($fp, $data);
+
+            fputs($fp, "\n");
         }
 
         fclose($fp);
