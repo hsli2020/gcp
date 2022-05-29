@@ -61,8 +61,8 @@ class BaselineService extends Injectable
 
         foreach ($zones as $zoneName => $zone) {
             $bl = $this->calcBaseline($zoneName, $date);
-            $al = []; //$this->calcBaseline($zoneName, $date);
-            $ia = []; //$this->calcBaseline($zoneName, $date);
+            $al = []; //$this->calcActualLoad($zoneName, $date);
+            $ia = []; //$this->calcIndayAdjustment($bl, $al);
 
             // Save Baseline History
             try {
@@ -83,7 +83,7 @@ class BaselineService extends Injectable
 
     public function calcBaseline($zone, $date)
     {
-        $data = $this->getStoreLoad($zone, $date);
+        $data = $this->getHourlyLoad($zone, $date);
 
         /**
          * $data = [
@@ -136,12 +136,16 @@ class BaselineService extends Injectable
         return $baseline;
     }
 
-    public function getStoreLoad($zone, $date)
+    public function calcIndayAdjustment($baseline, $actualLoad);
+    {
+    }
+
+    public function getHourlyLoad($zone, $date)
     {
         $start = date('Y-m-d', strtotime('-35 day', strtotime($date)));
 
         //$rec['excluded']
-        $sql = "SELECT * FROM actual_load
+        $sql = "SELECT * FROM hourly_load
                  WHERE `date`>='$start' AND `date`<'$date' AND zone_name='$zone'
               ORDER BY `date` DESC";
 
@@ -172,9 +176,9 @@ class BaselineService extends Injectable
             $data = $this->calcHourlyLoad($project, $date);
 
             // Save Actual Load
-            $this->db->execute("DELETE FROM actual_load WHERE date='$date' AND project_id=$projectId");
+            $this->db->execute("DELETE FROM hourly_load WHERE date='$date' AND project_id=$projectId");
 
-            $this->db->insertAsDict('actual_load', [
+            $this->db->insertAsDict('hourly_load', [
                 'date'       => $date,
                 'project_id' => $projectId,
                 'zone_name'  => $project['zone_name'],
