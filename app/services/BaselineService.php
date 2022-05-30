@@ -247,12 +247,16 @@ class BaselineService extends Injectable
         $fieldName = $project['field_name'];
         $tableName = $project['table_name'];
 
+        // convert time from EST/local to UTC/db
+        $start = $this->db->fetchColumn("SELECT CONVERT_TZ('$date 00:00:00', 'EST', 'UTC')");
+        $end   = $this->db->fetchColumn("SELECT CONVERT_TZ('$date 23:59:59', 'EST', 'UTC')");
+
         $sql = "SELECT time_utc,
                    --  CONVERT_TZ(time_utc, 'UTC', 'America/Toronto') AS time_edt,
                        CONVERT_TZ(time_utc, 'UTC', 'EST') AS time_est,
                        $fieldName AS `load`
                   FROM $tableName
-                HAVING DATE(time_est)='$date'";
+                 WHERE time_utc>='$start' AND time_utc<'$end'";
         $rows = $this->db->fetchAll($sql);
 
         $hourly = [];
