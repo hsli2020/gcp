@@ -132,7 +132,7 @@ class BaselineService extends Injectable
         foreach (range(0, 23) as $hour) {
             rsort($hourly[$hour]);
             $hourly[$hour] = array_slice($hourly[$hour], 0, 15);
-            $baseline[$hour] = round(array_sum($hourly[$hour]) / count($hourly[$hour]));
+            $baseline[$hour] = array_sum($hourly[$hour]);
         }
 
         return $baseline;
@@ -165,7 +165,7 @@ class BaselineService extends Injectable
 
         $acload = [];
         foreach (range(0, 23) as $hour) {
-            $acload[$hour] = round(array_sum($hourly[$hour]) / count($hourly[$hour]));
+            $acload[$hour] = array_sum($hourly[$hour]);
         }
 
         return $acload;
