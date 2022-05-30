@@ -189,7 +189,7 @@ class BaselineService extends Injectable
 
             $adj[$hour] = round($alAvg/$blAvg, 2);
         }
-print_r($adj);
+
         return $adj;
     }
 
