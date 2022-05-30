@@ -63,9 +63,11 @@ class BaselineService extends Injectable
 
         foreach ($zones as $zoneName => $zone) {
             $data = $this->getHourlyLoad($zoneName, $date);
-
             $bl = $this->calcBaseline($data);
+
+            $data = $this->getOneDayLoad($zoneName, $date);
             $al = $this->calcActualLoad($data);
+
             $ia = $this->calcIndayAdjustment($bl, $al);
 
             // Save Baseline History
@@ -140,32 +142,19 @@ class BaselineService extends Injectable
 
     public function calcActualLoad($data)
     {
-        // $data same as calcBaseline($data)
-
-        $days = 0;
         $hourly = [];
 
-        foreach ($data as $dt => $projects) {
-            if ($this->isDateExcluded($dt)) {
-                continue;
-            }
-
+        foreach ($data as $project) {
             foreach (range(0, 23) as $hour) {
-                foreach ($projects as $project) {
-                    if (isset($project['load'][$hour])) {
-                        $hourly[$hour][] = $project['load'][$hour];
-                    }
+                if (isset($project['load'][$hour])) {
+                    $hourly[$hour][] = $project['load'][$hour];
                 }
-            }
-
-            if (++$days == 20) {
-                break;
             }
         }
 
         $acload = [];
         foreach (range(0, 23) as $hour) {
-            $acload[$hour] = round(array_sum($hourly[$hour]) / count($hourly[$hour]));
+            $acload[$hour] = array_sum($hourly[$hour]);
         }
 
         return $acload;
@@ -197,7 +186,7 @@ class BaselineService extends Injectable
     {
         $start = date('Y-m-d', strtotime('-35 day', strtotime($date)));
 
-        //$rec['excluded']
+        // date<'$date': NOT include current date
         $sql = "SELECT * FROM hourly_load
                  WHERE `date`>='$start' AND `date`<'$date' AND zone_name='$zone'
               ORDER BY `date` DESC";
@@ -214,6 +203,18 @@ class BaselineService extends Injectable
         }
 
         return $result;
+    }
+
+    public function getOneDayLoad($zone, $date)
+    {
+        $sql = "SELECT * FROM hourly_load WHERE `date`='$date' AND zone_name='$zone'";
+        $data = $this->db->fetchAll($sql);
+
+        foreach ($data as $key => $rec) {
+            $data[$key]['load'] = json_decode($rec['load'], 1);
+        }
+
+        return $data;
     }
 
     public function generateHourlyLoad($dt = '')
