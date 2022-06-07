@@ -39,7 +39,8 @@
 
           <input type="hidden" name="{{ security.getTokenKey() }}" value="{{ security.getToken() }}"/>
 
-          <button class="w3-btn-block w3-indigo w3-section w3-padding" type="submit">Export/Download Data</button>
+          <button class="w3-btn-block w3-indigo w3-section w3-padding" type="submit">Download Baseline History</button>
+          <button class="w3-btn-block w3-blue   w3-section w3-padding" type="submit" name="btn" value="today">Download Today's Baseline</button>
         </div>
       </form>
   </div>

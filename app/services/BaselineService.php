@@ -154,6 +154,9 @@ class BaselineService extends Injectable
 
         $acload = [];
         foreach (range(0, 23) as $hour) {
+            if (!isset($hourly[$hour])) {
+                $hourly[$hour] = [];
+            }
             $acload[$hour] = array_sum($hourly[$hour]);
         }
 
@@ -366,5 +369,20 @@ class BaselineService extends Injectable
         fclose($fp);
 
         return $filename;
+    }
+
+    public function exportToday()
+    {
+        $today = date('Y-m-d');
+
+        $this->generateHourlyLoad($today);
+        $this->generateBaseline($today);
+
+        $params = [
+            'start-time' => $today,
+            'end-time'   => $today,
+        ];
+
+        return $this->export($params);
     }
 }

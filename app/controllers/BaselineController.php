@@ -13,8 +13,15 @@ class BaselineController extends ControllerBase
 
         if ($this->request->isPost()) {
             set_time_limit(0);
+
             $params = $this->request->getPost();
-            $filename = $this->baselineService->export($params);
+
+            if ($this->request->getPost('btn') == 'today') {
+                $filename = $this->baselineService->exportToday();
+            } else {
+                $filename = $this->baselineService->export($params);
+            }
+
             $this->startDownload($filename);
         }
     }
