@@ -269,10 +269,10 @@ class BaselineService extends Injectable
             $hr = intval(substr($time, 11, 2));
 
             if (isset($hourly[$hr])) {
-                $hourly[$hr]['sum'] += $row['load'];
+                $hourly[$hr]['sum'] += abs($row['load']);
                 $hourly[$hr]['cnt'] += 1;
             } else {
-                $hourly[$hr]['sum'] = $row['load'];
+                $hourly[$hr]['sum'] = abs($row['load']);
                 $hourly[$hr]['cnt'] = 1;
             }
         }
