@@ -63,7 +63,7 @@ class BaselineService extends Injectable
 
         foreach ($zones as $zoneName => $zone) {
             $data = $this->getHourlyLoad($zoneName, $date);
-            $bl = $this->calcBaseline($data);
+            $bl = $this->calcBaseline($zoneName, $data);
 
             $data = $this->getOneDayLoad($zoneName, $date);
             $al = $this->calcActualLoad($data);
@@ -87,7 +87,7 @@ class BaselineService extends Injectable
         }
     }
 
-    public function calcBaseline($data)
+    public function calcBaseline($zoneName, $data)
     {
         /**
          * $data = [
@@ -109,7 +109,7 @@ class BaselineService extends Injectable
         $hourly = [];
 
         foreach ($data as $dt => $projects) {
-            if ($this->isDateExcluded($dt)) {
+            if ($this->isDateExcluded($dt, $zoneName)) {
                 continue;
             }
 
@@ -229,6 +229,7 @@ class BaselineService extends Injectable
 
         foreach ($projects as $project) {
             $projectId = $project['project_id'];
+            $zoneName = $project['zone_name'];
 
             $data = $this->calcHourlyLoad($project, $date);
 
@@ -240,7 +241,7 @@ class BaselineService extends Injectable
                 'project_id' => $projectId,
                 'zone_name'  => $project['zone_name'],
                 'load'       => json_encode($data, JSON_FORCE_OBJECT),
-                'excluded'   => $this->isDateExcluded($date),
+                'excluded'   => $this->isDateExcluded($date, $zoneName),
             ]);
         }
     }
@@ -286,35 +287,29 @@ class BaselineService extends Injectable
         return $result;
     }
 
-    public function isDateExcluded($date)
+    public function isDateExcluded($date, $zone)
     {
-        static $excludedDates = [];
-
         $weekend = date('N', strtotime($date)) >= 6;
         if ($weekend) {
             return 1;
         }
 
-        if (empty($excludedDates)) {
-            $rows = $this->db->fetchAll("SELECT * FROM date_excluded");
-            $excludedDates = array_column($rows, 'note', 'date');
-        }
-
-        $excluded = isset($excludedDates[$date]);
-
-        return $excluded ? 1 : 0;
+        $row = $this->db->fetchOne("SELECT id FROM date_excluded WHERE date='$date' AND zone='$zone'");
+        return (bool)$row;
     }
 
     public function setDateExcluded($params)
     {
         $date = $params['date'];
         $note = $params['note'];
+        $zone = $params['zone'];
         $user = $params['user'];
 
         try {
             $this->db->insertAsDict('date_excluded', [
                 'date' => $date,
                 'note' => $note,
+                'zone' => $zone,
                 'user' => $user,
             ]);
         } catch (\Exception $e) {
@@ -323,9 +318,16 @@ class BaselineService extends Injectable
 
     public function loadExcludedDateList()
     {
-        $sql = "SELECT * FROM date_excluded ORDER BY `date`";
+        $sql = "SELECT * FROM date_excluded ORDER BY zone, `date`";
         $rows = $this->db->fetchAll($sql);
         return $rows;
+    }
+
+    public function loadZoneNameList()
+    {
+        $sql = "SELECT DISTINCT(zone_name) zone FROM project_zone";
+        $rows = $this->db->fetchAll($sql);
+        return array_column($rows, 'zone');
     }
 
     public function export($params)
@@ -348,7 +350,7 @@ class BaselineService extends Injectable
         }
 
         // All Zones
-        $baseline = $this->baselineService->getBaseline('', $startDate, $endDate);
+        $baseline = $this->getBaseline('', $startDate, $endDate);
 
         // CSV Data
         foreach ($baseline as $b) {

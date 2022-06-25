@@ -39,6 +39,9 @@ class BaselineController extends ControllerBase
         }
 
         $dates = $this->baselineService->loadExcludedDateList();
+        $zones = $this->baselineService->loadZoneNameList();
+
         $this->view->dates = $dates;
+        $this->view->zones = $zones;
     }
 }

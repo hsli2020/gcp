@@ -23,6 +23,19 @@
 
           <div class="w3-row-padding">
             <div class="w3-quarter w3-padding-16">
+              <label><b>Zone</b></label>
+            </div>
+            <div class="w3-threequarter w3-padding-8">
+              <select class="w3-select w3-border" name="zone" required>
+              {% for zone in zones %}
+                <option>{{ zone }}</option>
+              {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="w3-row-padding">
+            <div class="w3-quarter w3-padding-16">
               <label><b>Note</b></label>
             </div>
             <div class="w3-threequarter w3-padding-8">
@@ -37,11 +50,12 @@
       </form>
   </div>
 
-  <div style="display: block;margin: 0 auto;width: 800px;">
+  <div style="display: block;margin: 0 auto;width: 960px;">
       <table id="table1" class="w3-table w3-white w3-bordered w3-border">
         <tr>
           <th>#</th>
           <th>Date</th>
+          <th>Zone</th>
           <th>Note</th>
           <th>User</th>
           <th>Created On</th>
@@ -51,6 +65,7 @@
         <tr>
           <td>{{ loop.index }}</td>
           <td>{{ d['date'] }}</td>
+          <td>{{ d['zone'] }}</td>
           <td>{{ d['note'] }}</td>
           <td>{{ d['user'] }}</td>
           <td>{{ d['createdon'] }}</td>
