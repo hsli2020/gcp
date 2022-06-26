@@ -30,15 +30,18 @@ class BaselineController extends ControllerBase
     {
         $this->view->pageTitle = 'Excluded Dates';
 
+        $zone = '';
+
         if ($this->request->isPost()) {
             $params = $this->request->getPost();
+            $zone = $this->request->getPost('zone');
             $auth = $this->session->get('auth');
             $params['user'] = $auth['username'];
             $this->baselineService->setDateExcluded($params);
-            $this->response->redirect('/baseline/exclude');
+           #$this->response->redirect('/baseline/exclude');
         }
 
-        $dates = $this->baselineService->loadExcludedDateList();
+        $dates = $this->baselineService->loadExcludedDateList($zone);
         $zones = $this->baselineService->loadZoneNameList();
 
         $this->view->dates = $dates;
