@@ -52,6 +52,7 @@
       </form>
   </div>
 
+  {% if dates is not empty %}
   <div style="display: block;margin: 0 auto;width: 960px;">
       <table id="table1" class="w3-table w3-white w3-bordered w3-border">
         <tr>
@@ -75,6 +76,7 @@
         {% endfor %}
       </table>
   </div>
+  {% endif %}
 </div>
 {% endblock %}
 
