@@ -319,7 +319,7 @@ class BaselineService extends Injectable
     public function loadExcludedDateList($zone = '')
     {
         $where = $zone ? "WHERE zone='$zone'" : '';
-        $sql = "SELECT * FROM date_excluded $where ORDER BY zone, `date`";
+        $sql = "SELECT * FROM date_excluded $where ORDER BY zone, `date` DESC";
         $rows = $this->db->fetchAll($sql);
         return $rows;
     }

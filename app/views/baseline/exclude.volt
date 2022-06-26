@@ -12,14 +12,6 @@
   <div style="display: block;margin: 0 auto;width: 500px;">
       <form class="w3-container" method="POST" autocomplete="off">
         <div class="w3-section">
-          <div class="w3-row-padding">
-            <div class="w3-quarter w3-padding-16">
-              <label><b>Date</b></label>
-            </div>
-            <div class="w3-threequarter w3-padding-8">
-              <input class="w3-input w3-border datepicker" name="date" required type="text" value="">
-            </div>
-          </div>
 
           <div class="w3-row-padding">
             <div class="w3-quarter w3-padding-16">
@@ -27,10 +19,20 @@
             </div>
             <div class="w3-threequarter w3-padding-8">
               <select class="w3-select w3-border" name="zone" required>
-              {% for zone in zones %}
-                <option>{{ zone }}</option>
-              {% endfor %}
+                <option value="">Please Select</option>
+                {% for z in zones %}
+                <option {% if (z == zone) %}selected{% endif %}>{{ z }}</option>
+                {% endfor %}
               </select>
+            </div>
+          </div>
+
+          <div class="w3-row-padding">
+            <div class="w3-quarter w3-padding-16">
+              <label><b>Date</b></label>
+            </div>
+            <div class="w3-threequarter w3-padding-8">
+              <input class="w3-input w3-border datepicker" name="date" required type="text" value="">
             </div>
           </div>
 
@@ -86,4 +88,7 @@
 
 {% block domready %}
   $('.datepicker').datetimepicker({format: 'Y-m-d', timepicker:false, step: 30});
+  $('select[name=zone]').change(function() {
+    window.location.href = '/baseline/exclude/' + $(this).find(":selected").val();
+  });
 {% endblock %}

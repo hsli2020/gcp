@@ -26,11 +26,9 @@ class BaselineController extends ControllerBase
         }
     }
 
-    public function excludeAction()
+    public function excludeAction($zone = '')
     {
         $this->view->pageTitle = 'Excluded Dates';
-
-        $zone = '';
 
         if ($this->request->isPost()) {
             $params = $this->request->getPost();
@@ -38,7 +36,7 @@ class BaselineController extends ControllerBase
             $auth = $this->session->get('auth');
             $params['user'] = $auth['username'];
             $this->baselineService->setDateExcluded($params);
-           #$this->response->redirect('/baseline/exclude');
+            $this->response->redirect('/baseline/exclude/'. $zone);
         }
 
         $dates = $this->baselineService->loadExcludedDateList($zone);
@@ -46,5 +44,6 @@ class BaselineController extends ControllerBase
 
         $this->view->dates = $dates;
         $this->view->zones = $zones;
+        $this->view->zone  = $zone ;
     }
 }
