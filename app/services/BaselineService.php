@@ -120,9 +120,9 @@ class BaselineService extends Injectable
                         $hourSum += $project['load'][$hour];
                     }
                 }
-                if ($hourSum > 0) {
+               #if ($hourSum > 0) {
                     $hourly[$hour][] = $hourSum;
-                }
+               #}
             }
 
             if (++$days == 20) {
