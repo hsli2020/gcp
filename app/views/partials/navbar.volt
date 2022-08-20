@@ -35,7 +35,9 @@
     <a href="javascript:;" class="">Baseline <i class="fa fa-caret-down"></i></a>
     <div class="w3-dropdown-content w3-white w3-card-4">
       <a href="/baseline/export" class="">Baseline Export</a>
+      <hr style="margin:0.5em;">
       <a href="/baseline/exclude" class="">Exclude Date</a>
+      <a href="/baseline/holiday" class="">Public Holidays</a>
     </div>
   </li>
 

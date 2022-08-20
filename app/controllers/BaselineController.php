@@ -46,4 +46,21 @@ class BaselineController extends ControllerBase
         $this->view->zones = $zones;
         $this->view->zone  = $zone ;
     }
+
+    public function holidayAction($zone = '')
+    {
+        $this->view->pageTitle = 'Public Holidays';
+
+        if ($this->request->isPost()) {
+            $params = $this->request->getPost();
+            $auth = $this->session->get('auth');
+            $params['user'] = $auth['username'];
+            $this->baselineService->savePublicHoliday($params);
+            $this->response->redirect('/baseline/holiday');
+        }
+
+        $holidays = $this->baselineService->loadPublicHolidays();
+
+        $this->view->holidays = $holidays;
+    }
 }

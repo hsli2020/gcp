@@ -289,11 +289,6 @@ class BaselineService extends Injectable
 
     public function isDateExcluded($date, $zone)
     {
-        $weekend = date('N', strtotime($date)) >= 6;
-        if ($weekend) {
-            return 1;
-        }
-
         $row = $this->db->fetchOne("SELECT id FROM date_excluded WHERE date='$date' AND zone='$zone'");
         return (bool)$row;
     }
@@ -332,6 +327,41 @@ class BaselineService extends Injectable
         $sql = "SELECT DISTINCT(zone_name) zone FROM project_zone";
         $rows = $this->db->fetchAll($sql);
         return array_column($rows, 'zone');
+    }
+
+    public function loadPublicHolidays()
+    {
+        $sql = "SELECT * FROM holidays ORDER BY id DESC LIMIT 100";
+        $rows = $this->db->fetchAll($sql);
+        return $rows;
+    }
+
+    public function savePublicHoliday($params)
+    {
+        $date = $params['date'];
+        $note = $params['note'];
+        $user = $params['user'];
+
+        try {
+            $this->db->insertAsDict('holidays', [
+                'date' => $date,
+                'note' => $note,
+                'user' => $user,
+            ]);
+        } catch (\Exception $e) {
+        }
+    }
+
+    public function isHoliday($date)
+    {
+        $sql = "SELECT id FROM holidays WHERE date='$date'";
+        $row = $this->db->fetchOne($sql);
+        return (bool)$row;
+    }
+
+    public function isWeekend($date)
+    {
+        return date('N', strtotime($date)) >= 6;
     }
 
     public function export($params)
