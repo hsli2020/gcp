@@ -287,6 +287,45 @@ class BaselineService extends Injectable
         return $result;
     }
 
+    public function getValidDates($startDate, $zone)
+    {
+        // Step 1: Collect 35 business days
+        $bizDates = [];
+
+        $date = strtotime($startDate);
+        while (true) {
+            if ($this->isWeekend($date)) {
+                $date -= 24*60*60;
+                continue;
+            }
+
+            $bizDates[] = date('Y-m-d', $date);
+
+            if (count($bizDates) >= 35) {
+                break;
+            }
+
+            $date -= 24*60*60;
+        }
+
+        // Step 2: Get rid of holidays and excluded dates
+        $validDates = [];
+
+        foreach ($bizDates as $date) {
+            if ($this->isHoliday($date) || $this->isDateExcluded($date, $zone)) {
+                continue;
+            }
+
+            $validDates[] = $date;
+
+            if (count($validDates) >= 20) {
+                break;
+            }
+        }
+
+        return $validDates;
+    }
+
     public function isDateExcluded($date, $zone)
     {
         $row = $this->db->fetchOne("SELECT id FROM date_excluded WHERE date='$date' AND zone='$zone'");
@@ -361,7 +400,8 @@ class BaselineService extends Injectable
 
     public function isWeekend($date)
     {
-        return date('N', strtotime($date)) >= 6;
+        #return date('N', strtotime($date)) >= 6;
+        return date('N', $date) >= 6;
     }
 
     public function export($params)
