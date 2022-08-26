@@ -55,13 +55,12 @@ class BaselineService extends Injectable
         return $rows;
     }
 
-    public function generateBaseline($dt = '')
+    public function generateBaseline($date)
     {
-        $date = $dt ?: date('Y-m-d', strtotime('-1 days'));
-
         $zones = $this->getProjectZones();
 
         foreach ($zones as $zoneName => $zone) {
+
             $data = $this->getHourlyLoad($zoneName, $date);
             $bl = $this->calcBaseline($zoneName, $data);
 
@@ -105,13 +104,13 @@ class BaselineService extends Injectable
          * ];
          */
 
-        $days = 0;
+       #$days = 0;
         $hourly = [];
 
         foreach ($data as $dt => $projects) {
-            if ($this->isDateExcluded($dt, $zoneName)) {
-                continue;
-            }
+           #if ($this->isDateExcluded($dt, $zoneName)) {
+           #    continue;
+           #}
 
             foreach (range(0, 23) as $hour) {
                 $hourSum = 0;
@@ -120,14 +119,14 @@ class BaselineService extends Injectable
                         $hourSum += $project['load'][$hour];
                     }
                 }
-                if ($hourSum > 0) {
+               #if ($hourSum > 0) {
                     $hourly[$hour][] = $hourSum;
-                }
+               #}
             }
 
-            if (++$days == 20) {
-                break;
-            }
+           #if (++$days == 20) {
+           #    break;
+           #}
         }
 
         $baseline = [];
@@ -185,13 +184,10 @@ class BaselineService extends Injectable
         return $adj;
     }
 
-    public function getHourlyLoad($zone, $date)
+    public function getHourlyLoad($zone, $date) // $date not used
     {
-        $start = date('Y-m-d', strtotime('-35 day', strtotime($date)));
-
-        // date<'$date': NOT include current date
         $sql = "SELECT * FROM hourly_load
-                 WHERE `date`>='$start' AND `date`<'$date' AND zone_name='$zone'
+                 WHERE zone_name='$zone'
               ORDER BY `date` DESC";
 
         $data = $this->db->fetchAll($sql);
@@ -220,29 +216,31 @@ class BaselineService extends Injectable
         return $data;
     }
 
-    public function generateHourlyLoad($dt = '')
+    public function generateHourlyLoad($date)
     {
-        $date = $dt ? $dt : date('Y-m-d', strtotime('-1 days'));
-
         $sql = "SELECT * FROM project_zone";
         $projects = $this->db->fetchAll($sql);
 
         foreach ($projects as $project) {
             $projectId = $project['project_id'];
-            $zoneName = $project['zone_name'];
+            $zoneName  = $project['zone_name'];
 
-            $data = $this->calcHourlyLoad($project, $date);
+            $validDates = $this->getValidDates($date, $zoneName);
 
-            // Save Actual Load
-            $this->db->execute("DELETE FROM hourly_load WHERE date='$date' AND project_id=$projectId");
+            foreach ($validDates as $validDate) {
+                $data = $this->calcHourlyLoad($project, $validDate);
 
-            $this->db->insertAsDict('hourly_load', [
-                'date'       => $date,
-                'project_id' => $projectId,
-                'zone_name'  => $project['zone_name'],
-                'load'       => json_encode($data, JSON_FORCE_OBJECT),
-                'excluded'   => $this->isDateExcluded($date, $zoneName),
-            ]);
+                // Save Actual Load
+                $this->db->execute("DELETE FROM hourly_load WHERE date='$validDate' AND project_id=$projectId");
+
+                $this->db->insertAsDict('hourly_load', [
+                    'date'       => $validDate,
+                    'project_id' => $projectId,
+                    'zone_name'  => $project['zone_name'],
+                    'load'       => json_encode($data, JSON_FORCE_OBJECT),
+                    'excluded'   => 0, // $this->isDateExcluded($validDate, $zoneName),
+                ]);
+            }
         }
     }
 

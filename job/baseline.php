@@ -16,16 +16,24 @@ $db->execute("TRUNCATE TABLE baseline_history");
 
 $baselineService = $di->get('baselineService');
 
-echo "Generate Hourly Load\n";
-for ($d=78; $d>0; $d--) {
-    $date = date('Y-m-d', strtotime("-$d days"));
-    echo $date, "\n";
-    $baselineService->generateHourlyLoad($date);
-}
+$date = date('Y-m-d', strtotime('-1 days'));
+$date = '2022-08-15';
 
-echo "Generate Baseline\n";
-for ($d=30; $d>0; $d--) {
-    $date = date('Y-m-d', strtotime("-$d days"));
-    echo $date, "\n";
-    $baselineService->generateBaseline($date);
-}
+$baselineService->generateHourlyLoad($date);
+$baselineService->generateBaseline($date);
+
+#$dates = $baselineService->getValidDates();
+#
+#echo "Generate Hourly Load\n";
+#for ($d=78; $d>0; $d--) {
+#    $date = date('Y-m-d', strtotime("-$d days"));
+#    echo $date, "\n";
+#    $baselineService->generateHourlyLoad($date);
+#}
+#
+#echo "Generate Baseline\n";
+#for ($d=30; $d>0; $d--) {
+#    $date = date('Y-m-d', strtotime("-$d days"));
+#    echo $date, "\n";
+#    $baselineService->generateBaseline($date);
+#}
