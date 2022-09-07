@@ -91,7 +91,7 @@ class ImportService extends Injectable
 
             $this->saveLatestData($project, $device, $latest);
             $this->generateAlarm($project, $device, $latest);
-            $this->saveStatusChange($project, $latest);
+            $this->saveStatusChange($project, $device, $latest);
         }
     }
 
@@ -136,13 +136,18 @@ class ImportService extends Injectable
         $this->db->execute($sql);
     }
 
-    public function saveStatusChange($project, $data)
+    public function saveStatusChange($project, $device, $data)
     {
         if (empty($data) || $data['error'] != 0) {
             return;
         }
 
         $id = $project->id;
+
+        // Ajax-Tesla has 3 devices, only check mb-001
+        if ($id == 38 && $device->code != 'mb-001') {
+            return;
+        }
 
         $sql = "UPDATE status_change
                    SET time_old=time_new,
