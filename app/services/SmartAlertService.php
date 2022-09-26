@@ -51,7 +51,7 @@ class SmartAlertService extends Injectable
             $genPowerNew = abs($row['gen_power_new']);
 
             $delta = abs($genPowerNew - $genPowerOld);
-            $threshold = max($genPowerNew, $genPowerOld, 20)/2;
+            $threshold = max($genPowerNew, $genPowerOld, 100)/2;
 
             if ($delta > $threshold) {
                 $subject = "GCP Alert: $projectName - Generator Power Changed";
@@ -71,7 +71,7 @@ class SmartAlertService extends Injectable
             $storeLoadNew = abs($row['store_load_new']);
 
             $delta = abs($storeLoadNew - $storeLoadOld);
-            $threshold = max($storeLoadNew, $storeLoadOld, 20)/2;
+            $threshold = max($storeLoadNew, $storeLoadOld, 100)/2;
 
             if ($delta > $threshold) {
                 $subject = "GCP Alert: $projectName - Store Load Changed";
@@ -236,7 +236,7 @@ class SmartAlertService extends Injectable
 
     protected function log($str)
     {
-        return;
+#       return;
         $filename = BASE_DIR . '/app/logs/alert.log';
         $str = date('Y-m-d H:i:s ') . $str . "\n";
 
