@@ -16,7 +16,7 @@ if ($d < 10) {
     $end = date('t', $lastmonth);
 
     $reportService->getErthmeterReport($y, $m, $start, $end);
-    $reportService->send();
+#   $reportService->send();
 }
 
 if ($d >= 20 && $d < 30) {
@@ -26,5 +26,5 @@ if ($d >= 20 && $d < 30) {
     $end = 15;
 
     $reportService->getErthmeterReport($y, $m, $start, $end);
-    $reportService->send();
+#   $reportService->send();
 }
