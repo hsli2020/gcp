@@ -51,7 +51,7 @@ class SmartAlertService extends Injectable
             $genPowerNew = abs($row['gen_power_new']);
 
             $delta = abs($genPowerNew - $genPowerOld);
-            $threshold = max($genPowerNew, $genPowerOld, 100)/2;
+            $threshold = max(max($genPowerNew, $genPowerOld)/2, 100);
 
             if ($delta > $threshold) {
                 $subject = "GCP Alert: $projectName - Generator Power Changed";
