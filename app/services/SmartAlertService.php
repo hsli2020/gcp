@@ -71,7 +71,7 @@ class SmartAlertService extends Injectable
             $storeLoadNew = abs($row['store_load_new']);
 
             $delta = abs($storeLoadNew - $storeLoadOld);
-            $threshold = max($storeLoadNew, $storeLoadOld, 100)/2;
+            $threshold = 100; //max(max($storeLoadNew, $storeLoadOld)/2, 100);
 
             if ($delta > $threshold) {
                 $subject = "GCP Alert: $projectName - Store Load Changed";
